@@ -670,7 +670,6 @@ namespace Macrometa {
                 ) {
                     
                     switch (receivedMessage.properties.t) {
-
                         case VirtualMsgType.Pong:
                             receivedPongOnly = true;
                             var transportPing = TransportPings.Remove(receivedMessage.properties.i);
@@ -717,8 +716,9 @@ namespace Macrometa {
                 MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetChatConsumer));
         }
         
-        public void ChatSend(string channelId,  string msg) {
+        public void ChatSend(string channelId,  string msg, VirtualMsgType msgType = VirtualMsgType.Data) {
             var properties = new MessageProperties() {
+                t = msgType,
                 d = channelId,
             };
             var message = new SendMessage() {
@@ -746,9 +746,16 @@ namespace Macrometa {
                 if (receivedMessage.properties != null &&
                     receivedMessage.properties.d == chatChannelId
                 ) {
-                   chatMessages.Enqueue( Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload)));
-                   // do I need to decode this?
-                   //string inputStr = Encoding.UTF8.GetString(Convert.FromBase64String(encodedStr));
+                    switch (receivedMessage.properties.t) {
+
+                        case VirtualMsgType.Data:
+                            chatMessages.Enqueue(
+                                Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload)));
+                            break;
+                        case VirtualMsgType.Internal :
+                            //send command to Lobby
+                            break;
+                    }
                 }
                 ChatBuffer.Add(receivedMessage);
                 var ackMessage = new AckMessage() {
