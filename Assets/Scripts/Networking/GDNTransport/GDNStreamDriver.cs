@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using BestHTTP.WebSocket;
 using UnityEngine;
+using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
@@ -22,6 +24,7 @@ namespace Macrometa {
         public static int missedPingDisconnect = 3;
         public static float initialPingDelay = 30; // wait period before first ping is sent after connect
         public static bool isClientBrowser = false;
+        public static bool isLobbyAdmin = false;
         public ListStream listStream;
         public WebSocket consumer1;
         public WebSocket producer1;
@@ -30,9 +33,11 @@ namespace Macrometa {
         public WebSocket producerStats;
         public StreamStats consumer1Stats;
         public StreamStats producer1Stats;
+        public Region region;
         public string consumerName = "Server";
         public string serverName;
         public string chatChannelId;
+        public bool regionIsDone;
         public bool streamListDone = false;
         public bool serverInStreamExists = false;
         public bool serverOutStreamExists = false;
@@ -118,6 +123,27 @@ namespace Macrometa {
             public ReceivedMessage receivedMessage;
         }
 
+        public void GetRegion() {
+            //Debug.Log(baseGDNData.ListStreamsURL());
+            _gdnErrorHandler.isWaiting = true;
+            _monobehaviour.StartCoroutine(MacrometaAPI.GetRegion(_gdnData, GetRegionCallback));
+        }
+
+        public void GetRegionCallback(UnityWebRequest www) {
+            _gdnErrorHandler.isWaiting = false;
+            if (www.isHttpError || www.isNetworkError) {
+                _gdnErrorHandler.currentNetworkErrors++;
+                GameDebug.Log("Get Region : " + www.error);
+            }
+            else {
+                region = JsonUtility.FromJson<Region>(www.downloadHandler.text);
+                    GameDebug.Log("Get Regionsucceed " );
+                    regionIsDone = true;
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                
+            }
+        }
+        
         public void GetListStream() {
             //Debug.Log(baseGDNData.ListStreamsURL());
             _gdnErrorHandler.isWaiting = true;
@@ -365,11 +391,6 @@ namespace Macrometa {
         public void CreateStatsProducer(string streamName) {
             _gdnErrorHandler.isWaiting = true;
             GameDebug.Log("CreateStatsProducer: " + streamName);
-            producer1Stats = new StreamStats() {
-                dataType = DataType.JSON,
-                streamName = streamName,
-                streamType = StreamType.Shared
-            };
             _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetStatsProducer));
         }
 
@@ -428,6 +449,9 @@ namespace Macrometa {
                 properties.r = pingTimeR;
                 properties.o = pingTimeO;
                 properties.n = aNodeId;
+                properties.host = region.host;
+                properties.city = region.locationInfo.city;
+                properties.countrycode = region.locationInfo.countrycode;
             }
 
             var message = new SendMessage() {
@@ -487,6 +511,7 @@ namespace Macrometa {
             };
 
             consumer1.OnMessage += (sender, e) => {
+                //GameDebug.Log("Consumer1.OnMessage A " );
                 var receivedMessage = JsonUtility.FromJson<ReceivedMessage>(e);
                 //GameDebug.Log("Consumer1.OnMessage type: "+ receivedMessage.properties.t );
                 //Debug.Log("low time: " + DateTime.Now.AddMinutes(discardMinutes));
@@ -502,7 +527,7 @@ namespace Macrometa {
                     // && DateTime.Now.AddMinutes(discardMinutes) < DateTime.Parse(receivedMessage.publishTime)  
                 ) {
                     // GameDebug.Log("Consumer1.OnMessage 2");
-                    GDNStreamDriver.Command command;
+                    Command command;
                     switch (receivedMessage.properties.t) {
                         case VirtualMsgType.Data:
 
@@ -533,7 +558,7 @@ namespace Macrometa {
 
                             break;
                         case VirtualMsgType.Connect:
-                            //GameDebug.Log("Consumer1.OnMessage Connect: " + receivedMessage.properties.s);
+                            GameDebug.Log("Consumer1.OnMessage Connect: " + receivedMessage.properties.s);
                             if (_isServer) {
                                 command = new GDNStreamDriver.Command() {
                                     command = QueueCommand.ConnectClient,
@@ -752,8 +777,16 @@ namespace Macrometa {
                             chatMessages.Enqueue(
                                 Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload)));
                             break;
-                        case VirtualMsgType.Internal :
-                            //send command to Lobby
+                        case VirtualMsgType.Internal:
+                            if (!isLobbyAdmin && receivedMessage.properties.d != consumerName) break;
+                            
+                            //send commands to Lobby
+                                // request team X
+                            // I a still here every second
+                                    //Update is still here time by 5 seconds
+                            // reply to room request
+                                // yes or no
+                            
                             break;
                     }
                 }
@@ -889,6 +922,7 @@ namespace Macrometa {
         }
 
         public int AddOrGetConnectionId(GDNNetworkDriver.GDNConnection gdnConnection) {
+           
             foreach (var kvp in gdnConnections) {
                 if (kvp.Value.destination == gdnConnection.destination &&
                     kvp.Value.port == gdnConnection.port) {
@@ -912,6 +946,7 @@ namespace Macrometa {
 
             gdnConnection.id = min;
             gdnConnections[min] = gdnConnection;
+            GameDebug.Log("modifying connection collection");
             return min;
         }
 
@@ -948,6 +983,7 @@ namespace Macrometa {
         public void RemoveConnectionId(int connectionID) {
             if (gdnConnections.ContainsKey(connectionID)) {
                 gdnConnections.Remove(connectionID);
+                //GameDebug.Log("modifying connection collection remove");
             }
         }
 
@@ -969,15 +1005,17 @@ namespace Macrometa {
         }
 
         public void InitPingStatsGroup() {
-
+            
             pingStatsGroup.InitStatsFromGDNDate(_gdnData);
             pingStatsGroup.SetStreamStats(consumer1Stats, true);
             pingStatsGroup.SetStreamStats(producer1Stats, false);
+            pingStatsGroup.InitStatsFromRegion(region);
         }
 
         public IEnumerator RepeatTransportPing() {
+            GameDebug.Log("starting RepeatTransportPing");
             for (;;) {
-                SendTransportPing();
+                SendTransportPings();
                 yield return new WaitForSeconds(pingFrequency);
 
             }
@@ -985,18 +1023,21 @@ namespace Macrometa {
 
         public void ReceiveTransportPong(ReceivedMessage receivedMessage) {
             var transportPing = TransportPings.Remove(receivedMessage.properties.i);
+            pongOnlyRtt = transportPing.elapsedTime;
             if (isStatsOn) {
                 var networkStatsData = pingStatsGroup.AddRtt(transportPing.elapsedTime,
                     producer1.Latency, consumer1.Latency,
                     receivedMessage.properties.o, receivedMessage.properties.r,
-                    receivedMessage.properties.n);
+                    receivedMessage.properties.n,
+                    receivedMessage.properties.host,receivedMessage.properties.city, receivedMessage.properties.countrycode);
                 if (networkStatsData != null) {
                     ProducerStatsSend(networkStatsData);
                 }
             }
         }
 
-        public void SendTransportPing() {
+        /*
+        public void SendTransportPings() {
             foreach (var destinationId in gdnConnections.Keys) {
                 if (TransportPings.firstPingTimes.ContainsKey(destinationId) &&
                     Time.time > TransportPings.firstPingTimes[destinationId]) {
@@ -1024,16 +1065,49 @@ namespace Macrometa {
                 }
             }
         }
+*/
+        /// <summary>
+        /// crashing latency test
+        /// so moved
+        ///  RemoveConnectionId(id); out of foreach
+        /// retest with Games list type usage
+        /// is all this first ping stuff just games list?
+        /// need to check games list code again
+        /// </summary>
+        public void SendTransportPings() {
+            foreach (var destinationId in gdnConnections.Keys) {
+                if (TransportPings.firstPingTimes.ContainsKey(destinationId) &&
+                    Time.time > TransportPings.firstPingTimes[destinationId]) {
 
+                    var pingId = TransportPings.Add(destinationId, Time.realtimeSinceStartup, 0);
+                    ProducerSend(destinationId, VirtualMsgType.Ping, new byte[0], pingId);
+                }
+                else if (!TransportPings.firstPingTimes.ContainsKey(destinationId)) {
+                    TransportPings.firstPingTimes[destinationId] = Time.time + initialPingDelay;
+                }
+            }
+            
+            var disocnnects = TransportPings.HeartbeatCheck(missedPingDisconnect);
+            foreach (var id in disocnnects) {
+                var driverTransportEvent = new GDNNetworkDriver.DriverTransportEvent() {
+                    connectionId = id,
+                    data = new byte[0],
+                    dataSize = 0,
+                    type = GDNNetworkDriver.DriverTransportEvent.Type.Disconnect
+                };
+                PushEventQueue(driverTransportEvent);
+                TransportPings.RemoveDestinationId(id);
+                RemoveConnectionId(id);
+                GameDebug.Log("lost connection id: " + id);
+            }
+            
+        }
+        
         public void SendSimpleTransportPing() {
             GameDebug.Log("SendSimpleTransportPing()");
-           
-
-                    var pingId = TransportPings.Add(0, Time.realtimeSinceStartup, 0);
+                var pingId = TransportPings.Add(0, Time.realtimeSinceStartup, 0);
                     ProducerSend(0, VirtualMsgType.Ping, new byte[0], pingId);
                     GameDebug.Log("SendSimpleTransportPing() ProducerSend called ");
-              
-            
         }
         
         public void SendTransportPong(ReceivedMessage receivedMessage) {
@@ -1115,7 +1189,7 @@ namespace Macrometa {
                     ReceiveTransportPong(command.receivedMessage);
                     break;
                 case QueueCommand.SendTransportPing:
-                    SendTransportPing();
+                    SendTransportPings();
                     break;
                 case QueueCommand.SendTransportPong:
                     SendTransportPong(command.receivedMessage);

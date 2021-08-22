@@ -57,10 +57,14 @@ namespace Macrometa {
                    fabric+ "/" + region+"s."+streamName ;
         }
         
+        public string GetRegionURL() {
+            return "https://" + requestURL + "/datacenter/local";
+        }
+        
         public string GetOTPURL() {
             return "https://" + requestURL + "/apid/otp";
         }
-
+        
         public void Authorize(UnityWebRequest www) {
             www.SetRequestHeader("Authorization", "apikey " + apiKey);
         }
@@ -116,6 +120,33 @@ namespace Macrometa {
         public int type;
     }
 
+    [Serializable]
+    public struct Region {
+        public string _key;
+        public string host;
+        public bool local;
+        public string name;
+        public int port;
+        public bool spot_region;
+        public int status;
+        // tags not implemnented locally 
+        public LocationInfo locationInfo;
+    }
+
+    [Serializable]
+    public struct LocationInfo {
+        public string city;
+        public string countrycode;
+        public string countryname;
+        public float latitude;
+        public float longitude;
+        public string url;
+    }
+    /*
+     {"_key":"gdn-ap-northeast","host":"139.162.118.31","local":true,"name":"gdn-ap-northeast","port":30003,"spot_region":false,"status":0,"tags":{"api":"api-gdn-ap-northeast.paas.macrometa.io","role":"c8streams-agent","url":"gdn-ap-northeast.paas.macrometa.io"},
+     "locationInfo":{"city":"Tokyo","countrycode":"JP","countryname":"Japan","latitude":"35.6865","longitude":"139.7458","url":"gdn-ap-northeast.paas.macrometa.io"}}
+     */
+    
     [Serializable]
     public struct ListKVCollection{
         public bool error;
@@ -197,6 +228,11 @@ namespace Macrometa {
         public int r;// last ping time consumer i.e. remote ping time
         public int o;// last ping time producer i.e. remote ping time
         public string n;// node i.e. remote ping time
+        public string host; // datacenter host from region
+        public string city;
+        public string countrycode;
+        //public LocationInfo locationInfo; // data center info from region
+
     }
     
     [Serializable]
@@ -237,6 +273,14 @@ namespace Macrometa {
         public static IEnumerator ClearAllBacklogs(GDNData gdnData, Action<UnityWebRequest> callback) {
             List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
             UnityWebRequest www = UnityWebRequest.Post(gdnData.ClearAllBacklogs(), formData);
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            yield return www.SendWebRequest();
+            if (callback != null)
+                callback(www);
+        }
+
+        public static IEnumerator GetRegion(GDNData gdnData, Action<UnityWebRequest> callback) {
+            UnityWebRequest www = UnityWebRequest.Get(gdnData.GetRegionURL());
             www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
             yield return www.SendWebRequest();
             if (callback != null)
