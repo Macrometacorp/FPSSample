@@ -46,8 +46,11 @@ public class JoinMenu : MonoBehaviour
         UpdateGdnFields();
 
         // Unless typing, fill in field from configvar
-        if (!playername.isFocused)
+        if (!playername.isFocused) {
             playername.text = ClientGameLoop.clientPlayerName.Value;
+            GDNStreamDriver.localId = playername.text;
+        }
+
         if (playername.text == "Noname") {
             playername.text = MakePlayerName();
             OnNameChanged();
@@ -70,7 +73,7 @@ public class JoinMenu : MonoBehaviour
     string MakePlayerName()
     {
 
-        var f = new string[] { "Ultimate", "Furry", "Quick", "Laggy", "Hot", "Curious", "Flappy", "Sneaky", "Nested", "Deep", "Blue", "Hipster", "Artificial" };
+        var f = new string[] { "Ultimate", "Furry", "Quick", "Laggy", "Hot", "Curious", "Flappy", "Sneaky", "Nested", "Deep", "Blue", "Hipster" };
         var l = new string[] { "Soldier", "Pioneer", "Killer", "Maniac", "Sniper", "Private", "Marine", "Camper", "Dodger", "Robot", "Dolphin" };
         return f[Random.Range(0, f.Length)] + " " + l[Random.Range(0, l.Length)];
     }
@@ -215,6 +218,7 @@ public class JoinMenu : MonoBehaviour
     {
         Console.EnqueueCommandNoHistory("client.playername \"" + playername.text + '"');
         Console.EnqueueCommandNoHistory("saveconfig");
+        GDNStreamDriver.localId = playername.text;
 
     }
 

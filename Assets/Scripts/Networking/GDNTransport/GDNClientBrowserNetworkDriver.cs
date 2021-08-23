@@ -10,6 +10,7 @@ namespace Macrometa {
         
         public bool debugKVTryInit =true;
 
+        public string localId;
         public bool tryKVInit = false;
         public bool tryKVInitB = false;
         public bool canNotInit = false;
@@ -33,6 +34,7 @@ namespace Macrometa {
         
         public override void Awake() {
             GDNStreamDriver.isClientBrowser = true;
+            GDNStreamDriver.localId = localId;
             gdnErrorHandler = new GDNErrorhandler();
             var defaultConfig = RwConfig.ReadConfig();
             RwConfig.Flush();

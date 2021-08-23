@@ -151,6 +151,7 @@ namespace Macrometa {
         public StreamStats outStreamStats;
         public StreamStats inStreamStats;
 
+        public string appType;
         public string localNodeId; // node Id
         public string remoteNodeId; // node Id
         
@@ -299,6 +300,7 @@ namespace Macrometa {
             return new NetworkStatsData() {
                 dateTime =(long)(dateTime.
                     Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
+                appType = appType,
                 localNodeId = localNodeId,
                 localHost = localHost,  //datacenter ip
                 localCity = localCity,
@@ -324,8 +326,8 @@ namespace Macrometa {
             };
         }
         public class NetworkStatsData {
-            public string version = "0.1";
-            public string appType = "Monitor";
+            public string version = "0.2";
+            public string appType = "FPS";
             public int rttAverage; // in milliseconds 2 decimalplaces
             public int streamOutMessages; //number of messages sent in time period
             public int streamInMessages;  //number of messages recieved in time period
@@ -357,14 +359,14 @@ namespace Macrometa {
     
         
         public NetworkStatsData AddRtt(float rtt, float outLocalPing, float inLocalPing,
-            float outRemotePing,float inRemotePing, string aNodeId, string host, string city, string countrycode) {
+            float outRemotePing,float inRemotePing, string localId, string host, string city, string countrycode) {
             NetworkStatsData result= null;
             rttTotal += rtt;
             streamOutLocalPingTotal += outLocalPing;
             streamInLocalPingTotal += inLocalPing;
             streamOutRemotePingTotal += outRemotePing;
             streamInRemotePingTotal += inRemotePing;
-            remoteNodeId = aNodeId;
+            remoteId = localId;
             remoteHost = host;
             remoteCity = city;
             remoteCountrycode = countrycode;

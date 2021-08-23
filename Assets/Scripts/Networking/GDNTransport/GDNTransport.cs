@@ -12,8 +12,12 @@ public class GDNTransport :  INetworkTransport {
     public static bool sendDummyTraffic= false; //off by default for compatibility
     public static bool isMonitor = false;  // is monitor not game
     public static bool connectionStarted = false;
+    public static string localId;
+    public static string appType;
     
     public GDNNetworkDriver gdnNetworkDriver;
+   
+    
     private GDNNetworkDriver.GDNConnection[] m_IdToConnection;
     
     private static GDNTransport instance=null;
@@ -43,6 +47,8 @@ public class GDNTransport :  INetworkTransport {
         GDNStreamDriver.isSocketPingOn = isSocketPingOn;
         GDNStreamDriver.isStatsOn = isStatsOn;
         GDNStreamDriver.sendDummyTraffic = sendDummyTraffic;
+        GDNStreamDriver.localId = localId;
+        GDNStreamDriver.appType = appType;
         gdnNetworkDriver= new GameObject().AddComponent<GDNNetworkDriver>();
 
         MonoBehaviour.DontDestroyOnLoad(gdnNetworkDriver.gameObject);

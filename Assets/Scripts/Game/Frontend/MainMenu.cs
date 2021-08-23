@@ -88,6 +88,7 @@ public class MainMenu : MonoBehaviour
     }
     
     void Update() {
+        
         if (gdnClientBrowserNetworkDriver.initSucceeded) {
             CreateGame();
             gdnClientBrowserNetworkDriver.initSucceeded= false;

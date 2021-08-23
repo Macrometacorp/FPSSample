@@ -227,7 +227,7 @@ namespace Macrometa {
         // these are only used in TranportPing/Pong
         public int r;// last ping time consumer i.e. remote ping time
         public int o;// last ping time producer i.e. remote ping time
-        public string n;// node i.e. remote ping time
+        public string localId;// node i.e. remote ping time
         public string host; // datacenter host from region
         public string city;
         public string countrycode;

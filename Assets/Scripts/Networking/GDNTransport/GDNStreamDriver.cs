@@ -25,6 +25,9 @@ namespace Macrometa {
         public static float initialPingDelay = 30; // wait period before first ping is sent after connect
         public static bool isClientBrowser = false;
         public static bool isLobbyAdmin = false;
+        public static string localId;
+        public static string appType;
+        public string nodeId = "";
         public ListStream listStream;
         public WebSocket consumer1;
         public WebSocket producer1;
@@ -60,7 +63,7 @@ namespace Macrometa {
         public float pingFrequency = 1;
         public float dummyFrequency = 0.05f; // FPSSample standard is 20 messages per second
         public int dummySize = 50; // FPSSample standard is under 2000 bytes per second
-        public string nodeId = "";
+        
         public PingStatsGroup pingStatsGroup = new PingStatsGroup();
         public int statsGroupSize;
         public int dummyTrafficQuantity;
@@ -423,7 +426,7 @@ namespace Macrometa {
         }
 
         public void ProducerSend(int id, VirtualMsgType msgType, byte[] payload,
-            int pingId = 0, int pingTimeR = 0, int pingTimeO = 0, string aNodeId = "") {
+            int pingId = 0, int pingTimeR = 0, int pingTimeO = 0, string localId = "") {
             //GameDebug.Log("ProducerSend A: " + id);
             if (!gdnConnections.ContainsKey(id)) {
                 GameDebug.Log("ProducerSend bad id:" + id)  ;
@@ -431,12 +434,12 @@ namespace Macrometa {
 
             var gdnConnection = gdnConnections[id];
             
-            ProducerSend( gdnConnection,msgType, payload, pingId, pingTimeR, pingTimeO, aNodeId);
+            ProducerSend( gdnConnection,msgType, payload, pingId, pingTimeR, pingTimeO, localId);
         }
 
         private void ProducerSend(GDNNetworkDriver.GDNConnection gdnConnection, VirtualMsgType msgType,
             byte[] payload, int pingId, int pingTimeR, int pingTimeO,
-            string aNodeId ) {
+            string localId ) {
             var properties = new MessageProperties() {
                 t = msgType,
                 p = gdnConnection.port,
@@ -448,7 +451,7 @@ namespace Macrometa {
                 properties.i = pingId;
                 properties.r = pingTimeR;
                 properties.o = pingTimeO;
-                properties.n = aNodeId;
+                properties.localId = localId;
                 properties.host = region.host;
                 properties.city = region.locationInfo.city;
                 properties.countrycode = region.locationInfo.countrycode;
@@ -1010,6 +1013,8 @@ namespace Macrometa {
             pingStatsGroup.SetStreamStats(consumer1Stats, true);
             pingStatsGroup.SetStreamStats(producer1Stats, false);
             pingStatsGroup.InitStatsFromRegion(region);
+            pingStatsGroup.localId = localId;
+            pingStatsGroup.appType = appType;
         }
 
         public IEnumerator RepeatTransportPing() {
@@ -1028,7 +1033,7 @@ namespace Macrometa {
                 var networkStatsData = pingStatsGroup.AddRtt(transportPing.elapsedTime,
                     producer1.Latency, consumer1.Latency,
                     receivedMessage.properties.o, receivedMessage.properties.r,
-                    receivedMessage.properties.n,
+                    receivedMessage.properties.localId,
                     receivedMessage.properties.host,receivedMessage.properties.city, receivedMessage.properties.countrycode);
                 if (networkStatsData != null) {
                     ProducerStatsSend(networkStatsData);
@@ -1118,7 +1123,7 @@ namespace Macrometa {
             };
             //GameDebug.Log("send pong : "+ receivedMessage.properties.s);
             ProducerSend(connection, VirtualMsgType.Pong, new byte[0], receivedMessage.properties.i,
-                producer1.Latency, consumer1.Latency, nodeId);
+                producer1.Latency, consumer1.Latency, localId);
         }
 
         private IEnumerator RepeatDummyMsg() {
