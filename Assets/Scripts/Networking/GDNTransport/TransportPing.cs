@@ -341,8 +341,8 @@ namespace Macrometa {
             public long dateTime;  // unix time stamp 
             public string localNodeId; // not full domain name missing macrometa.io
             public string localHost;  //datacenter ip
-            public string localCity;
-            public string localCountrycode;
+            public string localCity;  //datacenter  city name
+            public string localCountrycode; // datacenter country
             public string remoteHost;  //datacenter ip
             public string remoteCity;
             public string remoteCountrycode;

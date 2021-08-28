@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using BestHTTP.WebSocket;
+using Macrometa.Lobby;
 using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Networking;
@@ -25,7 +26,7 @@ namespace Macrometa {
         public static float initialPingDelay = 30; // wait period before first ping is sent after connect
         public static bool isClientBrowser = false;
         public static bool isLobbyAdmin = false;
-        public static string localId;
+        public static string localId;  // is player name in FPS
         public static string appType;
         public string nodeId = "";
         public ListStream listStream;
@@ -75,7 +76,8 @@ namespace Macrometa {
             new Queue<GDNNetworkDriver.DriverTransportEvent>();
         
         public Queue<string> chatMessages = new Queue<string>();
-        private ConcurrentQueue<GDNStreamDriver.Command> queue = new ConcurrentQueue<GDNStreamDriver.Command>();
+        private ConcurrentQueue<GDNStreamDriver.Command> _commandQueue = new ConcurrentQueue<GDNStreamDriver.Command>();
+        private ConcurrentQueue<LobbyCommand> _lobbyQueue = new ConcurrentQueue<LobbyCommand>();
         private GDNErrorhandler _gdnErrorHandler;
         private GDNData _gdnData;
         private bool _isServer;
@@ -363,7 +365,7 @@ namespace Macrometa {
 
         public void SetChatProducer(WebSocket ws, string debug = "") {
             chatProducer1 = ws;
-            
+            chatProducer1.StartPingThread = true; // needed for lobby
             chatProducer1.OnOpen += (o) => {
                 _gdnErrorHandler.isWaiting = false;
                 chatProducerExists = true;
@@ -756,6 +758,37 @@ namespace Macrometa {
             string msgJSON = JsonUtility.ToJson(message);
             chatProducer1.Send(msgJSON);
         }
+        public void ChatSendHeartBeat() {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.HeartBeat,
+                source = consumerName,
+                playerName = localId
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        
+        public void ChatSendRoomRequest(int roomId) {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.RequestRoom,
+                source = consumerName,
+                playerName = localId
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        public void ChatSendCommand(string channelId,  LobbyCommand command ) {
+            var properties = new MessageProperties() {
+                t = VirtualMsgType.Internal,
+                d = channelId,
+                s = consumerName
+            };
+            var msg = JsonUtility.ToJson(command);
+            var message = new SendMessage() {
+                properties = properties,
+                payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(msg))
+            };
+            string msgJSON = JsonUtility.ToJson(message);
+            chatProducer1.Send(msgJSON);
+        }
 
         public void SetChatConsumer(WebSocket ws, string debug = "") {
 
@@ -782,14 +815,9 @@ namespace Macrometa {
                             break;
                         case VirtualMsgType.Internal:
                             if (!isLobbyAdmin && receivedMessage.properties.d != consumerName) break;
-                            
-                            //send commands to Lobby
-                                // request team X
-                            // I a still here every second
-                                    //Update is still here time by 5 seconds
-                            // reply to room request
-                                // yes or no
-                            
+                            var json  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
+                            var lobbyCommand = JsonUtility.FromJson<LobbyCommand>(json);
+                            AddLobbyCommand(lobbyCommand);
                             break;
                     }
                 }
@@ -949,7 +977,7 @@ namespace Macrometa {
 
             gdnConnection.id = min;
             gdnConnections[min] = gdnConnection;
-            GameDebug.Log("modifying connection collection");
+//            GameDebug.Log("modifying connection collection");
             return min;
         }
 
@@ -1160,12 +1188,12 @@ namespace Macrometa {
         }
 
         private void AddCommand(GDNStreamDriver.Command command) {
-            queue.Enqueue(command);
+            _commandQueue.Enqueue(command);
         }
 
         public void ExecuteCommands() {
             GDNStreamDriver.Command command;
-            while (queue.TryDequeue(out command)) {
+            while ( _commandQueue.TryDequeue(out command)) {
                 Execute(command);
             }
         }
@@ -1201,9 +1229,48 @@ namespace Macrometa {
                     break;
                 default:
                     break;
+            }
+        }
+        private void AddLobbyCommand(LobbyCommand command) {
+            _lobbyQueue.Enqueue(command);
+        }
+
+        public void ExecuteLobbyCommands() {
+            LobbyCommand command;
+            while (_lobbyQueue.TryDequeue(out command)) {
+                ExecuteLobby(command);
+            }
+        }
+
+        private void ExecuteLobby(LobbyCommand command) {
+            switch (command.command) {
+                case LobbyCommandType.RequestRoom:
+                    if (isLobbyAdmin) {
+                        GameDebug.Log("Request for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
+                                      +  "clientId " + command.source);
+                        //check if room has space
+                        //send command to kv
+                        //respond true
+                        //else
+                        //respond false
+                    }
+                    else {
+                        GameDebug.Log("Response for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
+                                      +  "clientId " + command.source + "succeed: "+ command.succeed);
+                        // on false flash fail message
+                    }
+                    break;
+                case LobbyCommandType.HeartBeat:
+                    if (isLobbyAdmin) {
+                        GameDebug.Log("handle heartbeak from source: " + command.source);
+                        //update last heartbeat time in heartBeat collection
+                    }
+
+                    break;
+                default:
+                    break;
 
             }
-
         }
     }
 

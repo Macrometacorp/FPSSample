@@ -10,6 +10,59 @@ using Object = System.Object;
 
 namespace Macrometa {
 
+    ///documents
+///_fabric/{fabric}/_api/document/{collection} Removes multiple documents delete
+///_fabric/{fabric}/_api/document/{collection} Update documents  patch
+
+
+/// /_fabric/{fabric}/_api/document/{collection}/{key} remove single document delete
+
+/// /_fabric/{fabric}/_api/document/{collection}/{key} can be used for checking doc _rev Head
+///_fabric/{fabric}/_api/document/{collection}/{key} Removes single document delete
+///_fabric/{fabric}/_api/document/{collection}/{key} Update single document  patch
+
+/// indexes
+
+/// /_fabric/{fabric}/_api/index/persistent create persistent index
+/*
+ A JSON object with these properties is required:
+
+fields (string): an array of attribute paths.
+unique: if true, then create a unique index.
+type: must be equal to "persistent".
+sparse: if true, then create a sparse index.
+ */
+///_fabric/{fabric}/_api/index/ttl
+/*
+ A JSON object with these properties is required:
+
+fields (string): an array with exactly one attribute path.
+type: must be equal to "ttl".
+expireAfter: The time (in seconds) after a document's creation after which the documents count as "expired".
+ */
+
+/// Collections
+//    /_fabric/{fabric}/_api/collection  Post create
+/*
+ A JSON object with these properties is required:
+
+keyOptions:
+allowUserKeys: if set to true, then it is allowed to supply own key values in the _key attribute of a document. If set to false, then the key generator will solely be responsible for generating keys and supplying own key values in the _key attribute of documents is considered an error.
+type: specifies the type of the key generator. The currently available generators are traditional, autoincrement, uuid and padded. The traditional key generator generates numerical keys in ascending order. The autoincrement key generator generates numerical keys in ascending order, the initial offset and the spacing can be configured The padded key generator generates keys of a fixed length (16 bytes) in ascending lexicographical sort order. This is ideal for usage with the RocksDB engine, which will slightly benefit keys that are inserted in lexicographically ascending order. The key generator can be used in a single-server or cluster. The uuid key generator generates universally unique 128 bit keys, which are stored in hexadecimal human-readable format. This key generator can be used in a single-server or cluster to generate "seemingly random" keys. The keys produced by this key generator are not lexicographically sorted.
+increment: increment value for autoincrement key generator. Not used for other key generator types.
+offset: Initial offset value for autoincrement key generator. Not used for other key generator types.
+name: The name of the collection.
+isSystem: If true, create a system collection. In this case collection-name should start with an underscore. End users should normally create non-system collections only. API implementors may be required to create system collections in very special occasions, but normally a regular collection will do. (The default is false)
+type: The type of the collection to be created.
+The following values for type are valid (The default is 2):
+2: document collection
+3: edge collection.
+stream: If true, create a local stream for collection. (The default is false)
+ */
+
+    /// Query
+    /// /_fabric/{fabric}/_api/cursor create cursor see web page
+    /// /_fabric/{fabric}/_api/cursor/{cursor-identifier}  get next cursor
 
     [Serializable]
     public struct GDNData {
@@ -23,8 +76,47 @@ namespace Macrometa {
 
         public string requestURL => "api-" + federationURL;
 
+        #region Collection
+        public string GetCollectionsURL() {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/collection?excludeSystem=true";
+        }
         
-        ///_fabric/{fabric}/_api/streams/clearbacklog
+        public string PostCreateCollectionsURL() {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/collection";
+        }
+        #endregion Collection
+        
+        #region Indexes
+        public string GetIndexesURL(string collection) {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index?collection="+collection;
+        }
+        
+        public string PostPersistentIndexURL() {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index/persistent";
+        }
+        
+        public string PostTTLIndexURL() {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index/ttl";
+        }
+        #endregion Indexes
+        
+        #region Document URLS
+
+        //   409 key violation
+        public string PostInsertDocumentURL(string collection) {
+            return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection;
+        }
+        
+        public string GetDocumentURL(string collection, string key) {
+            return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"/"+ key;
+        }
+        public string PutReplaceDocumentURL(string collection, string key) {
+            return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"/"+ key;
+        }
+        
+        #endregion Document URLS
+    
+        #region Stream URLS
         public string ClearAllBacklogs() {
             return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/streams/clearbacklog";
         }
@@ -57,6 +149,9 @@ namespace Macrometa {
                    fabric+ "/" + region+"s."+streamName ;
         }
         
+        #endregion stream URLS
+        
+        #region Autorization
         public string GetRegionURL() {
             return "https://" + requestURL + "/datacenter/local";
         }
@@ -69,10 +164,9 @@ namespace Macrometa {
             www.SetRequestHeader("Authorization", "apikey " + apiKey);
         }
 
-        public string StreamListName(string streamName) {
-            return region + "s." + streamName;
-        }
-        
+        #endregion Autorization
+
+        #region KV URLS
         public string CreateKVURL(string name, bool isExpire) {
             return "https://" + requestURL + "/_fabric/" + fabric + "/_api/kv/" + name + "?expiration=" + isExpire;
         }
@@ -92,7 +186,11 @@ namespace Macrometa {
             return "https://" + requestURL + "/_fabric/" + fabric + "/kv/"
                    + name + "/value";
         }
+        #endregion KV URLS
         
+        public string StreamListName(string streamName) {
+            return region + "s." + streamName;
+        }
     }
 
     [Serializable]
@@ -120,6 +218,56 @@ namespace Macrometa {
         public int type;
     }
 
+    [Serializable]
+    public struct ListCollection{
+        public bool error;
+        public int code;
+        public List<Collection> result;
+    }
+
+    
+    [Serializable]
+    public struct Collection {
+        public string id;
+        public string name;
+        public int status;
+        public int type;
+        public string collectionModel;
+        public bool isSpot;
+        public bool isLocal;
+        public bool hasStream;
+        public bool isSystem;
+        public string globallyUniqueId;
+        public bool searchEnabled;
+    }
+
+    [Serializable]
+    public struct IndexParams {
+    public List<string> fields;
+    public bool sparse;
+    public string type;
+    public bool unique;
+    }
+
+    
+    [Serializable]
+    public struct ListIndexes{
+        public bool error;
+        public int code;
+        public List<Index> result;
+    }
+
+    
+    [Serializable]
+    public struct Index {
+        public string id;
+        public string name;
+        public string[] fields;
+        public string type;
+        public bool sparse;
+        public bool unique;
+    }
+    
     [Serializable]
     public struct Region {
         public string _key;
@@ -173,8 +321,6 @@ namespace Macrometa {
         public string value;
         public int expireAt; // unix timestamp
     }
-    
-    
     
     [Serializable]
     public struct BaseHtttpReply {
@@ -249,7 +395,15 @@ namespace Macrometa {
     }
     
     public class MacrometaAPI {
-        
+        public static UnityWebRequest WebPost(string url, string data,GDNData gdnData) {
+            UnityWebRequest www = new UnityWebRequest(url, "POST");
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
+            www.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            return www;
+        }
         public static string Base64Encode(string plainText) {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
             return System.Convert.ToBase64String(plainTextBytes);
@@ -415,8 +569,65 @@ namespace Macrometa {
             if (callback != null)
                 callback(www);
         }
+        #endregion
+        #region DocumentCollection
+
+        public static IEnumerator ListDocumentCollections(GDNData gdnData, Action<UnityWebRequest> callback) {
+            
+            UnityWebRequest www = UnityWebRequest.Get(gdnData.GetCollectionsURL());
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            yield return www.SendWebRequest();
+            if (callback != null)
+                callback(www);
+        }
+
+      
+        public static IEnumerator ListIndexes(GDNData gdnData, string collection, Action<UnityWebRequest> callback) {
+
+            UnityWebRequest www = UnityWebRequest.Get(gdnData.GetIndexesURL(collection));
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            yield return www.SendWebRequest();
+            if (callback != null)
+                callback(www);
+        }
+
+        public static IEnumerator CreateCollection(GDNData gdnData, string collectionName,
+            Action<UnityWebRequest> callback) {
+           // var data= "{ \"name\": \" "+collectionName+"\" }";
+            var data= "{ \"name\": \""+collectionName +"\",\"stream\": true }";
+            var www = WebPost(gdnData.PostCreateCollectionsURL(), data, gdnData);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www);
+        }
+        /*
+        public static IEnumerator GetKVValues(GDNData gdnData, string collectionName,
+            Action<UnityWebRequest> callback) {
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+            var url = gdnData.GetKVValuesURL(collectionName);
+            //GameDebug.Log("KV url: "+ url);
+            UnityWebRequest www = UnityWebRequest.Post(url, formData);
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www);
+        }
+        public static IEnumerator PutKVValue(GDNData gdnData, string collectionName, string kvRecord,
+            Action<UnityWebRequest> callback) {
+            byte[] putData = System.Text.Encoding.UTF8.GetBytes(kvRecord);
+            var url = gdnData.PutKVValueURL(collectionName);
+           // GameDebug.Log("put URL: " + url);
+            UnityWebRequest www = UnityWebRequest.Put(url, putData);
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www);
+        }
         
-       
+       */
         
         
         #endregion
