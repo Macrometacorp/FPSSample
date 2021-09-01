@@ -40,7 +40,7 @@ public class JoinMenu : MonoBehaviour
     }
 
     public void Start() {
-        gameList = mainMenu.gdnClientBrowserNetworkDriver.gameList;
+        //gameList = mainMenu.gdnClientBrowserNetworkDriver.gameList;
     }
     public void UpdateMenu() {
         UpdateGdnFields();
@@ -65,7 +65,7 @@ public class JoinMenu : MonoBehaviour
             }
         }
         else {
-            gameList = mainMenu.gdnClientBrowserNetworkDriver.gameList;
+           // gameList = mainMenu.gdnClientBrowserNetworkDriver.gameList;
         }
        
     }

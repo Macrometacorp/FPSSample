@@ -16,13 +16,17 @@ public class PlayerUI : MonoBehaviour {
     public TMP_Text rttTime;
     public Button serverAllowed; //shown to admin to select who can start game server
     public Button startGameServer; // shown to player to start game server
-
-    public void DisplayPlayer(TeamSlot teamSlot) {
+    public GameObject highlight;
+    
+    public void DisplayPlayer(TeamSlot teamSlot, bool isHighlight) {
         if (teamSlot == null) {
             emptySlot.SetActive(true);
             activePlayer.SetActive(false);
+            highlight.SetActive(false);
             return;
         }
+
+        highlight.SetActive(isHighlight);
         emptySlot.SetActive(false);
         activePlayer.SetActive(true);
         playerName.text = teamSlot.playerName;

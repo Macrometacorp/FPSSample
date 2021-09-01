@@ -37,10 +37,12 @@ namespace Macrometa {
         public WebSocket producerStats;
         public StreamStats consumer1Stats;
         public StreamStats producer1Stats;
+        public WebSocket lobbyDocumentReader; // lobby collection stream
         public Region region;
         public string consumerName = "Server";
         public string serverName;
         public string chatChannelId;
+        public string chatLobbyId;  //used for internal messages not using channel switching in chat yet
         public bool regionIsDone;
         public bool streamListDone = false;
         public bool serverInStreamExists = false;
@@ -52,6 +54,9 @@ namespace Macrometa {
         public bool chatProducerExists = false;
         public bool chatConsumerExists = false;
         public bool producerStatsExists = false;
+        public bool lobbyDocumentReaderExists = false;
+        public bool lobbyUpdateAvail = false;
+        public LobbyValue lobbyUpdate;
         public bool sendConnect = true;
         public bool setupComplete = false;
         public bool pingStarted = false;
@@ -323,7 +328,7 @@ namespace Macrometa {
                 streamName = streamName,
                 streamType = StreamType.Shared
             };
-            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetProducer));
+            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetProducer, _gdnErrorHandler));
         }
 
         public void SetProducer(WebSocket ws, string debug = "") {
@@ -360,7 +365,7 @@ namespace Macrometa {
 
         public void CreateChatProducer(string streamName) {
             _gdnErrorHandler.isWaiting = true;
-            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetChatProducer));
+            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetChatProducer,_gdnErrorHandler));
         }
 
         public void SetChatProducer(WebSocket ws, string debug = "") {
@@ -396,7 +401,7 @@ namespace Macrometa {
         public void CreateStatsProducer(string streamName) {
             _gdnErrorHandler.isWaiting = true;
             GameDebug.Log("CreateStatsProducer: " + streamName);
-            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetStatsProducer));
+            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetStatsProducer,_gdnErrorHandler));
         }
 
         public void SetStatsProducer(WebSocket ws, string debug = "") {
@@ -502,7 +507,7 @@ namespace Macrometa {
                 streamName = streamName,
                 streamType = StreamType.Shared
             };
-            _monobehaviour.StartCoroutine(MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetConsumer));
+            _monobehaviour.StartCoroutine(MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetConsumer,_gdnErrorHandler));
         }
 
         public void SetConsumer(WebSocket ws, string debug = "") {
@@ -678,7 +683,7 @@ namespace Macrometa {
                 streamType = StreamType.Shared
             };
             _monobehaviour.StartCoroutine(
-                MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetConsumerPongOnly));
+                MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetConsumerPongOnly,_gdnErrorHandler));
         }
 
         public void SetConsumerPongOnly(WebSocket ws, string debug = "") {
@@ -739,12 +744,6 @@ namespace Macrometa {
             consumer1.Open();
         }
         
-        public void CreateChatConsumer(string streamName, string consumerName) {
-            _gdnErrorHandler.isWaiting = true;
-           
-            _monobehaviour.StartCoroutine(
-                MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetChatConsumer));
-        }
         
         public void ChatSend(string channelId,  string msg, VirtualMsgType msgType = VirtualMsgType.Data) {
             var properties = new MessageProperties() {
@@ -771,7 +770,9 @@ namespace Macrometa {
             var command = new LobbyCommand() {
                 command = LobbyCommandType.RequestRoom,
                 source = consumerName,
-                playerName = localId
+                playerName = localId,
+                roomNumber = roomId,
+                teamSlot = GDNClientLobbyNetworkDriver2.MakeSelfTeamSlot()
             };
             ChatSendCommand(chatChannelId,command);
         }
@@ -787,7 +788,15 @@ namespace Macrometa {
                 payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(msg))
             };
             string msgJSON = JsonUtility.ToJson(message);
+            GameDebug.Log("ChatSendCommand D " );
             chatProducer1.Send(msgJSON);
+        }
+        
+        public void CreateChatConsumer(string streamName, string consumerName) {
+            _gdnErrorHandler.isWaiting = true;
+           
+            _monobehaviour.StartCoroutine(
+                MacrometaAPI.Consumer(_gdnData, streamName, consumerName, SetChatConsumer,_gdnErrorHandler));
         }
 
         public void SetChatConsumer(WebSocket ws, string debug = "") {
@@ -814,9 +823,11 @@ namespace Macrometa {
                                 Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload)));
                             break;
                         case VirtualMsgType.Internal:
+                            GameDebug.Log(" chatConsumer1.OnMessage internal " );
                             if (!isLobbyAdmin && receivedMessage.properties.d != consumerName) break;
                             var json  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
                             var lobbyCommand = JsonUtility.FromJson<LobbyCommand>(json);
+                            GameDebug.Log(" chatConsumer1.OnMessage lobbycommand: " + lobbyCommand.command );
                             AddLobbyCommand(lobbyCommand);
                             break;
                     }
@@ -851,6 +862,57 @@ namespace Macrometa {
 
         }
 
+        
+        public void CreateDocuomentReader(string streamName, string aConsumerName) {
+            _gdnErrorHandler.isWaiting = true;
+           
+            _monobehaviour.StartCoroutine(
+                MacrometaAPI.DocumentReader(_gdnData, streamName, aConsumerName, SetDocumentReader,_gdnErrorHandler));
+        }
+
+        public void SetDocumentReader(WebSocket ws, string debug = "") {
+            lobbyDocumentReader = ws;
+            lobbyDocumentReader.OnOpen += (o) => {
+                GameDebug.Log("Stream driver Open " + debug + " chatConsumer1: " );
+                lobbyDocumentReaderExists = true;
+                _gdnErrorHandler.isWaiting = false;
+            };
+
+            lobbyDocumentReader.OnMessage += (sender, e) => {
+                GameDebug.Log(" LobbyDocumentReader.OnMessage: " );
+                var receivedMessage = JsonUtility.FromJson<ReceivedMessage>(e);
+                var json  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
+                var lobbyBase = JsonUtility.FromJson<LobbyBase>(json);
+                GameDebug.Log(" LobbyDocumentReaderExists.OnMessage stream name:" +  lobbyBase.lobbyValue.streamName + ":"+
+                              chatLobbyId +":"+lobbyBase.lobby);
+                if (lobbyBase.lobby && chatLobbyId ==  lobbyBase.lobbyValue.streamName) {
+                    lobbyUpdate = lobbyBase.lobbyValue;
+                    lobbyUpdateAvail = true;
+                }
+                
+            };
+            lobbyDocumentReader.OnError += (sender, e) => {
+                GameDebug.Log("WebSocket Error" + debug + " : " + e);
+
+                if (producer1 != null && producer1.IsOpen) {
+                    producer1.Close();
+                }
+                else {
+                    lobbyDocumentReaderExists = false;
+                    _gdnErrorHandler.isWaiting = false;
+                }
+            };
+
+            lobbyDocumentReader.OnClosed += (socket, code, message) => {
+                lobbyDocumentReaderExists = false;
+                _gdnErrorHandler.isWaiting = false;
+            };
+
+            lobbyDocumentReader.Open();
+
+        }
+
+        
         
         public void ConnectClient(ReceivedMessage receivedMessage) {
             var connection = new GDNNetworkDriver.GDNConnection() {
@@ -1236,8 +1298,10 @@ namespace Macrometa {
         }
 
         public void ExecuteLobbyCommands() {
+            //GameDebug.Log("ExecuteLobbyCommands");
             LobbyCommand command;
             while (_lobbyQueue.TryDequeue(out command)) {
+                GameDebug.Log("ExecuteLobbyCommand: "+ command.command);
                 ExecuteLobby(command);
             }
         }
@@ -1248,16 +1312,16 @@ namespace Macrometa {
                     if (isLobbyAdmin) {
                         GameDebug.Log("Request for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
                                       +  "clientId " + command.source);
-                        //check if room has space
-                        //send command to kv
-                        //respond true
-                        //else
-                        //respond false
+                        GDNClientLobbyNetworkDriver2.MoveToTeam(command.teamSlot, command.roomNumber);
+                        // do MoveTo()
+                        //      this move if possible and then send update to lobby even if not done
+
                     }
                     else {
                         GameDebug.Log("Response for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
                                       +  "clientId " + command.source + "succeed: "+ command.succeed);
-                        // on false flash fail message
+                        // this not uesed 
+                        // ui should just update
                     }
                     break;
                 case LobbyCommandType.HeartBeat:

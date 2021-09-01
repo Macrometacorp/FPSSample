@@ -366,6 +366,7 @@ namespace Macrometa {
         /// <param name="teamIndex"></param>
         static public void MoveToTeam(int teamIndex) {
             _inst.lobbyValue.MoveToTeam(_inst.SelfTeamSlot(), teamIndex);
+            
         }
 
         public void UpdateLobby() {

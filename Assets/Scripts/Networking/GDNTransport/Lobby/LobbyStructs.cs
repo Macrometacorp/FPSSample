@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.Esf;
 using UnityEngine;
 using UnityEngine.Networking;
 using static Macrometa.MacrometaAPI;
 
 namespace Macrometa.Lobby {
     
+    /// <summary>
+    /// A KV record
+    /// </summary>
     public class LobbyRecord {
         public string _key; //base string name
         public string value;
@@ -15,13 +19,7 @@ namespace Macrometa.Lobby {
         static public long UnixTSNow(long offset) {
             return (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds + offset;
         }
-
-        public enum Status {
-            init,
-            waiting,
-            playing
-        }
-
+        
         public static LobbyRecord GetFromLobbyValue(LobbyValue lobbyValue, long ttl) {
             return new LobbyRecord() {
                 _key = lobbyValue.streamName,
@@ -32,6 +30,71 @@ namespace Macrometa.Lobby {
         
     }
 
+    [Serializable]
+    public class LobbyDocument {
+        public string baseName; //base string name
+        public int serialNumber;
+        public LobbyValue lobbyValue;
+        
+        static public long UnixTSNow(long offset) {
+            return (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds+ (offset);
+        }
+    }
+    
+    
+    /// <summary>
+    /// Can accept other document types JSON strings and not lose information
+    /// i.e.  LobbyBase x = JsonUtility<LobbyBase>(other Lobby types JSON);
+    /// check tags to find type
+    /// </summary>
+    /// [Serializable]
+    public class LobbyBase : LobbyDocument {
+        public bool gameMaster;
+        public bool activeGame;
+        public bool lobby;
+    }
+    
+    [Serializable]
+    public class LobbyGameMaster : LobbyDocument{
+        public bool gameMaster = true; //this is a tag always set true
+        
+        public static LobbyGameMaster GetFromLobbyValue(LobbyValue lobbyValue) {
+            return new LobbyGameMaster() {
+                baseName = lobbyValue.streamName,
+                serialNumber = lobbyValue.serialNumber,
+                lobbyValue = lobbyValue
+            };
+        }
+    }
+    
+    [Serializable]
+    public class LobbyActiveGame : LobbyDocument {
+        public bool activeGae= true; //this is a tag always set true
+        public long lastUpdate = UnixTSNow(0);// in milliseconds 
+        public static LobbyActiveGame GetFromLobbyValue(LobbyValue lobbyValue) {
+            return new LobbyActiveGame() {
+                baseName = lobbyValue.streamName,
+                serialNumber = lobbyValue.serialNumber,
+                lobbyValue = lobbyValue
+            };
+        }
+    }
+    
+    [Serializable]
+    public class LobbyLobby : LobbyDocument {
+        public bool lobby= true; //this is a tag always set true
+        public long lastUpdate = UnixTSNow(0); 
+        
+        
+        public static LobbyLobby GetFromLobbyValue(LobbyValue lobbyValue) {
+            return new LobbyLobby() {
+                baseName = lobbyValue.baseName,
+                serialNumber = lobbyValue.serialNumber,
+                lobbyValue = lobbyValue
+            };
+        }
+    }
+    
     [Serializable]
     public class Team {
         public string name;
@@ -64,12 +127,14 @@ namespace Macrometa.Lobby {
     [Serializable]
     public class LobbyValue {
         public string clientId; // used for keeping record unique for KV collections are not ACID 
+        public string baseName;
+        public int serialNumber;
         public string gameMode;
         public string mapName;
         public int maxPlayers; // always 8?
         public string status; //init, waiting ( to start), playing
-        public float ping; // only used locally not use in kv db
-        public string streamName; // only used locally is also _key
+        public float ping; // only used locally not use in  db
+        public string streamName; // only used locally is also _key in kv
         public string adminName;
         public Region region;
         public Team team0 = new Team() {maxSize = 4};
@@ -78,6 +143,12 @@ namespace Macrometa.Lobby {
         public bool frozen;
         public bool serverClientChosen;
         
+        public string DisplayName() {
+            string displaySerial = serialNumber == 1 ? "" : " "+serialNumber.ToString();
+            return baseName + displaySerial + " By " + adminName+ "\n"+ region.DisplayLocation();
+        }
+
+        #region KV
         public static LobbyValue FromKVValue(KVValue kvValue) {
             LobbyValue result = JsonUtility.FromJson<LobbyValue>(kvValue.value);
             result.streamName = kvValue._key;
@@ -97,7 +168,7 @@ namespace Macrometa.Lobby {
             currRecords.Clear();
             currRecords.AddRange(newRecords);
         }
-
+        #endregion kv
         public Team TeamFromIndex(int index) {
             switch (index) {
                 case 0:
@@ -134,7 +205,7 @@ namespace Macrometa.Lobby {
             if (OnTeam(team, teamSlot.clientId)) return false;
             if (!SpaceOnTeam(team)) return false;
             team?.slots.Add(teamSlot);
-            RemoveFromOtherTeams(teamIndex, clientId);
+            RemoveFromOtherTeams(teamIndex, teamSlot.clientId);
             return true;
         }
         
@@ -183,6 +254,7 @@ namespace Macrometa.Lobby {
         public string playerName;
         public string source; // clientId
         public bool succeed;
+        public TeamSlot teamSlot;
     }
     
 }

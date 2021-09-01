@@ -4,12 +4,11 @@ namespace Macrometa {
     public class PlayStats {
 
         public struct PlayerStats {
-            public string name;
-            public string killed;   //playername
-            public string killedBy; //playername
+            public string name;     //player name
+            public string killed;   //player name
+            public string killedBy; //player name
             public string matchType; //DeathMatch, Assault
             public MatchResult matchResult; //lose , tie ,  win
-            public int score;  //used in Assuult game
             public string teamName;
             public string city;
             public string country;
@@ -18,13 +17,10 @@ namespace Macrometa {
             public int mainPioneerShots;
             public int secondaryPioneerShots;
             public string avatar; //Robot, Pioneer
-            public bool playerGameInfo; //if this is true stats are summed as game stats for player
-            public bool gameInfo; // this info about games not by player
-            public bool teamInfo; // this info about teams no by player
             
             public override string ToString() {
                 return "PlayerStats name: " + name + " killed: " + killed + " killedBy: " + killedBy +
-                       " matchType: " + matchType + "result: "+ matchResult +" Score: " + score;
+                       " matchType: " + matchType + "result: "+ matchResult ;
             }
         }
 
@@ -60,7 +56,7 @@ namespace Macrometa {
                 name = name,
                 matchType = gameType,
                 matchResult = matchResult,
-                score = score
+                //score = score
             };
             SendPlayerStats(ps);
         }

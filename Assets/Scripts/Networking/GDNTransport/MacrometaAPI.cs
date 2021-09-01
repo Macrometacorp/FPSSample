@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using System.Net;
 
 using BestHTTP.WebSocket;
+using Macrometa.Lobby;
 using Object = System.Object;
 
 namespace Macrometa {
@@ -21,17 +22,7 @@ namespace Macrometa {
 ///_fabric/{fabric}/_api/document/{collection}/{key} Removes single document delete
 ///_fabric/{fabric}/_api/document/{collection}/{key} Update single document  patch
 
-/// indexes
 
-/// /_fabric/{fabric}/_api/index/persistent create persistent index
-/*
- A JSON object with these properties is required:
-
-fields (string): an array of attribute paths.
-unique: if true, then create a unique index.
-type: must be equal to "persistent".
-sparse: if true, then create a sparse index.
- */
 ///_fabric/{fabric}/_api/index/ttl
 /*
  A JSON object with these properties is required:
@@ -41,24 +32,6 @@ type: must be equal to "ttl".
 expireAfter: The time (in seconds) after a document's creation after which the documents count as "expired".
  */
 
-/// Collections
-//    /_fabric/{fabric}/_api/collection  Post create
-/*
- A JSON object with these properties is required:
-
-keyOptions:
-allowUserKeys: if set to true, then it is allowed to supply own key values in the _key attribute of a document. If set to false, then the key generator will solely be responsible for generating keys and supplying own key values in the _key attribute of documents is considered an error.
-type: specifies the type of the key generator. The currently available generators are traditional, autoincrement, uuid and padded. The traditional key generator generates numerical keys in ascending order. The autoincrement key generator generates numerical keys in ascending order, the initial offset and the spacing can be configured The padded key generator generates keys of a fixed length (16 bytes) in ascending lexicographical sort order. This is ideal for usage with the RocksDB engine, which will slightly benefit keys that are inserted in lexicographically ascending order. The key generator can be used in a single-server or cluster. The uuid key generator generates universally unique 128 bit keys, which are stored in hexadecimal human-readable format. This key generator can be used in a single-server or cluster to generate "seemingly random" keys. The keys produced by this key generator are not lexicographically sorted.
-increment: increment value for autoincrement key generator. Not used for other key generator types.
-offset: Initial offset value for autoincrement key generator. Not used for other key generator types.
-name: The name of the collection.
-isSystem: If true, create a system collection. In this case collection-name should start with an underscore. End users should normally create non-system collections only. API implementors may be required to create system collections in very special occasions, but normally a regular collection will do. (The default is false)
-type: The type of the collection to be created.
-The following values for type are valid (The default is 2):
-2: document collection
-3: edge collection.
-stream: If true, create a local stream for collection. (The default is false)
- */
 
     /// Query
     /// /_fabric/{fabric}/_api/cursor create cursor see web page
@@ -76,13 +49,22 @@ stream: If true, create a local stream for collection. (The default is false)
 
         public string requestURL => "api-" + federationURL;
 
+        #region Query
+
+        /// /_fabric/{fabric}/_api/cursor create cursor see web page
+        public string PostQueryURL() {
+            return "https://" + requestURL+ "/_fabric/"+fabric+ "/_api/cursor";
+        }
+
+        #endregion Query
+        
         #region Collection
         public string GetCollectionsURL() {
             return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/collection?excludeSystem=true";
         }
         
         public string PostCreateCollectionsURL() {
-            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/collection";
+            return "https://" + requestURL+ "/_fabric/"+fabric+ "/_api/collection";
         }
         #endregion Collection
         
@@ -91,25 +73,29 @@ stream: If true, create a local stream for collection. (The default is false)
             return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index?collection="+collection;
         }
         
-        public string PostPersistentIndexURL() {
-            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index/persistent";
+        public string PostPersistentIndexURL(string collection) {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index/persistent?collection="+collection;
         }
         
-        public string PostTTLIndexURL() {
-            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index/ttl";
+        public string PostTTLIndexURL(string collection) {
+            return "https://" + requestURL + "/_fabric/"+fabric+ "/_api/index/ttl?collection="+collection;
         }
         #endregion Indexes
         
         #region Document URLS
 
         //   409 key violation
-        public string PostInsertDocumentURL(string collection) {
-            return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection;
+        public string PostInsertDocumentURL(string collection, bool replace) {
+            var replaceString = "";
+           /* if (replace) {
+                replaceString = "&overwrite=true";
+            */
+            return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"?silent=false" + replaceString;
         }
-        
         public string GetDocumentURL(string collection, string key) {
             return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"/"+ key;
         }
+        //https://api-beta-ap-south.eng.macrometa.io/_fabric/_system/_api/document/FPSGames_Lobbies_Documents/ZVvAhrvQTyORACQgr1bT8g?ignoreRevs=true&returnOld=false&returnNew=false&silent=false
         public string PutReplaceDocumentURL(string collection, string key) {
             return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"/"+ key;
         }
@@ -148,7 +134,24 @@ stream: If true, create a local stream for collection. (The default is false)
             return "wss://" + requestURL + "/_ws/ws/v2/producer/persistent/" + tenant + "/" + region+"."+
                    fabric+ "/" + region+"s."+streamName ;
         }
+         //wss://api-beta-us-east.eng.macrometa.io/_ws/ws/v2/reader/persistent/unity_fps_macrometa.io/c8local._system/FPSGames_Lobbies_Documents
         
+         
+         
+         /// <summary>
+         /// copying from Dashboard example
+         /// </summary>
+         /// <param name="streamName"></param>
+         /// <param name="consumerName"></param>
+         /// <returns></returns>
+         public string StreamReaderURL(string streamName, string consumerName ) {
+             return "wss://" + requestURL + "/_ws/ws/v2/reader/persistent/" + tenant + "/c8local._system/" 
+                    +streamName ;
+             //     "wss://" + requestURL + "/_ws/ws/v2/reader/persistent/unity_fps_macrometa.io/c8local._system/FPSGames_Lobbies_Documents";
+
+         }
+         
+         
         #endregion stream URLS
         
         #region Autorization
@@ -225,7 +228,16 @@ stream: If true, create a local stream for collection. (The default is false)
         public List<Collection> result;
     }
 
-    
+    [Serializable]
+    public struct InsertResponse{
+        public string _id;
+        public string _key;
+        public string _rev;
+        public bool error;
+        public bool errorMessage;
+        public int code;
+    }
+
     [Serializable]
     public struct Collection {
         public string id;
@@ -247,6 +259,7 @@ stream: If true, create a local stream for collection. (The default is false)
     public bool sparse;
     public string type;
     public bool unique;
+    public int expireAfter;
     }
 
     
@@ -254,7 +267,7 @@ stream: If true, create a local stream for collection. (The default is false)
     public struct ListIndexes{
         public bool error;
         public int code;
-        public List<Index> result;
+        public List<Index> indexes;
     }
 
     
@@ -262,11 +275,13 @@ stream: If true, create a local stream for collection. (The default is false)
     public struct Index {
         public string id;
         public string name;
+        public int selectivityEstimate;
         public string[] fields;
         public string type;
         public bool sparse;
         public bool unique;
     }
+    
     
     [Serializable]
     public struct Region {
@@ -279,6 +294,10 @@ stream: If true, create a local stream for collection. (The default is false)
         public int status;
         // tags not implemnented locally 
         public LocationInfo locationInfo;
+
+        public string DisplayLocation() {
+            return locationInfo.city + "," + locationInfo.countrycode;
+        }
     }
 
     [Serializable]
@@ -290,10 +309,21 @@ stream: If true, create a local stream for collection. (The default is false)
         public float longitude;
         public string url;
     }
-    /*
-     {"_key":"gdn-ap-northeast","host":"139.162.118.31","local":true,"name":"gdn-ap-northeast","port":30003,"spot_region":false,"status":0,"tags":{"api":"api-gdn-ap-northeast.paas.macrometa.io","role":"c8streams-agent","url":"gdn-ap-northeast.paas.macrometa.io"},
-     "locationInfo":{"city":"Tokyo","countrycode":"JP","countryname":"Japan","latitude":"35.6865","longitude":"139.7458","url":"gdn-ap-northeast.paas.macrometa.io"}}
-     */
+    
+    #region query
+    [Serializable]
+    public struct MaxSerialResult{
+        public bool error;
+        public int code;
+        public List<int> result;
+    }
+    
+    public struct LobbyListResult{
+        public bool error;
+        public int code;
+        public List<LobbyValue> result;
+    }
+    #endregion query
     
     [Serializable]
     public struct ListKVCollection{
@@ -325,6 +355,7 @@ stream: If true, create a local stream for collection. (The default is false)
     [Serializable]
     public struct BaseHtttpReply {
         public bool error;
+        public string errorMessage;
         public int code;
         public Object result;
     }
@@ -404,6 +435,16 @@ stream: If true, create a local stream for collection. (The default is false)
             www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
             return www;
         }
+        public static UnityWebRequest WebPut(string url, string data,GDNData gdnData) {
+            UnityWebRequest www = new UnityWebRequest(url, "PUT");
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
+            www.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            return www;
+        }
+        
         public static string Base64Encode(string plainText) {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
             return System.Convert.ToBase64String(plainTextBytes);
@@ -482,13 +523,16 @@ stream: If true, create a local stream for collection. (The default is false)
         }
         
         public static IEnumerator Consumer(GDNData gdnData, string streamName, string consumerName,
-            Action<WebSocket, string> callback) {
+            Action<WebSocket, string> callback,GDNErrorhandler gdnE) {
             List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
             OTPResult otp = new OTPResult();
             using (UnityWebRequest www = UnityWebRequest.Post(gdnData.GetOTPURL(), formData)) {
                 www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
                 yield return www.SendWebRequest();
-                
+                if (www.error != null) {
+                    gdnE.isWaiting = false;
+                    yield break;
+                }
                 otp = JsonUtility.FromJson<OTPResult>(www.downloadHandler.text);
             }
 
@@ -497,12 +541,33 @@ stream: If true, create a local stream for collection. (The default is false)
             //callback(new WebSocket(gdnData.ConsumerURLDebug(streamName, consumerName) ), "LIVE");
         }
         
-        public static IEnumerator Producer(GDNData gdnData, string streamName, Action<WebSocket, string> callback) {
+        public static IEnumerator DocumentReader(GDNData gdnData, string streamName, string consumerName,
+            Action<WebSocket, string> callback,GDNErrorhandler gdnE) {
             List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
             OTPResult otp = new OTPResult();
             using (UnityWebRequest www = UnityWebRequest.Post(gdnData.GetOTPURL(), formData)) {
                 www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
                 yield return www.SendWebRequest();
+                if (www.error != null) {
+                    gdnE.isWaiting = false;
+                    yield break;
+                }
+                otp = JsonUtility.FromJson<OTPResult>(www.downloadHandler.text);
+            }
+            callback(new WebSocket(new Uri(gdnData.StreamReaderURL(streamName, consumerName) + "?otp=" + otp.otp)),
+                "Document Reader: "+ streamName);
+        }
+        
+        public static IEnumerator Producer(GDNData gdnData, string streamName, Action<WebSocket, string> callback,GDNErrorhandler gdnE) {
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+            OTPResult otp = new OTPResult();
+            using (UnityWebRequest www = UnityWebRequest.Post(gdnData.GetOTPURL(), formData)) {
+                www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+                yield return www.SendWebRequest();
+                if (www.error != null) {
+                    gdnE.isWaiting = false;
+                    yield break;
+                }
                 otp = JsonUtility.FromJson<OTPResult>(www.downloadHandler.text);
             }
             callback(new WebSocket(new Uri(gdnData.ProducerURL(streamName) + "?otp=" + otp.otp)),
@@ -591,6 +656,28 @@ stream: If true, create a local stream for collection. (The default is false)
                 callback(www);
         }
 
+        public static IEnumerator PostCreateIndex(GDNData gdnData, string collectionName, IndexParams indexParams, int indexId,
+            Action<UnityWebRequest,int> callback) {
+            ;
+            var data= JsonUtility.ToJson(indexParams);
+            var www = WebPost(gdnData.PostPersistentIndexURL(collectionName), data, gdnData);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www, indexId);
+        }
+        
+        public static IEnumerator PostCreateTTLIndex(GDNData gdnData, string collectionName, IndexParams indexParams,
+            Action<UnityWebRequest> callback) {
+            ;
+            var data= JsonUtility.ToJson(indexParams);
+            var www = WebPost(gdnData.PostPersistentIndexURL(collectionName), data, gdnData);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www);
+        }
+        
         public static IEnumerator CreateCollection(GDNData gdnData, string collectionName,
             Action<UnityWebRequest> callback) {
            // var data= "{ \"name\": \" "+collectionName+"\" }";
@@ -601,6 +688,38 @@ stream: If true, create a local stream for collection. (The default is false)
             if (callback != null)
                 callback(www);
         }
+        
+        public static IEnumerator PostQuery(GDNData gdnData, string data,
+            Action<UnityWebRequest> callback) {
+            var www = WebPost(gdnData.PostQueryURL(), data, gdnData);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www);
+        }
+        
+        public static IEnumerator PostInsertReplaceDocument(GDNData gdnData,string collection, string data, bool replace,
+            Action<UnityWebRequest> callback) {
+            GameDebug.Log("Post Lobby Document: "+ gdnData.PostInsertDocumentURL(collection,replace));
+            var www = WebPost(gdnData.PostInsertDocumentURL(collection,replace), data, gdnData);
+            yield return www.SendWebRequest();
+            
+            if (callback != null)
+                callback(www);
+        }
+
+        public static IEnumerator PutReplaceDocument(GDNData gdnData, string collection, string data,
+            string key,
+            Action<UnityWebRequest> callback) {
+            var www = WebPut(gdnData.PutReplaceDocumentURL(collection, key), data, gdnData);
+            yield return www.SendWebRequest();
+
+            if (callback != null)
+                callback(www);
+        }
+
+
+
         /*
         public static IEnumerator GetKVValues(GDNData gdnData, string collectionName,
             Action<UnityWebRequest> callback) {

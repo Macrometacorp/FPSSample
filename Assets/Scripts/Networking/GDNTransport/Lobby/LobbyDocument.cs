@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
@@ -17,18 +19,32 @@ namespace Macrometa.Lobby {
         private MonoBehaviour _monoBehaviour;
         private GDNData _gdnData;
         private GDNErrorhandler _gdnErrorHandler;
-        //public ListKVCollection listKVCollection;
+        
         public ListKVValue listKVValues ;
         public ListCollection listCollection;
         public ListIndexes listIndexes;
-        //public ListDocumentValue listDocumentValues ;
+        
         public bool collectionListDone = false;
         public bool lobbiesCollectionExists;
         public string lobbiesCollectionName = "FPSGames_Lobbies_Documents";
         public bool indexesListDone = false;
+        public List<bool> indexesExist = new List<bool>();
+        public List<IndexParams> indexParamsList = new List<IndexParams>();
+        public bool indexTTLExist;
+        public IndexParams ttlIndexParams;
 
-        public bool documentValueListDone;
-        public bool putDocumentValueDone;
+        public bool maxSerialIsDone;
+        public MaxSerialResult maxSerialResult;
+        public int errorSerialIncr = 0;
+        
+        public bool lobbyListIsDone;
+        public LobbyListResult lobbyListResult;
+        
+        
+        public bool lobbyIsMade = false;
+        public bool postLobbyStuff;
+        public string lobbyKey;
+        
         public LobbyList lobbyList = new LobbyList();
         
         /// <summary>
@@ -40,24 +56,200 @@ namespace Macrometa.Lobby {
         /// <param name="gdnErrorhandler"></param>
         /// <param name="monoBehaviour"></param>
         public GdnDocumentLobbyDriver(GDNNetworkDriver gdnNetworkDriver) {
-
             _gdnData = gdnNetworkDriver.baseGDNData;
             _monoBehaviour = gdnNetworkDriver;
             _gdnErrorHandler = gdnNetworkDriver.gdnErrorHandler;
+
+            indexParamsList.Add(new IndexParams() {
+                fields = new List<string>() {"baseName", "serialNumber", "gameMaster"},
+                unique = true,
+                sparse = true,
+                type = "persistent"
+            });
+            indexesExist.Add(false);
+            indexParamsList.Add(new IndexParams() {
+                fields = new List<string>() {"baseName", "serialNumber", "activeGame"},
+                unique = true,
+                sparse = true,
+                type = "persistent"
+            });
+            indexesExist.Add(false);
+            indexParamsList.Add(new IndexParams() {
+                fields = new List<string>() {"baseName", "serialNumber", "lobby"},
+                unique = true,
+                sparse = true,
+                type = "persistent"
+            });
+            indexesExist.Add(false);
+            indexParamsList.Add(new IndexParams() {
+                fields = new List<string>() {"baseName", "serialNumber"},
+                unique = false,
+                type = "persistent"
+            });
+            indexesExist.Add(false);
+
+            ttlIndexParams = new IndexParams() {
+                expireAfter = 180,
+                fields = new List<string>() {"lastUpdate"},
+                type = "ttl"
+            };
+
         }
 
-        public void CreateLobbiesDocumentCollection() {
+        
+        #region Query
+        
+        public void PostMaxSerialQuery(string baseName) {
+            _gdnErrorHandler.isWaiting = true;
+            var data = $"{{\"bindVars\" : {{\"baseName\" : \"{baseName}\",\"@collection\" : \"{lobbiesCollectionName}\" }},";
+            data +=
+                "\"query\": \"FOR c IN  @@collection FILTER c.baseName == @baseName SORT c.serialNumber desc LIMIT 1 RETURN c.serialNumber\" }";
+            _monoBehaviour.StartCoroutine(PostQuery(_gdnData, data, PostMaxSerialQueryCallback));
+        }
+
+        public void PostMaxSerialQueryCallback(UnityWebRequest www) {
+            _gdnErrorHandler.isWaiting = false;
+            if (www.isHttpError || www.isNetworkError) {
+                GameDebug.Log("Post Max Serial Query : " + www.error);
+                _gdnErrorHandler.currentNetworkErrors++;
+                maxSerialIsDone = false;
+            }
+            else {
+                maxSerialResult = JsonUtility.FromJson<MaxSerialResult>(www.downloadHandler.text);
+                if (maxSerialResult.error == true) {
+                    GameDebug.Log("Post Max Serial Query  failed:" + maxSerialResult.code);
+                    _gdnErrorHandler.currentNetworkErrors++;
+                    maxSerialIsDone = false;
+                }
+                else {
+                    GameDebug.Log("Post Max Serial Query  ");
+                    maxSerialIsDone = true;
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                }
+            }
+        }
+
+        public void PostLobbyListQuery() {
+            _gdnErrorHandler.isWaiting = true;
+            var data = $"{{\"bindVars\" : {{\"@collection\" : \"{lobbiesCollectionName}\" }},";
+
+            data +=
+                "\"query\": \"FOR doc IN  @@collection FILTER doc.lobby RETURN doc.lobbyValue\" }";
+            _monoBehaviour.StartCoroutine(PostQuery(_gdnData, data, PostLobbyListQueryCallback));
+        }
+
+        public void PostLobbyListQueryCallback(UnityWebRequest www) {
+            _gdnErrorHandler.isWaiting = false;
+            if (www.isHttpError || www.isNetworkError) {
+                GameDebug.Log("Post Lobby List Query : " + www.error);
+                _gdnErrorHandler.currentNetworkErrors++;
+                lobbyListIsDone = false;
+            }
+            else {
+                lobbyListResult = JsonUtility.FromJson<LobbyListResult>(www.downloadHandler.text);
+                if (maxSerialResult.error == true) {
+                    GameDebug.Log("Post Lobby List Query failed:" + maxSerialResult.code);
+                    _gdnErrorHandler.currentNetworkErrors++;
+                    lobbyListIsDone = false;
+                }
+                else {
+                    GameDebug.Log("Post Lobby List Query: "+ lobbyListResult.result.Count);
+                    lobbyListIsDone = true;
+                    lobbyList.lobbies = lobbyListResult.result;
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                }
+            }
+        }
+        
+        #endregion Query
+        
+        #region Document
+        
+        public void PostLobbyDocument(LobbyDocument lobbyDocument) {
+            GameDebug.Log("Post Lobby Document: " + lobbyDocument.baseName + " : "+ lobbyDocument.serialNumber);
+            _gdnErrorHandler.isWaiting = true;
+            string data = JsonUtility.ToJson(lobbyDocument);
+            _monoBehaviour.StartCoroutine(PostInsertReplaceDocument(_gdnData, lobbiesCollectionName,
+                data,false, PostLobbyDocumentCallback));
+        }
+
+        public void PostLobbyDocumentCallback(UnityWebRequest www) {
+            _gdnErrorHandler.isWaiting = false;
+            if (www.isHttpError || www.isNetworkError) {
+                if (www.responseCode == 409) {
+                    errorSerialIncr++;
+                }
+                GameDebug.Log("Post Lobby Doc network: " + www.error);
+                _gdnErrorHandler.currentNetworkErrors++;
+                lobbyIsMade = false;
+                maxSerialIsDone = false;
+            }
+            else {
+                
+                //409 error means unique index clash  so increase serial number
+                var insertResponse = JsonUtility.FromJson<InsertResponse>(www.downloadHandler.text);
+                if (insertResponse.error == true) {
+                    if (insertResponse.code == 409) {
+                       errorSerialIncr++;
+                    }
+                    GameDebug.Log("Post Lobby Doc insert response:" +insertResponse.code);
+                    _gdnErrorHandler.currentNetworkErrors++;
+                    lobbyIsMade  = false;
+                    maxSerialIsDone = false;
+                }
+                else {
+                    GameDebug.Log("Post Lobby Doc key: "+ insertResponse._key);
+                    errorSerialIncr = 0;
+                    lobbyKey = insertResponse._key;
+                    lobbyIsMade = true;
+                    postLobbyStuff = true;
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                }
+            }
+        }
+        
+        //need to repeat with same post on error
+        public void UpdateLobbyDocument(LobbyDocument lobbyDocument, string key) {
+            _gdnErrorHandler.isWaiting = true;
+            String data = JsonUtility.ToJson(lobbyDocument);
+            _monoBehaviour.StartCoroutine(PutReplaceDocument(_gdnData, lobbiesCollectionName,
+                data,key, UpdateLobbyDocumentCallback));
+        }
+
+        public void UpdateLobbyDocumentCallback(UnityWebRequest www) {
+            _gdnErrorHandler.isWaiting = false;
+            if (www.isHttpError || www.isNetworkError) {
+                GameDebug.Log("replace Lobby Doc : " + www.error);
+                _gdnErrorHandler.currentNetworkErrors++;
+            }
+            else {
+                var baseHttpReply = JsonUtility.FromJson<BaseHtttpReply>(www.downloadHandler.text);
+                if (baseHttpReply.error == true) {
+                    GameDebug.Log("replace Lobby Doc :" +baseHttpReply.code);
+                    _gdnErrorHandler.currentNetworkErrors++;
+                    maxSerialIsDone = false;
+                }
+                else {
+                    GameDebug.Log("replace Lobby Doc   ");
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                }
+            }
+        }
+        #endregion Document
+        
+        #region Collection
+        public void CreateLobbiesCollection() {
             lobbiesCollectionExists = listCollection.result.Any
                 (item => item.name == lobbiesCollectionName);
             if (!lobbiesCollectionExists) {
                 _gdnErrorHandler.isWaiting = true;
                 //Debug.Log("creating server in stream: " + baseGDNData.CreateStreamURL(serverInStreamName));
                 _monoBehaviour.StartCoroutine(CreateCollection(_gdnData, lobbiesCollectionName,
-                    CreateDocumentCollectionCallback));
+                    CreateLobbiesCollectionCallback));
             }
         }
 
-        public void CreateDocumentCollectionCallback(UnityWebRequest www) {
+        public void CreateLobbiesCollectionCallback(UnityWebRequest www) {
             _gdnErrorHandler.isWaiting = false;
             if (www.isHttpError || www.isNetworkError) {
                 GameDebug.Log("Create document collection : " + www.error);
@@ -78,7 +270,7 @@ namespace Macrometa.Lobby {
                 }
             }
         }
-
+        
         public void GetListDocumentCollections() {
             _gdnErrorHandler.isWaiting = true;
             _monoBehaviour.StartCoroutine(ListDocumentCollections(_gdnData, ListDocumentCollectionsCallback));
@@ -106,8 +298,34 @@ namespace Macrometa.Lobby {
                 }
             }
         }
-
         
+        #endregion Collection
+        
+        #region Index
+
+        public bool IndexExists(IndexParams indexParams) {
+            return listIndexes.indexes.Any
+            (item => {
+                if (indexParams.fields.Count != item.fields.Length) {
+                    return false;
+                }
+                for (int i = 0; i < item.fields.Length; i++) {
+                    if (item.fields[i] != indexParams.fields[i]) {
+                        return false;
+                    }
+                }
+                if (indexParams.sparse != !item.sparse) {
+                    return false;
+                }
+                if (indexParams.unique != !item.unique) {
+                    return false;
+                }
+                if (indexParams.type != item.type) {
+                    return false;
+                }
+                return true;
+            });
+        }
         public void GetListIndexes(string collection) {
             _gdnErrorHandler.isWaiting = true;
             _monoBehaviour.StartCoroutine(ListIndexes(_gdnData, collection, ListIndexesCallback));
@@ -124,6 +342,7 @@ namespace Macrometa.Lobby {
                 //overwrite does not assign toplevel fields
                 //JsonUtility.FromJsonOverwrite(www.downloadHandler.text, listStream);
                 listIndexes= JsonUtility.FromJson<ListIndexes>(www.downloadHandler.text);
+                //GameDebug.Log( "list index result: "+ www.downloadHandler.text);
                 if (listIndexes.error == true) {
                     GameDebug.Log("List Indexes failed:" + listIndexes.code);
                     //Debug.LogWarning("ListStream failed reply:" + www.downloadHandler.text);
@@ -136,64 +355,70 @@ namespace Macrometa.Lobby {
             }
         }
 
-        
-        public void GetListKVValues() {
-            _gdnErrorHandler.isWaiting = true;
-            _monoBehaviour.StartCoroutine(GetKVValues(_gdnData, lobbiesCollectionName,
-                ListKVValuesCallback));
+        public void CreateIndex( int indexId) {
+            IndexParams indexParams = indexParamsList[indexId]; 
+            indexesExist[indexId] = IndexExists(indexParams);
+            if (!indexesExist[indexId]) {
+                _gdnErrorHandler.isWaiting = true;
+                //Debug.Log("creating server in stream: " + baseGDNData.CreateStreamURL(serverInStreamName));
+                _monoBehaviour.StartCoroutine(PostCreateIndex(_gdnData, lobbiesCollectionName, indexParams, indexId,
+                    CreateIndexCallback));
+            }
         }
 
-        public void ListKVValuesCallback(UnityWebRequest www) {
+        public void CreateIndexCallback(UnityWebRequest www, int indexId) {
             _gdnErrorHandler.isWaiting = false;
             if (www.isHttpError || www.isNetworkError) {
+                GameDebug.Log("create an index failed:" + indexId + " : " + www.error);
                 _gdnErrorHandler.currentNetworkErrors++;
-                GameDebug.Log("List KVvalues: " + www.error);
+                indexesExist[indexId] = false;
             }
             else {
-
-                //overwrite does not assign toplevel fields
-                //JsonUtility.FromJsonOverwrite(www.downloadHandler.text, listStream);
-                listKVValues = JsonUtility.FromJson<ListKVValue>(www.downloadHandler.text);
-                if (listKVValues.error == true) {
-                    GameDebug.Log("List KV values failed:" + listKVValues.code);
-                    //Debug.LogWarning("ListStream failed reply:" + www.downloadHandler.text);
+                var baseHttpReply = JsonUtility.FromJson<BaseHtttpReply>(www.downloadHandler.text);
+                if (baseHttpReply.error == true) {
+                    GameDebug.Log("create an index failed:" + indexId + " : " + baseHttpReply.code);
                     _gdnErrorHandler.currentNetworkErrors++;
+                    indexesExist[indexId] = false;
                 }
                 else {
-                    
-                    documentValueListDone = true;
+                    GameDebug.Log("Create an Index " + indexId);
+                    indexesExist[indexId] =  true;
                     _gdnErrorHandler.currentNetworkErrors = 0;
-                    var newLobbyList = new List<LobbyValue>();
-                    foreach (KVValue kvv in listKVValues.result) {
-                        newLobbyList.Add(LobbyValue.FromKVValue(kvv));
-                    }
-                    LobbyValue.UpdateFrom(lobbyList.lobbies,newLobbyList);
-                    lobbyList.isDirty = true;
-                    //GameDebug.Log("List KV values succeed" );
                 }
             }
         }
-
-        public void PutKVValue(LobbyRecord kvRecord) {
-            string data = "[" +JsonUtility.ToJson(kvRecord)+"]"; // JsonUtility can not handle bare values
-            _gdnErrorHandler.isWaiting = true;
-            _monoBehaviour.StartCoroutine(MacrometaAPI.PutKVValue(_gdnData, lobbiesCollectionName,
-                data, PutKVValueCallback));
+        public void CreateTTLIndex() {
+            if (!indexTTLExist) {
+                _gdnErrorHandler.isWaiting = true;
+                //Debug.Log("creating server in stream: " + baseGDNData.CreateStreamURL(serverInStreamName));
+                _monoBehaviour.StartCoroutine(PostCreateTTLIndex(_gdnData, lobbiesCollectionName, ttlIndexParams,
+                    CreateTTLIndexCallback));
+            }
         }
 
-        public void PutKVValueCallback(UnityWebRequest www) {
+        public void CreateTTLIndexCallback(UnityWebRequest www) {
             _gdnErrorHandler.isWaiting = false;
-            putDocumentValueDone = false;
             if (www.isHttpError || www.isNetworkError) {
+                GameDebug.Log("create TTL index failed:"  + www.error);
                 _gdnErrorHandler.currentNetworkErrors++;
-                GameDebug.Log("Put KV value: " + www.error);
+                indexTTLExist = false;
             }
             else {
-                //GameDebug.Log("put KV value succeed ");
-                putDocumentValueDone = true;
-                _gdnErrorHandler.currentNetworkErrors = 0;
+                var baseHttpReply = JsonUtility.FromJson<BaseHtttpReply>(www.downloadHandler.text);
+                if (baseHttpReply.error == true) {
+                    GameDebug.Log("create TTL index failed:" + baseHttpReply.code);
+                    _gdnErrorHandler.currentNetworkErrors++;
+                    indexTTLExist = false;
+                }
+                else {
+                    GameDebug.Log("Create TTL Index " );
+                    indexTTLExist=  true;
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                }
             }
         }
+        #endregion Index
+        
     }
 
 }

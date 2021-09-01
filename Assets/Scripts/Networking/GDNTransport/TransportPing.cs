@@ -328,7 +328,7 @@ namespace Macrometa {
         public class NetworkStatsData {
             public string version = "0.2";
             public string appType = "FPS";
-            public int rttAverage; // in milliseconds 2 decimalplaces
+            public int rttAverage; // in milliseconds 
             public int streamOutMessages; //number of messages sent in time period
             public int streamInMessages;  //number of messages recieved in time period
             public int streamOutBytes;    //number of bytes sent in time period
@@ -338,21 +338,20 @@ namespace Macrometa {
             public int streamOutRemotePingAverage; // in milliseconds 2 decimalplaces
             public int streamInLocalPingAverage; // in milliseconds 2 decimalplaces
             public int streamInRemotePingAverage; // in milliseconds 2 decimalplaces
-            public long dateTime;  // unix time stamp 
+            public long dateTime;  // unix time stamp  UTC +0
             public string localNodeId; // not full domain name missing macrometa.io
             public string localHost;  //datacenter ip
             public string localCity;  //datacenter  city name
-            public string localCountrycode; // datacenter country
-            public string remoteHost;  //datacenter ip
+            public string localCountrycode; // datacenter country 2 characters
+            public string remoteHost;  //datacenter ip for client end of connection
             public string remoteCity;
-            public string remoteCountrycode;
+            public string remoteCountrycode; 
             public string localId;     //servername
-            public string remoteId;     // player name 
+            public string remoteId;     // client name 
             public int connectionId;   // used to identify clients by int
             public string sessionID;   // unique ID for each session of latency monitoring
             public string streamOutName; //stream server sends on
             public string streamInName;   //server stream receives on
-
         }
 
 

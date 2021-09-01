@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 namespace Macrometa {
     public class GDNClientLobbyNetworkDriver2 : GDNNetworkDriver {
         
-        public bool debugDocumentTryInit =true;
+        public bool startDocumentInit =true;
 
         public string localId;
         public string gameMode;
@@ -18,21 +18,19 @@ namespace Macrometa {
         
         
         public bool tryDocumentInit = false;
-        public bool tryDocumentInitB = false;
-        public bool canNotInit = false;
-        public bool initSucceeded = false;
-        public bool initFail=false;
-        public bool initTrying = false;
         public string clientId;
-        public int maxConfirmInit = 3;
-        public int currentConfirmInit = 3;
+
+        public int nextGameSerialnumber = 1;
         public GdnDocumentLobbyDriver gdnDocumentLobbyDriver;
         public LobbyValue lobbyValue;
+        public bool lobbyUpdateAvail = true;
+        public bool isLobbyAdmin;
+        public float nextUpdateLobby = 0;
+        
 
         public LobbyList lobbyList = new LobbyList();
-        private float nextDocumentValueGet = 0;
-        public float nextDocumentValueGetIncr = 5;
-        
+        public float nextRefreshLobbyList= 0;
+
         protected Lobby.PingData transportPingData;
         public bool sendTransportPing = false;
         public Lobby.PingData debugPingData;
@@ -66,6 +64,16 @@ namespace Macrometa {
             lobbyList.isDirty = true;
             MakeGDNConnection(null); //servers are all using default name server.
         }
+        public override void Update() {
+            Bodyloop();
+        }
+
+        public void CreateLobby() {
+            startDocumentInit = true;
+        }
+        public void OnDisable() {
+            GameDebug.Log("GDNClientBrowserNetworkDriver OnDisable");
+        }
 
         public void MakeGDNConnection(LobbyValue aL) {
             var destination = "Server";
@@ -84,19 +92,37 @@ namespace Macrometa {
             
         }
         
-        public void OnDisable() {
-            GameDebug.Log("GDNClientBrowserNetworkDriver OnDisable");
-        }
-
         public void setRandomClientName() {
             clientId = "Cl" + (10000000 + Random.Range(1, 89999999)).ToString();
         }
 
-        public override void Update() {
-            Bodyloop();
+        public void JoinLobby(LobbyValue lobbyValue, bool isAdmin) {
+            SetIsLobbyAdmin(isAdmin);
+            GameDebug.Log("JoinLobby:" + lobbyValue.streamName);
+            gdnStreamDriver.chatChannelId = lobbyValue.streamName;
+            gdnStreamDriver.chatLobbyId = lobbyValue.streamName;
+        }
+        
+        public void SetIsLobbyAdmin(bool val) {
+            GDNStreamDriver.isLobbyAdmin = val;
+            isLobbyAdmin = val;
+        }
+
+
+        public void UpdateLocalLobby(LobbyValue lobbyUpdate) {
+            GameDebug.Log("UpdateLocalLobby");
+            lobbyValue = lobbyUpdate;
+            lobbyUpdateAvail = true;
         }
         
         public void Bodyloop() {
+
+            if (gdnStreamDriver.lobbyUpdateAvail) {
+                GameDebug.Log("gdnStreamDriver.lobbyUpdateAvail");
+                UpdateLocalLobby( gdnStreamDriver.lobbyUpdate);
+                gdnStreamDriver.lobbyUpdateAvail = false;
+
+            }
 
             if (gdnErrorHandler.pauseNetworkErrorUntil > Time.time) return;
             if (gdnErrorHandler.currentNetworkErrors >= gdnErrorHandler.increasePauseConnectionError) {
@@ -115,7 +141,7 @@ namespace Macrometa {
             
             if (!gdnDocumentLobbyDriver.lobbiesCollectionExists) {
                 GameDebug.Log("Setup  lobbiesCollectionExists  A");
-                gdnDocumentLobbyDriver.CreateLobbiesDocumentCollection();
+                gdnDocumentLobbyDriver.CreateLobbiesCollection();
                 return;
             }
 
@@ -125,15 +151,22 @@ namespace Macrometa {
                 return;
             }
 
-            return;
-            if (!gdnDocumentLobbyDriver.lobbiesCollectionExists) {
-                GameDebug.Log("Setup  lobbiesCollectionExists  A");
-                gdnDocumentLobbyDriver.CreateLobbiesDocumentCollection();
+            for (int checkIndex = 0; checkIndex < gdnDocumentLobbyDriver.indexesExist.Count; checkIndex++) {
+                
+                if (!gdnDocumentLobbyDriver.indexesExist[checkIndex]) {
+                    gdnDocumentLobbyDriver.CreateIndex( checkIndex);
+                    return;
+                }
+            }
+
+            if (!gdnDocumentLobbyDriver.indexTTLExist) {
+                gdnDocumentLobbyDriver.CreateTTLIndex();
                 return;
             }
             
             if (!gdnStreamDriver.regionIsDone) {
                 gdnStreamDriver.GetRegion();
+                return;
             }
             
             if (!gdnStreamDriver.streamListDone) {
@@ -147,6 +180,7 @@ namespace Macrometa {
             }
             
             if (!gdnStreamDriver.chatProducerExists) {
+                GameDebug.Log(" pre CreateChatProducer");
                 gdnStreamDriver.CreateChatProducer(gdnStreamDriver.chatStreamName);
                 return;
             }
@@ -155,107 +189,81 @@ namespace Macrometa {
                 gdnStreamDriver.CreateChatConsumer(gdnStreamDriver.chatStreamName, gdnStreamDriver.consumerName);
                 return;
             }
+            
+            if (!gdnDocumentLobbyDriver.lobbyListIsDone ) {
+                gdnDocumentLobbyDriver.PostLobbyListQuery();
+                nextRefreshLobbyList = Time.time + 10;
+                return;
+            }
 
-            if (debugDocumentTryInit) {
-                debugDocumentTryInit = false;
+            if (nextRefreshLobbyList > Time.time) {
+                gdnDocumentLobbyDriver.lobbyListIsDone = false;
+            }
+            
+            
+            if (startDocumentInit) {
+                startDocumentInit = false;
                 tryDocumentInit = true;
+                gdnDocumentLobbyDriver.lobbyIsMade = false;
+                gdnDocumentLobbyDriver.maxSerialIsDone = false;
+                gdnDocumentLobbyDriver.postLobbyStuff = false;
             }
-            
+
             if (tryDocumentInit) {
-                tryDocumentInit = false;
-                tryDocumentInitB = true;
-                gdnDocumentLobbyDriver.documentValueListDone = false;
-            }
-            
-           
-            if (!gdnDocumentLobbyDriver.documentValueListDone  ||  nextDocumentValueGet < Time.time) {
-                //GameDebug.Log("Setup  kvValueListDone ");
-                nextDocumentValueGet = Time.time + nextDocumentValueGetIncr;
-                gdnDocumentLobbyDriver.GetListKVValues();
-                return;
-            }
-
-            return;
-            if (tryDocumentInitB) {
-                GameDebug.Log("Setup  tryKVInit C: " + RwConfig.ReadConfig().gameName);
-                initTrying = true;
-                tryDocumentInitB = false;
-               
-               var foundRecord =  gdnDocumentLobbyDriver.listKVValues.result.
-                   SingleOrDefault(l => l._key == RwConfig.ReadConfig().gameName);
-               
-
-               if (foundRecord != null) {
-                   canNotInit = true;
-                   initTrying = false;
-                   initFail = true;
-                   GameDebug.Log("Setup  tryKVInit C fail");
-               }
-               else {
-                   var unassigned = new Team();
-                   //unassigned.slots = new List<TeamSlot>();
-                   lobbyValue = new LobbyValue() {
-                       adminName = localId,
-                       gameMode = gameMode,
-                       mapName = mapName,
-                       clientId = clientId,
-                       maxPlayers = maxPlayers,
-                       streamName = RwConfig.ReadConfig().gameName,
-                       region = gdnStreamDriver.region,
-                   };
-                   lobbyValue.unassigned.slots.Add(SelfTeamSlot());
-                   AddDummyTeamSlots(0, 4);
-                   AddDummyTeamSlots(1, 3);
-                   AddDummyTeamSlots(2, 10);
-                   var record = LobbyRecord.GetFromLobbyValue( lobbyValue, 60 );
-                   //GameDebug.Log(record.value);
-                   gdnDocumentLobbyDriver.putDocumentValueDone = false;
-                   gdnDocumentLobbyDriver.PutKVValue(record);
-                   currentConfirmInit = 0;
-               }
-               return;
-            }
-
-            if (gdnDocumentLobbyDriver.putDocumentValueDone) {
-                gdnDocumentLobbyDriver.putDocumentValueDone = false;
-                gdnDocumentLobbyDriver.documentValueListDone = false;
-                return;
-            }
-            
-            if ( initTrying) {
-               
-                GameDebug.Log("Setup  initTrying D");
-                var foundRecord =  gdnDocumentLobbyDriver.listKVValues.result.
-                    FirstOrDefault(l => l._key == RwConfig.ReadConfig().gameName);
-               if (foundRecord == null ) {
-                   GameDebug.Log("Setup  initTrying E put record in put not found");
-                    initFail = true;
-                    initTrying = false;
-                    lobbyValue = null;
+                if (!gdnDocumentLobbyDriver.maxSerialIsDone && !gdnDocumentLobbyDriver.lobbyIsMade) {
+                    gdnDocumentLobbyDriver.PostMaxSerialQuery(RwConfig.ReadConfig().gameName);
                     return;
-               }
-            
-               var aLobbyRecord = JsonUtility.FromJson<LobbyValue>(foundRecord.value);
-               if (aLobbyRecord.clientId != clientId) {
-                   GameDebug.Log("Setup  initTrying F other init same name");
-                   initFail = true;
-                   lobbyValue = null;
-                   initTrying = false;
-                   return;
-               }
+                }
 
-               if (currentConfirmInit < maxConfirmInit) {
-                   GameDebug.Log("Setup  initTrying G");
-                   gdnDocumentLobbyDriver.documentValueListDone = false;
-                   currentConfirmInit++;
-                   return;
-               }
-               GameDebug.Log("Setup  initTrying H succeed");
-               gdnDocumentLobbyDriver.putDocumentValueDone = false;
-               initTrying = false; 
-               initSucceeded = true;
+                if (!gdnDocumentLobbyDriver.lobbyIsMade) {
+                    if (gdnDocumentLobbyDriver.maxSerialResult.result.Count == 0) {
+                        nextGameSerialnumber = 1 + gdnDocumentLobbyDriver.errorSerialIncr;
+                    }
+                    else {
+                        nextGameSerialnumber = gdnDocumentLobbyDriver.maxSerialResult.result[0] + 1
+                            + gdnDocumentLobbyDriver.errorSerialIncr;
+                    }
+
+                    //unassigned.slots = new List<TeamSlot>();
+                    lobbyValue = new LobbyValue() {
+                        adminName = localId,
+                        gameMode = gameMode,
+                        mapName = mapName,
+                        clientId = clientId,
+                        maxPlayers = maxPlayers,
+                        baseName = RwConfig.ReadConfig().gameName,
+                        streamName = RwConfig.ReadConfig().gameName + "_" + nextGameSerialnumber,
+                        serialNumber = nextGameSerialnumber,
+                        region = gdnStreamDriver.region,
+                    };
+
+                    lobbyValue.MoveToTeam(SelfTeamSlot(), 2);
+                    AddDummyTeamSlots(0, 4);
+                    AddDummyTeamSlots(1, 1);
+                    AddDummyTeamSlots(2, 3);
+                    GameDebug.Log("make lobby: " + lobbyValue.streamName);
+                    var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
+                    gdnDocumentLobbyDriver.PostLobbyDocument(lobbyLobby);
+                    return;
+                }
+
+                if (gdnDocumentLobbyDriver.postLobbyStuff) {
+                    GameDebug.Log("Lobby joined");
+                    JoinLobby(lobbyValue, true);
+                    gdnDocumentLobbyDriver.postLobbyStuff = false;
+                    tryDocumentInit = false;
+                    //initial insert message comes before this joinLobby can happen
+                    UpdateLobby();
+                    return;
+                }
             }
 
+            if (isLobbyAdmin && gdnDocumentLobbyDriver.lobbyIsMade && Time.time > nextUpdateLobby) {
+                GameDebug.Log("heartbeat update");
+                UpdateLobby();
+                return;
+            }
+            
             if (StreamsBodyLoop()) {
                debugPingData = transportPingData.Copy();
                 return;
@@ -263,33 +271,48 @@ namespace Macrometa {
 
         }
 
+        public void UpdateLobby() {
+            nextUpdateLobby = Time.time + 10;
+            var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
+            var key = gdnDocumentLobbyDriver.lobbyKey;
+            gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, key);
+        }
+
         /// <summary>
         /// returns true if containing loop should return
         /// </summary>
         /// <returns></returns>
         public bool  StreamsBodyLoop() {
+            //GameDebug.Log("StreamsBodyLoop A");
+            if (!gdnStreamDriver.lobbyDocumentReaderExists) {
+               
+                gdnStreamDriver.CreateDocuomentReader(gdnDocumentLobbyDriver.lobbiesCollectionName, clientId);
+                return false;
+            }
+            //GameDebug.Log("StreamsBodyLoop B");
             if (waitStreamClearing) {
                 if (Time.time > streamClearTime) {
                     FinishClearStreams();
                 }
                 return false; // none streams action OK
             }
-
+            gdnStreamDriver.ExecuteLobbyCommands();
+           // GameDebug.Log("StreamsBodyLoop C");
             SetPings();
             if (transportPingData == null) {
                 return false;
             }
-            
+            GameDebug.Log("StreamsBodyLoop D");
             if (!gdnStreamDriver.producerExists) {
                 gdnStreamDriver.CreateProducer(gdnStreamDriver.producerStreamName);
                 return true;
             }
-
+            GameDebug.Log("StreamsBodyLoop E");
             if (!gdnStreamDriver.consumerExists) {
                 gdnStreamDriver.CreateConsumerPongOnly(gdnStreamDriver.consumerStreamName, gdnStreamDriver.consumerName);
                 return false;
             }
-
+            GameDebug.Log("StreamsBodyLoop F");
             if (sendTransportPing) {
                 GameDebug.Log(" PingBodyLoop() sendTransportPing");
                 gdnStreamDriver.SendSimpleTransportPing();
@@ -298,7 +321,7 @@ namespace Macrometa {
 
             if (TransportPings.PingTime() > 15000) {
 
-                // what shoud gdnStreamDriver.receivedPongOnly
+                // what should gdnStreamDriver.receivedPongOnly
                 // be set to?
                 lobbyValue.ping = -1;
                 StartClearStreams();
@@ -321,6 +344,8 @@ namespace Macrometa {
                     sendTransportPing = true;
                 }
             }
+            GameDebug.Log("StreamsBodyLoop Z");
+           
             return false;
         }
 
@@ -374,20 +399,31 @@ namespace Macrometa {
             };
             return result;
         }
+
+        public static Lobby.TeamSlot MakeSelfTeamSlot() {
+           return  _inst.SelfTeamSlot();
+        }
+
         /// <summary>
         /// This is static to make calling from UI easier
         /// </summary>
         /// <param name="teamIndex"></param>
         static public void MoveToTeam(int teamIndex) {
-            _inst.lobbyValue.MoveToTeam(_inst.SelfTeamSlot(), teamIndex);
+            _inst.gdnStreamDriver.ChatSendRoomRequest(teamIndex);
         }
 
-        public void UpdateLobby() {
-            var record = LobbyRecord.GetFromLobbyValue( lobbyValue, 60 );
-            gdnDocumentLobbyDriver.PutKVValue(record);
+        static public void TeamNameChanged(string teamName, int teamIndex) {
+            /// this change goes directo lobby and updates
+            _inst.lobbyValue.TeamFromIndex( teamIndex).name = teamName;
+            _inst.UpdateLobby();
         }
         
-        
+        static public bool MoveToTeam(TeamSlot teamSlot,int teamIndex) {
+            var val = _inst.lobbyValue.MoveToTeam(teamSlot, teamIndex);
+            _inst.UpdateLobby();
+            return val;
+        }
+
         //testing
 
         public void AddDummyTeamSlots(int teamIndex, int count) {

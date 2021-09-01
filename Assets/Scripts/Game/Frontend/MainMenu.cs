@@ -34,7 +34,8 @@ public class MainMenu : MonoBehaviour
     public OptionsMenu optionMenu;
     public GameObject disconnectedMenu;
     public bool isDisconnected = false;
-    public GDNClientBrowserNetworkDriver gdnClientBrowserNetworkDriver;
+    //public GDNClientBrowserNetworkDriver gdnClientBrowserNetworkDriver;
+    public GDNClientLobbyNetworkDriver2 gdnClientBrowserNetworkDriver;
 
     // Currently active submenu, used by menu backdrop to track what is going on
     public int activeSubmenuNumber;
@@ -88,7 +89,7 @@ public class MainMenu : MonoBehaviour
     }
     
     void Update() {
-        
+        /*
         if (gdnClientBrowserNetworkDriver.initSucceeded) {
             CreateGame();
             gdnClientBrowserNetworkDriver.initSucceeded= false;
@@ -97,6 +98,7 @@ public class MainMenu : MonoBehaviour
             createFailMsg.SetActive(true);
             gdnClientBrowserNetworkDriver.initFail = false;
         }
+        */
     }
     void OnEnable() {
         if (isDisconnected) {
@@ -159,7 +161,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void OnCreateGame() {
-        gdnClientBrowserNetworkDriver.tryKVInit = true;
+      //  gdnClientBrowserNetworkDriver.tryKVInit = true;
     }
     
     public void CreateGame(){   

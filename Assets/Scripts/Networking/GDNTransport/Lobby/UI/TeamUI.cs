@@ -4,30 +4,32 @@ using Macrometa.Lobby;
 using TMPro;
 using UnityEngine;
 
-
 public class TeamUI : MonoBehaviour {
    public LobbyUI lobby;
    public int teamIndex;
    public List<PlayerUI> players;
-   public TMP_Text teamName;
+   public TMP_InputField teamName;
+   public GameObject highlight;
    
    private void Awake() {
       players.Clear();
       players.AddRange(GetComponentsInChildren<PlayerUI>());
    }
 
-
-   public void DisplayTeam(Macrometa.Lobby.Team team) {
+   // Macrometa.Lobby. is needed to stop FPSSample conflicts
+   public void DisplayTeam(Macrometa.Lobby.Team team, string anOwnerId) {
       if (teamName != null) {
          teamName.text = team.name;
       }
-
+      highlight.SetActive(false);
+       var pos = team.Find(anOwnerId);
       for (int i = 0; i < players.Count; i++) {
+         bool highlight = pos == i;
          if (i < team.slots.Count) {
-            players[i].DisplayPlayer(team.slots[i]);
+            players[i].DisplayPlayer(team.slots[i],highlight);
          }
          else {
-            players[i].DisplayPlayer(null);
+            players[i].DisplayPlayer(null,false);
          }
       }
    }
@@ -35,5 +37,11 @@ public class TeamUI : MonoBehaviour {
    public void TeamSelectedClicked() {
       Debug.Log("TeamSelectedClicked(): " + teamIndex);
       lobby.TeamSelected( teamIndex);
+      highlight.SetActive(true);
+   }
+   
+   public void TeamNameChanged() {
+      Debug.Log("TeamNameChanged(): " + teamIndex + " : "+teamName.text );
+      lobby.TeamNameChanged(teamName.text, teamIndex);
    }
 }
