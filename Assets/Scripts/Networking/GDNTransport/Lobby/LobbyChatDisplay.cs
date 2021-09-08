@@ -62,11 +62,11 @@ public class LobbyChatDisplay: MonoBehaviour {
     }
     
     public void InputText() {
-        //Debug.Log( "Sent text: A " + inputField.text);
+        Debug.Log( "Sent text: A " + inputField.text);
         if (inputField.text == "") return;
-        //Debug.Log( "Sent text: B " + inputField.text);
+        Debug.Log( "Sent text: B " + inputField.text);
         SendText("<b>" + localId + "</b>: "+inputField.text);
-       // Debug.Log( "Sent text: B " + inputField.text);
+        Debug.Log( "Sent text: B " + inputField.text);
         inputField.text = "";
         inputField.Select();
         inputField.ActivateInputField();

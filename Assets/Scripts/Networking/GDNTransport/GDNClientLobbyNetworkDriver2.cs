@@ -180,7 +180,6 @@ namespace Macrometa {
             }
             
             if (!gdnStreamDriver.chatProducerExists) {
-                GameDebug.Log(" pre CreateChatProducer");
                 gdnStreamDriver.CreateChatProducer(gdnStreamDriver.chatStreamName);
                 return;
             }
