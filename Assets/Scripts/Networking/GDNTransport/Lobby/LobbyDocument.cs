@@ -89,7 +89,7 @@ namespace Macrometa.Lobby {
             indexesExist.Add(false);
 
             ttlIndexParams = new IndexParams() {
-                expireAfter = 180,
+                expireAfter = 30,
                 fields = new List<string>() {"lastUpdate"},
                 type = "ttl"
             };
@@ -141,7 +141,7 @@ namespace Macrometa.Lobby {
         public void PostLobbyListQueryCallback(UnityWebRequest www) {
             _gdnErrorHandler.isWaiting = false;
             if (www.isHttpError || www.isNetworkError) {
-                GameDebug.Log("Post Lobby List Query : " + www.error);
+                GameDebug.Log("Post Lobby List Query error: " + www.error);
                 _gdnErrorHandler.currentNetworkErrors++;
                 lobbyListIsDone = false;
             }
@@ -153,9 +153,10 @@ namespace Macrometa.Lobby {
                     lobbyListIsDone = false;
                 }
                 else {
-                    GameDebug.Log("Post Lobby List Query: "+ lobbyListResult.result.Count);
+                   // GameDebug.Log("Post Lobby List Query: "+ lobbyListResult.result.Count);
                     lobbyListIsDone = true;
                     lobbyList.lobbies = lobbyListResult.result;
+                    lobbyList.isDirty = true;
                     _gdnErrorHandler.currentNetworkErrors = 0;
                 }
             }

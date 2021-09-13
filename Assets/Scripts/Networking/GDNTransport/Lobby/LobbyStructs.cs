@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.Esf;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Asn1.X509;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Networking;
 using static Macrometa.MacrometaAPI;
 
 namespace Macrometa.Lobby {
+    
     
     /// <summary>
     /// A KV record
@@ -85,7 +88,6 @@ namespace Macrometa.Lobby {
         public bool lobby= true; //this is a tag always set true
         public long lastUpdate = UnixTSNow(0); 
         
-        
         public static LobbyLobby GetFromLobbyValue(LobbyValue lobbyValue) {
             return new LobbyLobby() {
                 baseName = lobbyValue.baseName,
@@ -111,6 +113,23 @@ namespace Macrometa.Lobby {
                 slots.RemoveAt(i);
             }
         }
+
+        public TeamInfo ToTeamInfo() {
+            var result = new TeamInfo() {
+                teamName = name,
+                players = new List<string>()
+            };
+            foreach (var ts in slots) {
+               result.players.Add(ts.playerName);
+            }
+            return result;
+        }
+
+        public void ClearRttValues() {
+            foreach (var ts in slots) {
+                ts.rtt = 0;
+            }
+        }
     }
 
     [Serializable]
@@ -121,9 +140,12 @@ namespace Macrometa.Lobby {
         public Region region;
         public int ping;
         public int rtt;
+        public bool rttTarget;
         public bool runGameServer;
     }
 
+   
+    
     [Serializable]
     public class LobbyValue {
         public string clientId; // used for keeping record unique for KV collections are not ACID 
@@ -142,13 +164,29 @@ namespace Macrometa.Lobby {
         public Team unassigned= new Team() {maxSize = 0};
         public bool frozen;
         public bool serverClientChosen;
+        public bool closeLobbyNow;
+        public bool showGameInitNow;
+        public bool joinGameNow;
+        public string rttTarget = "";
+        public string serverAllowed;
+
+
+       
         
         public string DisplayName() {
             string displaySerial = serialNumber == 1 ? "" : " "+serialNumber.ToString();
             return baseName + displaySerial + " By " + adminName+ "\n"+ region.DisplayLocation();
         }
 
-        #region KV
+       /// <summary>
+       /// used for stats
+       /// </summary>
+       /// <returns></returns>
+        public string GameName() {
+           return baseName + "_" + serialNumber;
+       }
+
+       #region KV
         public static LobbyValue FromKVValue(KVValue kvValue) {
             LobbyValue result = JsonUtility.FromJson<LobbyValue>(kvValue.value);
             result.streamName = kvValue._key;
@@ -156,7 +194,6 @@ namespace Macrometa.Lobby {
         }
         
         public static void UpdateFrom(List<LobbyValue> currRecords, List<LobbyValue> newRecords) {
-
             foreach (var lobbyValue in newRecords) {
                 //Debug.Log( "lobbyValue.streamName:  " + lobbyValue.streamName);
                 var oldRecord = currRecords.FirstOrDefault(x => x.streamName == lobbyValue.streamName);
@@ -169,6 +206,12 @@ namespace Macrometa.Lobby {
             currRecords.AddRange(newRecords);
         }
         #endregion kv
+
+        public void ClearRttValues() {
+            team0.ClearRttValues();
+            team1.ClearRttValues();
+            unassigned.ClearRttValues();
+        }
         public Team TeamFromIndex(int index) {
             switch (index) {
                 case 0:
@@ -182,6 +225,31 @@ namespace Macrometa.Lobby {
             }
         }
 
+        public TeamSlot FindPlayer(string playerId) {
+            var result = FindPlayerOnTeam(team0, playerId);
+            if (result != null) {
+                return result;
+            }
+            result = FindPlayerOnTeam(team1, playerId);
+            if (result != null) {
+                return result;
+            }
+            result = FindPlayerOnTeam(unassigned, playerId);
+            if (result != null) {
+                return result;
+            }
+            return null;
+        }
+
+        public TeamSlot FindPlayerOnTeam(Team team,string playerId) {
+            if (team == null) return null;
+            var index =team.Find(playerId) ;
+            if (index == -1) {
+                return null;
+            }
+            return team.slots[index];
+        }
+        
         public bool OnTeam(Team team, string clientId) {
             if (team == null) return false;
             return team.Find(clientId) != -1;
@@ -207,6 +275,26 @@ namespace Macrometa.Lobby {
             team?.slots.Add(teamSlot);
             RemoveFromOtherTeams(teamIndex, teamSlot.clientId);
             return true;
+        }
+
+        public void SetRttTime(string consumerName, int rttTime) {
+            GameDebug.Log("SetRttTime try team0 : " + consumerName);
+            if (OnTeamSetRttTime(team0, consumerName, rttTime)) return;
+            GameDebug.Log("SetRttTime try team1 ");
+            if (OnTeamSetRttTime(team1, consumerName, rttTime)) return;
+            GameDebug.Log("SetRttTime try unassigned");
+            if (OnTeamSetRttTime(unassigned, consumerName, rttTime)) return;
+            GameDebug.Log("SetRttTime failed ");
+
+        }
+        public bool OnTeamSetRttTime(Team team, string clientId, int rttTime) {
+            if (team == null) return false;
+             var index =team.Find(clientId) ;
+             if (index == -1) {
+                 return false;
+             }
+             team.slots[index].rtt = rttTime;
+             return true;
         }
         
     }
@@ -244,7 +332,15 @@ namespace Macrometa.Lobby {
     [Serializable]
     public enum LobbyCommandType {
         RequestRoom,
-        HeartBeat
+        //HeartBeat,
+        CloseLobby,
+        SetRttTarget,
+        SendRttTime,
+        AllowServer,
+        GameInit,
+        GameReady,
+        Ping,
+        Pong,
     }
     
     [Serializable]
@@ -253,8 +349,11 @@ namespace Macrometa.Lobby {
         public int roomNumber;
         public string playerName;
         public string source; // clientId
-        public bool succeed;
+        public bool all;
+        public bool admin;
+        public string target; //clientId
         public TeamSlot teamSlot;
+        public int intVal;
     }
     
 }

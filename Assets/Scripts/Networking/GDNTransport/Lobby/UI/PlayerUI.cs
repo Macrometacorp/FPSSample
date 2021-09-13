@@ -14,9 +14,12 @@ public class PlayerUI : MonoBehaviour {
     public TMP_Text playerName;
     public TMP_Text pingTime;
     public TMP_Text rttTime;
+    public Button rttTargetButton; ////shown to admin to select who to ping
     public Button serverAllowed; //shown to admin to select who can start game server
     public Button startGameServer; // shown to player to start game server
     public GameObject highlight;
+    public GameObject highlightRttTarget;
+    public Image highlightRttTime;
     
     public void DisplayPlayer(TeamSlot teamSlot, bool isHighlight) {
         if (teamSlot == null) {
@@ -33,20 +36,44 @@ public class PlayerUI : MonoBehaviour {
         pingTime.text = teamSlot.ping.ToString();
         if (teamSlot.rtt > 0) {
             rttTime.text = teamSlot.rtt.ToString();
+            highlightRttTime.gameObject.SetActive(true);
+            if (teamSlot.rtt > 300) {
+                highlightRttTime.color = Color.red;
+            } else if (teamSlot.rtt > 200) {
+                highlightRttTime.color = new Color(0.85f, 0.45f, 0);
+            }
+            else {
+                highlightRttTime.color = Color.green;
+            }
         }
         else {
             rttTime.text = "";
+            highlightRttTime.gameObject.SetActive(false);
+        }
+
+        if (teamSlot.rttTarget) {
+            highlightRttTarget.SetActive(true);
+        }
+        else {
+            highlightRttTarget.SetActive(false);
+        }
+        if (teamSlot.runGameServer) {
+            startGameServer.gameObject.SetActive(true);
+        }
+        else {
+            startGameServer.gameObject.SetActive(false);
         }
         clientID = teamSlot.clientId;
 
     }
     
     public void ServerAllowedClicked() {
+        GameDebug.Log("pushed ServerAllowedClicked");
         lobby.ServerAllowed(clientID);
     }
     
-    public void StartGameClicked() {
-        lobby.StartGame();
+    public void RttTargetClicked() {
+        lobby.SetRttTarget(clientID);
     }
     
 }

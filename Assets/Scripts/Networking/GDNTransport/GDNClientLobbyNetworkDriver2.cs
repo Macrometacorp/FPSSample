@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -23,19 +24,33 @@ namespace Macrometa {
         public int nextGameSerialnumber = 1;
         public GdnDocumentLobbyDriver gdnDocumentLobbyDriver;
         public LobbyValue lobbyValue;
+        //public bool isRttTarget;
         public bool lobbyUpdateAvail = true;
-        public bool isLobbyAdmin;
+        static public bool isLobbyAdmin;
         public float nextUpdateLobby = 0;
+        public float lobbyClosingTime;
+        public bool closeLobby;
+        public float closeLobbyInactiveTime;
+        public bool closeLobbyInactive = true;
+        public float closeLobbyInactiveDelay = 30;
         
 
         public LobbyList lobbyList = new LobbyList();
         public float nextRefreshLobbyList= 0;
 
-        protected Lobby.PingData transportPingData;
+        //protected Lobby.PingData transportPingData;
         public bool sendTransportPing = false;
-        public Lobby.PingData debugPingData;
+        static public bool pingWaiting = false;
+        //public Lobby.PingData debugPingData;
+        public int pingCount = 0;
+        public int maxPing = 3; //send this many pings for calculating RTT
+            
+        
+        
         public bool waitStreamClearing = false;
         public float streamClearTime = 0;
+        
+        private ConcurrentQueue<LobbyCommand> _lobbyQueue = new ConcurrentQueue<LobbyCommand>();
 
         static  GDNClientLobbyNetworkDriver2 _inst;
         
@@ -57,15 +72,26 @@ namespace Macrometa {
             }
             gdnStreamDriver.nodeId = PingStatsGroup.NodeFromGDNData(baseGDNData);
             GameDebug.Log("Setup GDNClientBrowserNetworkDriver: " + gdnStreamDriver.nodeId);
-            setRandomClientName();
+            MakeGDNConnection(null);
+            clientId = gdnStreamDriver.consumerName;
             gdnStreamDriver.chatStreamName = "FPSChat";
             gdnStreamDriver.chatChannelId = "_Lobby";
             lobbyList = gdnDocumentLobbyDriver.lobbyList;
             lobbyList.isDirty = true;
-            MakeGDNConnection(null); //servers are all using default name server.
+            //servers are all using default name server.
         }
         public override void Update() {
             Bodyloop();
+            if (closeLobbyInactive && Time.time > closeLobbyInactiveTime) {
+                closeLobbyInactive = false;
+                lobbyClosingTime = Time.time + 5;
+                closeLobby = true;
+                lobbyValue.closeLobbyNow = true;
+            }
+            if (closeLobby && Time.time > lobbyClosingTime) {
+                closeLobby = false;
+                LeaveLobby();
+            }
         }
 
         public void CreateLobby() {
@@ -80,7 +106,7 @@ namespace Macrometa {
             if (aL != null) {
                 destination = aL.clientId;
             }
-                
+
             gdnStreamDriver.setRandomClientName();
             var connection = new GDNNetworkDriver.GDNConnection() {
                 source = gdnStreamDriver.consumerName,
@@ -88,21 +114,35 @@ namespace Macrometa {
                 port = 443
             };
 
-            var id =gdnStreamDriver.AddOrGetConnectionId(connection);
-            
-        }
-        
-        public void setRandomClientName() {
-            clientId = "Cl" + (10000000 + Random.Range(1, 89999999)).ToString();
+            var id = gdnStreamDriver.AddOrGetConnectionId(connection);
         }
 
-        public void JoinLobby(LobbyValue lobbyValue, bool isAdmin) {
+        public void JoinLobby(LobbyValue aLobbyValue, bool isAdmin) {
             SetIsLobbyAdmin(isAdmin);
-            GameDebug.Log("JoinLobby:" + lobbyValue.streamName);
-            gdnStreamDriver.chatChannelId = lobbyValue.streamName;
-            gdnStreamDriver.chatLobbyId = lobbyValue.streamName;
+            lobbyValue = aLobbyValue;
+            GameDebug.Log("JoinLobby:" + aLobbyValue.streamName);
+            gdnStreamDriver.chatChannelId = aLobbyValue.streamName;
+            gdnStreamDriver.chatLobbyId = aLobbyValue.streamName;
+            gdnStreamDriver.ChatSendRoomRequest(2);
+            closeLobbyInactiveTime = Time.time + closeLobbyInactiveDelay;
+            closeLobbyInactive = true;
+
         }
-        
+        public void LeaveLobby() {
+            Debug.Log(" LeaveLobby()");
+            
+            if (isLobbyAdmin) {
+                lobbyValue.closeLobbyNow = true;
+                UpdateLobby();
+            }
+            SetIsLobbyAdmin(false);
+            lobbyValue = new LobbyValue();
+            gdnStreamDriver.chatLobbyId = "_Lobby";
+            gdnStreamDriver.chatChannelId = "_Lobby";
+            
+            
+        }
+
         public void SetIsLobbyAdmin(bool val) {
             GDNStreamDriver.isLobbyAdmin = val;
             isLobbyAdmin = val;
@@ -112,7 +152,13 @@ namespace Macrometa {
         public void UpdateLocalLobby(LobbyValue lobbyUpdate) {
             GameDebug.Log("UpdateLocalLobby");
             lobbyValue = lobbyUpdate;
+            lobbyValue.clientId = clientId;
             lobbyUpdateAvail = true;
+            closeLobbyInactiveTime = Time.time + closeLobbyInactiveDelay;
+            if (lobbyValue.closeLobbyNow) {
+                lobbyClosingTime = Time.time + 5;
+                closeLobby = true;
+            }
         }
         
         public void Bodyloop() {
@@ -180,7 +226,6 @@ namespace Macrometa {
             }
             
             if (!gdnStreamDriver.chatProducerExists) {
-                GameDebug.Log(" pre CreateChatProducer");
                 gdnStreamDriver.CreateChatProducer(gdnStreamDriver.chatStreamName);
                 return;
             }
@@ -192,14 +237,13 @@ namespace Macrometa {
             
             if (!gdnDocumentLobbyDriver.lobbyListIsDone ) {
                 gdnDocumentLobbyDriver.PostLobbyListQuery();
-                nextRefreshLobbyList = Time.time + 10;
+                nextRefreshLobbyList = Time.time + 2f;
                 return;
             }
 
-            if (nextRefreshLobbyList > Time.time) {
+            if (nextRefreshLobbyList < Time.time) {
                 gdnDocumentLobbyDriver.lobbyListIsDone = false;
             }
-            
             
             if (startDocumentInit) {
                 startDocumentInit = false;
@@ -238,9 +282,9 @@ namespace Macrometa {
                     };
 
                     lobbyValue.MoveToTeam(SelfTeamSlot(), 2);
-                    AddDummyTeamSlots(0, 4);
-                    AddDummyTeamSlots(1, 1);
-                    AddDummyTeamSlots(2, 3);
+                    //AddDummyTeamSlots(0, 1);
+                    //AddDummyTeamSlots(1, 3);
+                    //AddDummyTeamSlots(2, 1);
                     GameDebug.Log("make lobby: " + lobbyValue.streamName);
                     var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
                     gdnDocumentLobbyDriver.PostLobbyDocument(lobbyLobby);
@@ -259,27 +303,29 @@ namespace Macrometa {
             }
 
             if (isLobbyAdmin && gdnDocumentLobbyDriver.lobbyIsMade && Time.time > nextUpdateLobby) {
-                GameDebug.Log("heartbeat update");
                 UpdateLobby();
                 return;
             }
             
             if (StreamsBodyLoop()) {
-               debugPingData = transportPingData.Copy();
+               //debugPingData = transportPingData.Copy();
                 return;
             }
 
         }
 
         public void UpdateLobby() {
-            nextUpdateLobby = Time.time + 10;
+            nextUpdateLobby = Time.time +5;
             var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
+           
             var key = gdnDocumentLobbyDriver.lobbyKey;
+            
             gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, key);
         }
 
         /// <summary>
         /// returns true if containing loop should return
+        /// this run when inside a lobby
         /// </summary>
         /// <returns></returns>
         public bool  StreamsBodyLoop() {
@@ -297,74 +343,25 @@ namespace Macrometa {
                 return false; // none streams action OK
             }
             gdnStreamDriver.ExecuteLobbyCommands();
-           // GameDebug.Log("StreamsBodyLoop C");
-            SetPings();
-            if (transportPingData == null) {
-                return false;
-            }
-            GameDebug.Log("StreamsBodyLoop D");
-            if (!gdnStreamDriver.producerExists) {
-                gdnStreamDriver.CreateProducer(gdnStreamDriver.producerStreamName);
-                return true;
-            }
-            GameDebug.Log("StreamsBodyLoop E");
-            if (!gdnStreamDriver.consumerExists) {
-                gdnStreamDriver.CreateConsumerPongOnly(gdnStreamDriver.consumerStreamName, gdnStreamDriver.consumerName);
-                return false;
-            }
-            GameDebug.Log("StreamsBodyLoop F");
-            if (sendTransportPing) {
-                GameDebug.Log(" PingBodyLoop() sendTransportPing");
-                gdnStreamDriver.SendSimpleTransportPing();
-                sendTransportPing = false;
-            }
+            //GameDebug.Log("StreamsBodyLoop C");
 
-            if (TransportPings.PingTime() > 15000) {
+            //this for pinging rtt clients
+            // ping three time
 
-                // what should gdnStreamDriver.receivedPongOnly
-                // be set to?
-                lobbyValue.ping = -1;
-                StartClearStreams();
-                transportPingData = null;
-                TransportPings.Clear();
-                sendTransportPing = false;
-                gdnStreamDriver.receivedPongOnly = false;
-            }
-
-            if (gdnStreamDriver.receivedPongOnly) {
-                gdnStreamDriver.receivedPongOnly = false;
-                transportPingData.pingCount++;
-                if (transportPingData.pingCount > 3) {
-                    GameDebug.Log("pingCount set "+ lobbyValue.streamName + " : "+ gdnStreamDriver.pongOnlyRtt) ;
-                    lobbyValue.ping = gdnStreamDriver.pongOnlyRtt;
-                    StartClearStreams();
-                    transportPingData = null;
-                }
-                else {
-                    sendTransportPing = true;
-                }
-            }
-            GameDebug.Log("StreamsBodyLoop Z");
+            
+                
            
+            
+            
+            
             return false;
         }
 
-        public void SetPings() {
-            if (transportPingData == null) {
-                var unpingedLobby = lobbyList.UnpingedLobby();
-                if (unpingedLobby != null) {
-                    transportPingData = new Lobby.PingData() {
-                        lobbyValue = unpingedLobby
-                    };
-                    //ClearStreams();
-                    gdnStreamDriver.producerStreamName = unpingedLobby.streamName + "_InStream";
-                    gdnStreamDriver.consumerStreamName  = unpingedLobby.streamName + "_OutStream";
-                    sendTransportPing = true;
-                    lobbyValue = unpingedLobby;
-                }
-            }
-            
-        }
+        
+        
+        /// <summary>
+        /// pings are being sent to lobby streams (chat)
+        /// </summary>
 
         public void StartClearStreams() {
             GameDebug.Log("ClearStreams");
@@ -389,9 +386,13 @@ namespace Macrometa {
             waitStreamClearing = false;
         }
         
-        #region LobbyManipulation
+   #region LobbyManipulation
         public Lobby.TeamSlot SelfTeamSlot() {
-            var result = new TeamSlot() {
+            var result = lobbyValue.FindPlayer(clientId);
+            if (result != null) {
+                return result;
+            }
+            result = new TeamSlot() {
                 playerName = localId,
                 clientId = clientId,
                 region = gdnStreamDriver.region,
@@ -410,6 +411,9 @@ namespace Macrometa {
         /// <param name="teamIndex"></param>
         static public void MoveToTeam(int teamIndex) {
             _inst.gdnStreamDriver.ChatSendRoomRequest(teamIndex);
+            if (teamIndex == -1) {
+                _inst.LeaveLobby();
+            }
         }
 
         static public void TeamNameChanged(string teamName, int teamIndex) {
@@ -424,6 +428,98 @@ namespace Macrometa {
             return val;
         }
 
+        static public void SetServerAllowed(string consumerName) {
+            GameDebug.Log("pushed SetServerAllowed");
+            _inst.lobbyValue.serverAllowed = consumerName;
+            _inst.UpdateLobby();
+        }
+        
+        static public void SetRttTarget(string rttTarget) {
+            GameDebug.Log("pushed SetRttTarget");
+            _inst.lobbyValue.rttTarget = rttTarget;
+            _inst.gdnStreamDriver.ChatSendSetRttTarget(rttTarget);
+
+        }
+        static public void SendRttTime(string consumerName, int rttTime) {
+            _inst.lobbyValue.SetRttTime(consumerName, rttTime);
+            _inst.UpdateLobby();
+        }
+        
+        static public void CloseLobby() {
+            // we need to sen this to UI
+           //_inst.lobbyValue.MoveToTeam(teamSlot, teamIndex);
+            
+        }
+        
+        public void AddLobbyCommand(LobbyCommand command) {
+            _lobbyQueue.Enqueue(command);
+        }
+
+        public void ExecuteLobbyCommands() {
+            //GameDebug.Log("ExecuteLobbyCommands");
+            LobbyCommand command;
+            while (_lobbyQueue.TryDequeue(out command)) {
+                GameDebug.Log("ExecuteLobbyCommand: "+ command.command);
+                ExecuteLobby(command);
+            }
+        }
+
+        public void ExecuteLobby(LobbyCommand command) {
+
+            switch (command.command) {
+                case LobbyCommandType.RequestRoom:
+                    GameDebug.Log("Request for lobby Room: " + command.roomNumber + " playerName: " +
+                                  command.playerName
+                                  + "clientId " + command.source);
+                    GDNClientLobbyNetworkDriver2.MoveToTeam(command.teamSlot, command.roomNumber);
+                    // do MoveTo()
+                    //      this move if possible and then send update to lobby even if not done
+                    break;
+                case LobbyCommandType.AllowServer:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+                case LobbyCommandType.CloseLobby:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+                case LobbyCommandType.GameInit:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+                case LobbyCommandType.GameReady:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+                case LobbyCommandType.SendRttTime:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    
+                    break;
+                case LobbyCommandType.SetRttTarget:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+
+   #endregion LobbyManipulation 
+   
+   #region LobbyTesting
         //testing
 
         public void AddDummyTeamSlots(int teamIndex, int count) {
@@ -445,7 +541,7 @@ namespace Macrometa {
         
         
         
-        #endregion LobbyManipulation
+    #endregion LobbyLobbyTesting
         
     }
 }

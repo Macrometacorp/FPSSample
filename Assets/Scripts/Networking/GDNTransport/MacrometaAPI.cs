@@ -566,10 +566,12 @@ expireAfter: The time (in seconds) after a document's creation after which the d
                 yield return www.SendWebRequest();
                 if (www.error != null) {
                     gdnE.isWaiting = false;
+                    GameDebug.Log("OTP Authorization error" + www.error);
                     yield break;
                 }
                 otp = JsonUtility.FromJson<OTPResult>(www.downloadHandler.text);
             }
+            Debug.Log( "LIVE producer url :"+gdnData.ProducerURL(streamName));
             callback(new WebSocket(new Uri(gdnData.ProducerURL(streamName) + "?otp=" + otp.otp)),
                 "LIVE producer "+ streamName);
         }
@@ -671,7 +673,11 @@ expireAfter: The time (in seconds) after a document's creation after which the d
             Action<UnityWebRequest> callback) {
             ;
             var data= JsonUtility.ToJson(indexParams);
-            var www = WebPost(gdnData.PostPersistentIndexURL(collectionName), data, gdnData);
+            var www = WebPost(gdnData.PostTTLIndexURL(collectionName), data, gdnData);
+            Debug.Log("TTLIndex URL: "+gdnData.PostTTLIndexURL(collectionName) );
+            Debug.Log("TTLIndex Data: "+ data);
+            
+            
             yield return www.SendWebRequest();
             
             if (callback != null)

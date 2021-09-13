@@ -87,10 +87,12 @@ namespace Macrometa {
         
         
         public static TransportPing Remove(int id) {
+            GameDebug.Log("Ping Remove count: "+ pings.Count);
             TransportPing result;
             if (pings.ContainsKey(id)) {
                 result = pings[id];
                 pings.Remove(id);
+                
             } else {
                 GameDebug.LogError("Could not find ping: " + id);
                 return new TransportPing {id = -1, elapsedTime = -1, stopwatch = null};
@@ -100,6 +102,7 @@ namespace Macrometa {
                 GameDebug.LogError("missing stopwatch ping: " + id);
             }
             result.elapsedTime = result.stopwatch.ElapsedMilliseconds;
+            GameDebug.Log("Ping Removed OK: "+ id + " : " + result.elapsedTime);
             stopWatchPool.Return(result.stopwatch);
             result.stopwatch = null;
             return result;

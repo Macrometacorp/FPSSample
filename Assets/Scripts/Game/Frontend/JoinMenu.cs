@@ -322,7 +322,7 @@ public class JoinMenu : MonoBehaviour
         m_Servers.Clear();
         AddServersFromGameList();
         RepositionItems();
-    }
+    } 
 
     void AddServersFromGameList() {
         foreach (var grv in gameList.games) {

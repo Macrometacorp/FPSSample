@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
@@ -26,6 +27,9 @@ namespace Macrometa {
         public static float initialPingDelay = 30; // wait period before first ping is sent after connect
         public static bool isClientBrowser = false;
         public static bool isLobbyAdmin = false;
+        public static string lobbyTarget;
+        public static bool isLobbyPinger;
+        public static Stopwatch chatPingStopwatch;
         public static string localId;  // is player name in FPS
         public static string appType;
         public string nodeId = "";
@@ -56,6 +60,8 @@ namespace Macrometa {
         public bool producerStatsExists = false;
         public bool lobbyDocumentReaderExists = false;
         public bool lobbyUpdateAvail = false;
+        public int lobbyRtt;
+        public bool lobbyURttAvail;
         public LobbyValue lobbyUpdate;
         public bool sendConnect = true;
         public bool setupComplete = false;
@@ -335,6 +341,7 @@ namespace Macrometa {
             producer1 = ws;
             if (isSocketPingOn) {
                 ws.StartPingThread = true;
+                ws.CloseAfterNoMessage = TimeSpan.FromSeconds(10);
             }
 
             producer1.OnOpen += (o) => {
@@ -371,6 +378,7 @@ namespace Macrometa {
         public void SetChatProducer(WebSocket ws, string debug = "") {
             chatProducer1 = ws;
             chatProducer1.StartPingThread = true; // needed for lobby
+            chatProducer1.CloseAfterNoMessage = TimeSpan.FromSeconds(10);
             chatProducer1.OnOpen += (o) => {
                 _gdnErrorHandler.isWaiting = false;
                 chatProducerExists = true;
@@ -514,6 +522,7 @@ namespace Macrometa {
 
             consumer1 = ws;
             consumer1.StartPingThread = isSocketPingOn;
+            consumer1.CloseAfterNoMessage = TimeSpan.FromSeconds(10);
             consumer1.OnOpen += (o) => {
                 GameDebug.Log("Stream driver Open " + debug + " isPingOn: " + isSocketPingOn);
                 consumerExists = true;
@@ -690,6 +699,7 @@ namespace Macrometa {
 
             consumer1 = ws;
             consumer1.StartPingThread = isSocketPingOn;
+            consumer1.CloseAfterNoMessage = TimeSpan.FromSeconds(10);
             consumer1.OnOpen += (o) => {
                 GameDebug.Log("Stream driver Open " + debug + " PongOnly isPingOn: " + isSocketPingOn);
                 consumerExists = true;
@@ -757,14 +767,6 @@ namespace Macrometa {
             string msgJSON = JsonUtility.ToJson(message);
             chatProducer1.Send(msgJSON);
         }
-        public void ChatSendHeartBeat() {
-            var command = new LobbyCommand() {
-                command = LobbyCommandType.HeartBeat,
-                source = consumerName,
-                playerName = localId
-            };
-            ChatSendCommand(chatChannelId,command);
-        }
         
         public void ChatSendRoomRequest(int roomId) {
             var command = new LobbyCommand() {
@@ -772,10 +774,58 @@ namespace Macrometa {
                 source = consumerName,
                 playerName = localId,
                 roomNumber = roomId,
-                teamSlot = GDNClientLobbyNetworkDriver2.MakeSelfTeamSlot()
+                teamSlot = GDNClientLobbyNetworkDriver2.MakeSelfTeamSlot(),
+                admin = true,
             };
             ChatSendCommand(chatChannelId,command);
         }
+        public void ChatSendCloseLobby() {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.CloseLobby,
+                all = true,
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        public void ChatSendSetRttTarget(string clientId) {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.SetRttTarget,
+                target = clientId,
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        public void ChatSendSetRttTime(string rttClientId,int val) {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.SendRttTime,
+                source = consumerName,
+                target = rttClientId,
+                admin = true,
+                intVal = val,
+            };
+            GameDebug.Log("hatSendSetRttTime : "+consumerName);
+            ChatSendCommand(chatChannelId,command);
+        }
+        public void ChatSendAllowServer(string clientId) {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.AllowServer,
+                target = clientId,
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        public void ChatSendGameInit() {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.GameInit,
+                all = true,
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        public void ChatSendGameReady() {
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.GameReady,
+                all = true,
+            };
+            ChatSendCommand(chatChannelId,command);
+        }
+        
         public void ChatSendCommand(string channelId,  LobbyCommand command ) {
             var properties = new MessageProperties() {
                 t = VirtualMsgType.Internal,
@@ -802,7 +852,7 @@ namespace Macrometa {
         public void SetChatConsumer(WebSocket ws, string debug = "") {
 
             chatConsumer1 = ws;
-            
+            chatConsumer1.CloseAfterNoMessage = TimeSpan.FromSeconds(10);
             chatConsumer1.OnOpen += (o) => {
                 GameDebug.Log("Stream driver Open " + debug + " chatConsumer1: " );
                 chatConsumerExists = true;
@@ -810,9 +860,10 @@ namespace Macrometa {
             };
 
             chatConsumer1.OnMessage += (sender, e) => {
-                GameDebug.Log(" chatConsumer1.OnMessage"  );
+                //GameDebug.Log(" chatConsumer1.OnMessage"  );
                 var receivedMessage = JsonUtility.FromJson<ReceivedMessage>(e);
-                GameDebug.Log(" chatConsumer1.OnMessage channelid: "  +receivedMessage.properties.d );
+                GameDebug.Log(" chatConsumer1.OnMessage channelid: "  +receivedMessage.properties.d +
+                              " : " + receivedMessage.properties.t );
                 if (receivedMessage.properties != null &&
                     receivedMessage.properties.d == chatChannelId
                 ) {
@@ -823,16 +874,37 @@ namespace Macrometa {
                                 Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload)));
                             break;
                         case VirtualMsgType.Internal:
-                            GameDebug.Log(" chatConsumer1.OnMessage internal " );
-                            if (!isLobbyAdmin && receivedMessage.properties.d != consumerName) break;
+                           // GameDebug.Log(" chatConsumer1.OnMessage internal " );
                             var json  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
                             var lobbyCommand = JsonUtility.FromJson<LobbyCommand>(json);
-                            GameDebug.Log(" chatConsumer1.OnMessage lobbycommand: " + lobbyCommand.command );
-                            AddLobbyCommand(lobbyCommand);
+                            if (lobbyCommand.all || (lobbyCommand.admin && isLobbyAdmin) ||
+                                (lobbyCommand.target == consumerName)) {
+                                //GameDebug.Log(" chatConsumer1.OnMessage lobbycommand: " + lobbyCommand.command);
+                                AddLobbyCommand(lobbyCommand);
+                            }
+                            break;
+                        case VirtualMsgType.Ping:
+                            //GameDebug.Log(" chatConsumer1.OnMessage ping source: "+ receivedMessage.properties.s +
+                             //            " lobbyTarget: "+  lobbyTarget + "consumer: "+consumerName );
+                            SendChatTransportPong(receivedMessage.properties.d,receivedMessage);
+                            break;
+                        case VirtualMsgType.Pong:
+                            
+                            var jsonPong  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
+                            var lobbyCommandPong = JsonUtility.FromJson<LobbyCommand>(jsonPong);
+                            //GameDebug.Log("ping chatConsumer1.OnMessage pong source/target : local:"+ lobbyCommandPong.source +
+                             //             " : " + consumerName + " : "+ lobbyCommandPong.target );
+                            if (lobbyCommandPong.target != consumerName) break;
+                            // this need to check check target is me
+                            //GameDebug.Log("ping chatConsumer1.OnMessage lobbycommand: " + lobbyCommandPong.command );
+                            AddLobbyCommand(lobbyCommandPong);
                             break;
                     }
                 }
-                ChatBuffer.Add(receivedMessage);
+
+                if (receivedMessage.properties.t == VirtualMsgType.Data) {
+                    ChatBuffer.Add(receivedMessage);
+                }
                 var ackMessage = new AckMessage() {
                     messageId = receivedMessage.messageId
                 };
@@ -865,7 +937,6 @@ namespace Macrometa {
         
         public void CreateDocuomentReader(string streamName, string aConsumerName) {
             _gdnErrorHandler.isWaiting = true;
-           
             _monobehaviour.StartCoroutine(
                 MacrometaAPI.DocumentReader(_gdnData, streamName, aConsumerName, SetDocumentReader,_gdnErrorHandler));
         }
@@ -1064,11 +1135,9 @@ namespace Macrometa {
                     min++;
                 }
             }
-
             if (!gdnConnections.ContainsKey(min)) {
                 return -1;
             }
-
             gdnConnection.id = min;
             return min;
         }
@@ -1131,36 +1200,13 @@ namespace Macrometa {
             }
         }
 
-        /*
-        public void SendTransportPings() {
-            foreach (var destinationId in gdnConnections.Keys) {
-                if (TransportPings.firstPingTimes.ContainsKey(destinationId) &&
-                    Time.time > TransportPings.firstPingTimes[destinationId]) {
+        public void ReceiveChatTransportPong(string rttClientId) {
 
-                    var pingId = TransportPings.Add(destinationId, Time.realtimeSinceStartup, 0);
-                    ProducerSend(destinationId, VirtualMsgType.Ping, new byte[0], pingId);
-
-                    var disocnnects = TransportPings.HeartbeatCheck(missedPingDisconnect);
-                    foreach (var id in disocnnects) {
-                        var driverTransportEvent = new GDNNetworkDriver.DriverTransportEvent() {
-                            connectionId = id,
-                            data = new byte[0],
-                            dataSize = 0,
-                            type = GDNNetworkDriver.DriverTransportEvent.Type.Disconnect
-                        };
-                        PushEventQueue(driverTransportEvent);
-                        TransportPings.RemoveDestinationId(id);
-                        RemoveConnectionId(id);
-                        GameDebug.Log("lost connection id: " + id);
-                    }
-
-                }
-                else if (!TransportPings.firstPingTimes.ContainsKey(destinationId)) {
-                    TransportPings.firstPingTimes[destinationId] = Time.time + initialPingDelay;
-                }
-            }
+            var rtt = (int) chatPingStopwatch.ElapsedMilliseconds;
+            GameDebug.Log("lRtt: " + rttClientId + " : " + rtt);
+            ChatSendSetRttTime(rttClientId,rtt);
+            
         }
-*/
         /// <summary>
         /// crashing latency test
         /// so moved
@@ -1201,8 +1247,8 @@ namespace Macrometa {
         public void SendSimpleTransportPing() {
             GameDebug.Log("SendSimpleTransportPing()");
                 var pingId = TransportPings.Add(0, Time.realtimeSinceStartup, 0);
-                    ProducerSend(0, VirtualMsgType.Ping, new byte[0], pingId);
-                    GameDebug.Log("SendSimpleTransportPing() ProducerSend called ");
+                ProducerSend(0, VirtualMsgType.Ping, new byte[0], pingId);
+                GameDebug.Log("SendSimpleTransportPing() ProducerSend called ");
         }
         
         public void SendTransportPong(ReceivedMessage receivedMessage) {
@@ -1215,15 +1261,61 @@ namespace Macrometa {
             ProducerSend(connection, VirtualMsgType.Pong, new byte[0], receivedMessage.properties.i,
                 producer1.Latency, consumer1.Latency, localId);
         }
+        
+        public void SendChatTransportPing() {
+            //GameDebug.Log("Send chat TransportPing()");
+            
+            chatPingStopwatch = Stopwatch.StartNew();
+            chatPingStopwatch.Reset();
+            chatPingStopwatch.Start();
+            
+            //do I need other properties
+            var properties = new MessageProperties() {
+                t = VirtualMsgType.Ping,
+                d = chatLobbyId,
+                s = consumerName,
+                i = 0
+            };
+            var msg = "";
+            var message = new SendMessage() {
+                properties = properties,
+                payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(msg))
+            };
+            string msgJSON = JsonUtility.ToJson(message);
+            chatProducer1.Send(msgJSON);
+            GameDebug.Log("SendChatTransportPing() called: "+ consumerName);
+        }
+        
+        public void SendChatTransportPong(string channelId,ReceivedMessage receivedMessage) {
+            var properties = new MessageProperties() {
+                t = VirtualMsgType.Pong,
+                d = channelId,
+                s = consumerName,
+                i = receivedMessage.properties.i
+            };
+            var command = new LobbyCommand() {
+                command = LobbyCommandType.Pong,
+                source = consumerName,
+                target = receivedMessage.properties.s,
+                intVal =  receivedMessage.properties.i,
+            };
+            var msg = JsonUtility.ToJson(command);
+            var message = new SendMessage() {
+                properties = properties,
+                payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(msg))
+            };
+            string msgJSON = JsonUtility.ToJson(message);
+            chatProducer1.Send(msgJSON);
+            GameDebug.Log("pingSendChatTransportPong() called: consumer"+ consumerName + " i: "+receivedMessage.properties.i);
+        }
 
+        
         private IEnumerator RepeatDummyMsg() {
             for (;;) {
                 for (int i = 0; i < dummyTrafficQuantity; i++) {
                     SendDummy();
                 }
-
                 yield return new WaitForSeconds(dummyFrequency);
-
             }
         }
 
@@ -1293,7 +1385,7 @@ namespace Macrometa {
                     break;
             }
         }
-        private void AddLobbyCommand(LobbyCommand command) {
+        public void AddLobbyCommand(LobbyCommand command) {
             _lobbyQueue.Enqueue(command);
         }
 
@@ -1306,30 +1398,49 @@ namespace Macrometa {
             }
         }
 
-        private void ExecuteLobby(LobbyCommand command) {
+        public void ExecuteLobby(LobbyCommand command) {
             switch (command.command) {
                 case LobbyCommandType.RequestRoom:
                     if (isLobbyAdmin) {
                         GameDebug.Log("Request for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
                                       +  "clientId " + command.source);
                         GDNClientLobbyNetworkDriver2.MoveToTeam(command.teamSlot, command.roomNumber);
-                        // do MoveTo()
-                        //      this move if possible and then send update to lobby even if not done
-
-                    }
-                    else {
-                        GameDebug.Log("Response for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
-                                      +  "clientId " + command.source + "succeed: "+ command.succeed);
-                        // this not uesed 
-                        // ui should just update
                     }
                     break;
-                case LobbyCommandType.HeartBeat:
+                case LobbyCommandType.AllowServer:
+                    GameDebug.Log("unhandled lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                        break;
+                case LobbyCommandType.CloseLobby:
                     if (isLobbyAdmin) {
-                        GameDebug.Log("handle heartbeak from source: " + command.source);
-                        //update last heartbeat time in heartBeat collection
+                        GameDebug.Log("unhandled lobby command from source: " 
+                                      + command.command +" : "+command.source );
                     }
-
+                    break;
+                case LobbyCommandType.GameInit:
+                    GameDebug.Log("unhandled lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    break;
+                case LobbyCommandType.GameReady:
+                    GameDebug.Log("unhandled lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    break;
+                case LobbyCommandType.SendRttTime:
+                    GameDebug.Log("unhandled lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    GDNClientLobbyNetworkDriver2.SendRttTime(command.target, command.intVal);
+                    
+                    break;
+                case LobbyCommandType.SetRttTarget:
+                    GameDebug.Log("unhandled lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    
+                    SendChatTransportPing();
+                    break;
+                case LobbyCommandType.Pong:
+                    GameDebug.Log(" lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    ReceiveChatTransportPong(command.source);
                     break;
                 default:
                     break;

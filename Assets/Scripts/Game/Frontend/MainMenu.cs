@@ -161,7 +161,8 @@ public class MainMenu : MonoBehaviour
     }
 
     public void OnCreateGame() {
-      //  gdnClientBrowserNetworkDriver.tryKVInit = true;
+     // gdnClientBrowserNetworkDriver.tryKVInit = true;
+     CreateGame();
     }
     
     public void CreateGame(){   
@@ -194,7 +195,7 @@ public class MainMenu : MonoBehaviour
                     {
                         try
                         {
-                            p.Kill();
+                           // p.Kill();
                         }
                         catch (System.Exception)
                         {

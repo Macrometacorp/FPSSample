@@ -178,7 +178,7 @@ namespace Macrometa {
                    GameDebug.Log("Setup  tryKVInit C fail");
                }
                else {
-                   var unassigned = new Team();
+                   var unassigned = new TeamInfo();
                    //unassigned.slots = new List<TeamSlot>();
                    lobbyValue = new LobbyValue() {
                        adminName = localId,
