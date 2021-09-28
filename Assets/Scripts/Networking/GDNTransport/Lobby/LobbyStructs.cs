@@ -62,8 +62,9 @@ namespace Macrometa.Lobby {
         public bool gameMaster = true; //this is a tag always set true
         
         public static LobbyGameMaster GetFromLobbyValue(LobbyValue lobbyValue) {
+            GameDebug.Log("LobbyGameMaster baseName:" +lobbyValue.baseName);
             return new LobbyGameMaster() {
-                baseName = lobbyValue.streamName,
+                baseName = lobbyValue.baseName,
                 serialNumber = lobbyValue.serialNumber,
                 lobbyValue = lobbyValue
             };

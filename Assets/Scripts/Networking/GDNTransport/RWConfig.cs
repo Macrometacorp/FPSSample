@@ -12,8 +12,8 @@ public struct ConfigData {
     public int statsGroupSize; 
     public bool isServer;
     public string gameName;
+    public string streamName;
     public string playerName;
-    public int testId;
     public string userCity;
     public string userCountry;
     public string connectionType;

@@ -4,12 +4,14 @@ using Macrometa.Lobby;
 namespace Macrometa {
     //
 
-    public class GDNCServerLobbyNetworkDriver2 : GDNNetworkDriver {
+    public class GDNLobbyNetworkDriver2 : GDNNetworkDriver {
         public GdnDocumentLobbyDriver gdnDocumentLobbyDriver;
         public float nextRefreshLobbyList= 0;
         public LobbyValue lobbyValue;
         public bool lobbyUpdated = false;
-
+        public bool lobbyJoinGameNowSet = false;
+        public string savedKey;
+        
         public override void Awake() {
             GameDebug.Log("  GDNNetworkDriver Awake");
             PlayStats.remotePlayerCity = RwConfig.ReadConfig().userCity;
@@ -51,11 +53,11 @@ namespace Macrometa {
             gdnStreamDriver.nodeId = PingStatsGroup.NodeFromGDNData(baseGDNData);
             GameDebug.Log("Setup: " + gdnStreamDriver.nodeId);
 
-            gdnStreamDriver.serverInStreamName = RwConfig.ReadConfig().gameName + "_InStream";
-            gdnStreamDriver.serverOutStreamName = RwConfig.ReadConfig().gameName + "_OutStream";
+            gdnStreamDriver.serverInStreamName = RwConfig.ReadConfig().streamName + "_InStream";
+            gdnStreamDriver.serverOutStreamName = RwConfig.ReadConfig().streamName + "_OutStream";
             gdnStreamDriver.serverStatsStreamName = "Unity" + "_StatsStream";
             gdnStreamDriver.serverName = gdnStreamDriver.consumerName;
-            GDNStats.gameName = RwConfig.ReadConfig().gameName;
+            GDNStats.gameName = RwConfig.ReadConfig().streamName;
 
             if (isServer) {
                 gdnStreamDriver.consumerStreamName = gdnStreamDriver.serverInStreamName;
@@ -67,12 +69,7 @@ namespace Macrometa {
                 gdnStreamDriver.setRandomClientName();
             }
 
-            //ToDo switch document collection 
-            // how do i get lobby what function()
-
-            // need to get Lobby name from RWConfig
-            // read LobbyDocument
-            // make LobbyGameActive & LobbyGameMaster
+            //ToDo record value be removed?
             if (!isMonitor && isServer) {
                 gameRecordValue = new GameRecordValue() {
                     gameMode = "",
@@ -118,6 +115,52 @@ namespace Macrometa {
                 return;
             }
 
+            if (isServer) {
+                #region get lobby
+
+                if (!gdnDocumentLobbyDriver.lobbyListIsDone) {
+                    gdnDocumentLobbyDriver.PostLobbyListQuery();
+                    nextRefreshLobbyList = Time.time + 2f;
+                    return;
+                }
+
+                lobbyValue =
+                    gdnDocumentLobbyDriver.lobbyList.lobbies.Find(lv =>
+                        lv.GameName() == RwConfig.ReadConfig().streamName);
+                if (lobbyValue == null) {
+                    GameDebug.LogError("lobby not found: " + RwConfig.ReadConfig().streamName);
+                    var lobbies = gdnDocumentLobbyDriver.lobbyList.lobbies;
+                    GameDebug.LogError("Lobbies count:" + lobbies.Count);
+                    foreach (var l in lobbies) {
+                        GameDebug.LogError("name: " + l.GameName());
+                    }
+
+                    gdnDocumentLobbyDriver.lobbyListIsDone = false;
+                    return;
+                }
+
+                // try to get from lobbylist
+                // if not put in lobbyValue
+                if (!lobbyUpdated) {
+                    lobbyValue.showGameInitNow = true;
+                    var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
+                    savedKey = lobbyValue.key;
+                    gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, lobbyValue.key);
+                    lobbyUpdated = true;
+                }
+
+                if (!gdnDocumentLobbyDriver.postLobbyStuff) {
+                    GameDebug.Log("make game Master: " + lobbyValue.baseName);
+                    var lobbyGameMaster = LobbyGameMaster.GetFromLobbyValue(lobbyValue);
+                    gdnDocumentLobbyDriver.PostLobbyDocument(lobbyGameMaster);
+                    return;
+                }
+                
+
+                #endregion
+
+            }
+
             if (!gdnStreamDriver.serverInStreamExists) {
                 gdnStreamDriver.CreatServerInStream();
                 return;
@@ -160,52 +203,26 @@ namespace Macrometa {
                 GameDebug.Log("try producerGameStatsExists");
                 return;
             }
-
-            if (!gdnDocumentLobbyDriver.lobbyListIsDone ) {
-                gdnDocumentLobbyDriver.PostLobbyListQuery();
-                nextRefreshLobbyList = Time.time + 2f;
-                return;
-            }
-            
-            lobbyValue = gdnDocumentLobbyDriver.lobbyList.lobbies.
-                Find(lv => lv.GameName() == RwConfig.ReadConfig().gameName);
-            if (lobbyValue == null) {
-                GameDebug.LogError("lobby not found: "+ RwConfig.ReadConfig().gameName);
-                gdnDocumentLobbyDriver.lobbyListIsDone = false;
-                return;
-            } 
-            
-            
-            //todo get key from??
-            // try to get from lobbylist
-            // if not put in lobbyValue
-            if (!lobbyUpdated) {
-                lobbyValue.showGameInitNow = true;
-                var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
-                var key = gdnDocumentLobbyDriver.lobbyKey;
-                gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, lobbyValue.key);
-                lobbyUpdated = true;
-            }
-
-            //ToDo make PostLobbyGameMaster
-            if (!gdnDocumentLobbyDriver.postLobbyStuff) {
-                lobbyValue.key = "";
-                GameDebug.Log("make game Master: " + lobbyValue.streamName);
-                var lobbyGameMaster = LobbyGameMaster.GetFromLobbyValue(lobbyValue);
-                gdnDocumentLobbyDriver.PostLobbyDocument(lobbyGameMaster);
-                return;
-            }
-
+        
             if (!gdnStreamDriver.setupComplete) {
                 if (GDNStreamDriver.isPlayStatsClientOn) {
                     PingStatsGroup.Init(Application.dataPath, "LatencyStats", gdnStreamDriver.statsGroupSize);
                 }
-                GameDebug.Log("Set up Complete as " + RwConfig.ReadConfig().gameName + " : " +
+                GameDebug.Log("Set up Complete as " + RwConfig.ReadConfig().streamName + " : " +
                               gdnStreamDriver.consumerName);
                 gdnStreamDriver.setupComplete = true;
                 GDNTransport.setupComplete = true;
             }
-
+            
+            if (!lobbyJoinGameNowSet && isServer) {
+                GameDebug.Log("lobbyJoinGameNowSet after complete A");
+                lobbyValue.joinGameNow = true;
+                var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
+                gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, savedKey);
+                lobbyJoinGameNowSet = true;
+                GameDebug.Log("lobbyJoinGameNowSet after complete Z");
+            }
+            
             if (!gdnStreamDriver.sendConnect && !isServer) {
                 GameDebug.Log("Connect after complete " + RwConfig.ReadConfig().gameName + " : " +
                               gdnStreamDriver.consumerName);

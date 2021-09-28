@@ -232,7 +232,7 @@ public class MainMenu : MonoBehaviour
 
         // TODO : Add commands to set these
         var gamemode = uiBinding.gamemode.options[uiBinding.gamemode.value].text.ToLower();
-        var maxplayers = 8
+        var maxplayers = 8;
 
         var dedicated = uiBinding.decidatedServer.isOn;
         if(dedicated)
@@ -276,7 +276,7 @@ public class MainMenu : MonoBehaviour
             if (process.Start()){
                 GameDebug.Log("game process started");
                 //StartCoroutine(SendConnect(10));
-                ShowSubMenu(introMenu);
+                //ShowSubMenu(introMenu);
             }
         }
         else

@@ -89,7 +89,7 @@ namespace Macrometa.Lobby {
             indexesExist.Add(false);
 
             ttlIndexParams = new IndexParams() {
-                expireAfter = 30,
+                expireAfter = 90,
                 fields = new List<string>() {"lastUpdate"},
                 type = "ttl"
             };
@@ -215,7 +215,8 @@ namespace Macrometa.Lobby {
         //need to repeat with same post on error
         public void UpdateLobbyDocument(LobbyDocument lobbyDocument, string key) {
             _gdnErrorHandler.isWaiting = true;
-            String data = JsonUtility.ToJson(lobbyDocument);
+            GameDebug.Log("replace Lobby Doc : " + key + " : "+ lobbyDocument.lobbyValue.joinGameNow  );
+                          String data = JsonUtility.ToJson(lobbyDocument);
             _monoBehaviour.StartCoroutine(PutReplaceDocument(_gdnData, lobbiesCollectionName,
                 data,key, UpdateLobbyDocumentCallback));
         }

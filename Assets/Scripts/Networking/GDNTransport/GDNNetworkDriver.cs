@@ -72,11 +72,11 @@ public class GDNNetworkDriver : MonoBehaviour {
         gdnStreamDriver.nodeId = PingStatsGroup.NodeFromGDNData(baseGDNData);
         GameDebug.Log("Setup: " + gdnStreamDriver.nodeId);
         
-        gdnStreamDriver.serverInStreamName = RwConfig.ReadConfig().gameName + "_InStream";
-        gdnStreamDriver.serverOutStreamName = RwConfig.ReadConfig().gameName + "_OutStream";
+        gdnStreamDriver.serverInStreamName = RwConfig.ReadConfig().streamName + "_InStream";
+        gdnStreamDriver.serverOutStreamName = RwConfig.ReadConfig().streamName + "_OutStream";
         gdnStreamDriver.serverStatsStreamName =  "Unity" + "_StatsStream";
         gdnStreamDriver.serverName = gdnStreamDriver.consumerName;
-        GDNStats.gameName =  RwConfig.ReadConfig().gameName;
+        GDNStats.gameName =  RwConfig.ReadConfig().streamName;
        
         if (isServer) {
             gdnStreamDriver.consumerStreamName = gdnStreamDriver.serverInStreamName;

@@ -126,6 +126,10 @@ namespace Macrometa {
             gdnStreamDriver.ChatSendRoomRequest(2);
             closeLobbyInactiveTime = Time.time + closeLobbyInactiveDelay;
             closeLobbyInactive = true;
+            var configData = RwConfig.ReadConfig();
+            configData.streamName = lobbyValue.streamName;
+            RwConfig.Change(configData);
+            RwConfig.Flush();
         }
         
         public void LeaveLobby() {
@@ -147,7 +151,7 @@ namespace Macrometa {
         }
         
         public void UpdateLocalLobby(LobbyValue lobbyUpdate) {
-            GameDebug.Log("UpdateLocalLobby");
+            GameDebug.Log("UpdateLocalLobby joinGamenow: " +lobbyUpdate.joinGameNow);
             lobbyValue = lobbyUpdate;
             lobbyValue.clientId = clientId;
             lobbyUpdateAvail = true;

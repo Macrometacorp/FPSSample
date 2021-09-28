@@ -51,7 +51,7 @@ public class GDNTransport :  INetworkTransport {
         GDNStreamDriver.sendDummyTraffic = sendDummyTraffic;
         GDNStreamDriver.localId = localId;
         GDNStreamDriver.appType = appType;
-        gdnNetworkDriver= new GameObject().AddComponent<GDNNetworkDriver>();
+        gdnNetworkDriver= new GameObject().AddComponent<GDNLobbyNetworkDriver2>();
 
         MonoBehaviour.DontDestroyOnLoad( gdnNetworkDriver.gameObject);
 
