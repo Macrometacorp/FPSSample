@@ -110,7 +110,7 @@ public class GameModeDeathmatch : IGameMode
                         playerState.displayScoreBoard = false;
                         playerState.displayGoal = false;
                     }
-                    PlayStats.UpdateNumPlayers( players.Length);
+                    // PlayStats.UpdateNumPlayers( players.Length);
                     m_Phase = Phase.Ended;
                     m_GameModeSystemServer.SetRespawnEnabled(false);
                     m_GameModeSystemServer.StartGameTimer(postMatchTime, "PostMatch");

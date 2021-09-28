@@ -9,6 +9,7 @@ public class GDNTransport :  INetworkTransport {
     // must be set before websockets are opened.
     public static bool isSocketPingOn = false; //off by default for compatibility
     public static bool isStatsOn= false; //off by default for compatibility
+    public static bool isPlayStatsClientOn;
     public static bool sendDummyTraffic= false; //off by default for compatibility
     public static bool isMonitor = false;  // is monitor not game
     public static bool connectionStarted = false;
@@ -43,6 +44,7 @@ public class GDNTransport :  INetworkTransport {
         connectionStarted = true;
         GDNNetworkDriver.overrideIsServer = true;
         GDNNetworkDriver.overrideIsServerValue = isServer;
+        GDNNetworkDriver.isPlayStatsClientOn = isPlayStatsClientOn;
         GDNNetworkDriver.isMonitor = isMonitor;
         GDNStreamDriver.isSocketPingOn = isSocketPingOn;
         GDNStreamDriver.isStatsOn = isStatsOn;
@@ -51,14 +53,14 @@ public class GDNTransport :  INetworkTransport {
         GDNStreamDriver.appType = appType;
         gdnNetworkDriver= new GameObject().AddComponent<GDNNetworkDriver>();
 
-        MonoBehaviour.DontDestroyOnLoad(gdnNetworkDriver.gameObject);
+        MonoBehaviour.DontDestroyOnLoad( gdnNetworkDriver.gameObject);
 
         m_IdToConnection = new GDNNetworkDriver.GDNConnection[maxConnections];
         //Does GDNNetworkDriver need maxConnections connection to refuse later connections
         LogFrequency.AddLogFreq("OnData",1, "onData: ", 2 );
         LogFrequency.AddLogFreq("SendData",1, "oSendData: ", 2 );
         LogFrequency.AddLogFreq("SendDataB",1, "oSendDataB: ", 2 );
-
+        GameDebug.Log(" GDNTransport.Connect ++++++++++++++++++++++++++++++++++++++++++");
     }
 
     public void UpdateGameRecord(string gameMode, string mapName, int maxPlayers,

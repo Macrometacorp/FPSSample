@@ -918,11 +918,6 @@ MonoBehaviour:
       slots: []
     frozen: 0
     serverClientChosen: 0
-    closeLobbyNow: 0
-    showGameInitNow: 0
-    joinGameNow: 0
-    rttTarget: 
-    serverAllowed: 
   prelobby: {fileID: 6092579386911911977}
 --- !u!1 &4947763630561389642
 GameObject:
@@ -935,6 +930,7 @@ GameObject:
   - component: {fileID: 4947763630561389643}
   - component: {fileID: 4947763630561389636}
   - component: {fileID: 3011588494342700806}
+  - component: {fileID: 373841394}
   m_Layer: 5
   m_Name: Lobby List
   m_TagString: Untagged
@@ -997,6 +993,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabItem: {fileID: 6536891288935894268}
+  itemHolder: {fileID: 4947763630561389642}
+  prelobby: {fileID: 6092579386911911977}
+--- !u!114 &373841394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4947763630561389642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb396c6aed764aedbb365c017d40892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabItem: {fileID: 0}
   itemHolder: {fileID: 4947763630561389642}
   prelobby: {fileID: 6092579386911911977}
 --- !u!1 &4947763631324594562
@@ -1090,7 +1101,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48.9
+  m_fontSize: 48.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

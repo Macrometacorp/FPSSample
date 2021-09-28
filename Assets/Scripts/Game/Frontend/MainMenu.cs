@@ -212,21 +212,78 @@ public class MainMenu : MonoBehaviour
             process.StartInfo.Arguments = " -batchmode -nographics -noboot -consolerestorefocus" +
                                           " +serve " + levelname + " +game.modename " + gamemode.ToLower() +
                                           " +servername \"" + servername + "\"";
-           
-            
             if (process.Start()){
                 GameDebug.Log("game process started");
                 //StartCoroutine(SendConnect(10));
                 ShowSubMenu(introMenu);
             }
-            
         }
         else
         {
             Console.EnqueueCommand("serve " + levelname);
             Console.EnqueueCommand("servername \"" + servername + "\"");
         }
-        
+    }
+
+    public void CreateGameFromLobby() {
+             var servername = uiBinding.servername.text;
+
+        var levelname = uiBinding.levelname.options[uiBinding.levelname.value].text;
+
+        // TODO : Add commands to set these
+        var gamemode = uiBinding.gamemode.options[uiBinding.gamemode.value].text.ToLower();
+        var maxplayers = 8
+
+        var dedicated = uiBinding.decidatedServer.isOn;
+        if(dedicated)
+        {
+            var process = new System.Diagnostics.Process();
+            if (Application.isEditor)
+            {
+                process.StartInfo.FileName = k_AutoBuildPath + "/" + k_AutoBuildExe;
+                process.StartInfo.WorkingDirectory = k_AutoBuildPath;
+            }
+            else
+            {
+                // TODO : We should look to make this more robust but for now we just
+                // kill other processes to avoid running multiple servers locally
+                var thisProcess = System.Diagnostics.Process.GetCurrentProcess();
+                var processes = System.Diagnostics.Process.GetProcesses();
+                foreach (var p in processes)
+                {
+                    if (p.Id != thisProcess.Id && p.ProcessName == thisProcess.ProcessName)
+                    {
+                        try
+                        {
+                           // p.Kill();
+                        }
+                        catch (System.Exception)
+                        {
+                        }
+                    }
+                }
+
+                process.StartInfo.FileName = thisProcess.MainModule.FileName;
+                process.StartInfo.WorkingDirectory = thisProcess.StartInfo.WorkingDirectory;
+                GameDebug.Log(string.Format("filename='{0}', dir='{1}'", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
+            }
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.Arguments = " -batchmode -nographics -noboot -consolerestorefocus" +
+                                          " +serve " +"Level_01" + " +game.modename " 
+                                          +("Deathmatch".ToLower()) +
+                                          " +servername \"" + servername + "\"";
+            if (process.Start()){
+                GameDebug.Log("game process started");
+                //StartCoroutine(SendConnect(10));
+                ShowSubMenu(introMenu);
+            }
+        }
+        else
+        {
+            Console.EnqueueCommand("serve " + levelname);
+            Console.EnqueueCommand("servername \"" + servername + "\"");
+        }
     }
 
     IEnumerator SendConnect(float delay)

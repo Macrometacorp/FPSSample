@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Net;
 
 using BestHTTP.WebSocket;
 using Macrometa.Lobby;
 using Object = System.Object;
+using Random = UnityEngine.Random;
 
 namespace Macrometa {
 
@@ -126,7 +126,7 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         //const consumerUrl = `wss://${requestURL}/_ws/ws/v2/consumer/persistent/${tenant}/${region}._system/${region}s.${STREAM_NAME}/${CONSUMER_NAME}`;
         public string ConsumerURL(string streamName, string consumerName ) {
             return "wss://" + requestURL + "/_ws/ws/v2/consumer/persistent/" + tenant + "/" + region+"."+
-                fabric+ "/" + region+"s."+streamName+"/"+consumerName ;
+                fabric+ "/" + region+"s."+streamName+"/"+consumerName + ( Random.Range(1, 89999999)).ToString();;
         }
         
         //const producerUrl = `wss://${requestURL}/_ws/ws/v2/producer/persistent/${tenant}/${region}._system/${region}s.${STREAM_NAME}`;
@@ -408,7 +408,19 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         public string host; // datacenter host from region
         public string city;
         public string countrycode;
-        //public LocationInfo locationInfo; // data center info from region
+        public int rifleShots;
+        public int grenadeShots;
+        public int fps;
+        public int health;
+        public float posX;
+        public float posY;
+        public float posZ;
+        public float orientation;
+        public string killedPlayerName;
+        public string remotePlayerCity;
+        public string remotePlayerCountrycode;
+        public string remoteConnectin_Type;
+
 
     }
     
@@ -535,7 +547,7 @@ expireAfter: The time (in seconds) after a document's creation after which the d
                 }
                 otp = JsonUtility.FromJson<OTPResult>(www.downloadHandler.text);
             }
-
+            GameDebug.Log( "consumerURL " +gdnData.ConsumerURL(streamName, consumerName) + "?otp=" + otp.otp);
             callback(new WebSocket(new Uri(gdnData.ConsumerURL(streamName, consumerName) + "?otp=" + otp.otp)),
                 "LIVE consumer "+ streamName);
             //callback(new WebSocket(gdnData.ConsumerURLDebug(streamName, consumerName) ), "LIVE");
@@ -704,14 +716,14 @@ expireAfter: The time (in seconds) after a document's creation after which the d
                 callback(www);
         }
         
-        public static IEnumerator PostInsertReplaceDocument(GDNData gdnData,string collection, string data, bool replace,
-            Action<UnityWebRequest> callback) {
+        public static IEnumerator PostInsertReplaceDocument(GDNData gdnData,string collection, string data, bool replace, LobbyValue lv,
+            Action<UnityWebRequest, LobbyValue> callback) {
             GameDebug.Log("Post Lobby Document: "+ gdnData.PostInsertDocumentURL(collection,replace));
             var www = WebPost(gdnData.PostInsertDocumentURL(collection,replace), data, gdnData);
             yield return www.SendWebRequest();
             
             if (callback != null)
-                callback(www);
+                callback(www,lv);
         }
 
         public static IEnumerator PutReplaceDocument(GDNData gdnData, string collection, string data,

@@ -29,7 +29,7 @@ namespace Macrometa {
         static public bool isLobbyAdmin;
         public float nextUpdateLobby = 0;
         public float lobbyClosingTime;
-        public bool closeLobby;
+        public bool closeLobby = false;
         public float closeLobbyInactiveTime;
         public bool closeLobbyInactive = true;
         public float closeLobbyInactiveDelay = 30;
@@ -126,8 +126,8 @@ namespace Macrometa {
             gdnStreamDriver.ChatSendRoomRequest(2);
             closeLobbyInactiveTime = Time.time + closeLobbyInactiveDelay;
             closeLobbyInactive = true;
-
         }
+        
         public void LeaveLobby() {
             Debug.Log(" LeaveLobby()");
             
@@ -139,16 +139,13 @@ namespace Macrometa {
             lobbyValue = new LobbyValue();
             gdnStreamDriver.chatLobbyId = "_Lobby";
             gdnStreamDriver.chatChannelId = "_Lobby";
-            
-            
         }
 
         public void SetIsLobbyAdmin(bool val) {
             GDNStreamDriver.isLobbyAdmin = val;
             isLobbyAdmin = val;
         }
-
-
+        
         public void UpdateLocalLobby(LobbyValue lobbyUpdate) {
             GameDebug.Log("UpdateLocalLobby");
             lobbyValue = lobbyUpdate;
@@ -162,12 +159,10 @@ namespace Macrometa {
         }
         
         public void Bodyloop() {
-
             if (gdnStreamDriver.lobbyUpdateAvail) {
                 GameDebug.Log("gdnStreamDriver.lobbyUpdateAvail");
                 UpdateLocalLobby( gdnStreamDriver.lobbyUpdate);
                 gdnStreamDriver.lobbyUpdateAvail = false;
-
             }
 
             if (gdnErrorHandler.pauseNetworkErrorUntil > Time.time) return;
@@ -317,9 +312,7 @@ namespace Macrometa {
         public void UpdateLobby() {
             nextUpdateLobby = Time.time +5;
             var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
-           
             var key = gdnDocumentLobbyDriver.lobbyKey;
-            
             gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, key);
         }
 

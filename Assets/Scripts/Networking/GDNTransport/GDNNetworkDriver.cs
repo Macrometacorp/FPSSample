@@ -14,6 +14,7 @@ public class GDNNetworkDriver : MonoBehaviour {
     
     public static bool overrideIsServer = false;
     public static bool overrideIsServerValue = false;
+    public static bool isPlayStatsClientOn = false;
 
     public GDNData baseGDNData;
     
@@ -30,6 +31,10 @@ public class GDNNetworkDriver : MonoBehaviour {
 
     public virtual void Awake() {
         GameDebug.Log("  GDNNetworkDriver Awake");
+        PlayStats.remotePlayerCity = RwConfig.ReadConfig().userCity;
+        PlayStats.remotePlayerCountry = RwConfig.ReadConfig().userCountry;
+        PlayStats.remoteConnectin_Type = RwConfig.ReadConfig().connectionType;
+
         gdnErrorHandler = new GDNErrorhandler();
        
         BestHTTP.HTTPManager.Setup();
@@ -50,12 +55,15 @@ public class GDNNetworkDriver : MonoBehaviour {
         if (!isMonitor && isServer) {
             gdnKVDriver = new GDNKVDriver(this);
         }
+
+        GDNStreamDriver.isPlayStatsClientOn = isPlayStatsClientOn;
         gdnStreamDriver = new GDNStreamDriver(this);
         gdnStreamDriver.statsGroupSize = defaultConfig.statsGroupSize;
         if (gdnStreamDriver.statsGroupSize < 1) {
             gdnStreamDriver.statsGroupSize = 10; //seconds
         }
 
+        gdnStreamDriver.statsGroupSize = 1;// hard coded for rifleShots
         gdnStreamDriver.dummyTrafficQuantity = defaultConfig.dummyTrafficQuantity;
         if (gdnStreamDriver.dummyTrafficQuantity < 0) {
             gdnStreamDriver.dummyTrafficQuantity = 0; 
@@ -66,8 +74,9 @@ public class GDNNetworkDriver : MonoBehaviour {
         
         gdnStreamDriver.serverInStreamName = RwConfig.ReadConfig().gameName + "_InStream";
         gdnStreamDriver.serverOutStreamName = RwConfig.ReadConfig().gameName + "_OutStream";
-        gdnStreamDriver.serverStatsStreamName =  "Uninty" + "_StatsStream";
+        gdnStreamDriver.serverStatsStreamName =  "Unity" + "_StatsStream";
         gdnStreamDriver.serverName = gdnStreamDriver.consumerName;
+        GDNStats.gameName =  RwConfig.ReadConfig().gameName;
        
         if (isServer) {
             gdnStreamDriver.consumerStreamName = gdnStreamDriver.serverInStreamName;
@@ -155,6 +164,12 @@ public class GDNNetworkDriver : MonoBehaviour {
             return;
         }
         
+        if (!gdnStreamDriver.gameStatsStreamExists) {
+            gdnStreamDriver.CreatGameStatsStream();
+           // GameDebug.Log("try.gameStatsStreamExists");
+            return;
+        }
+        
         if (!gdnStreamDriver.producerExists) {
             gdnStreamDriver.CreateProducer(gdnStreamDriver.producerStreamName);
             return;
@@ -167,10 +182,20 @@ public class GDNNetworkDriver : MonoBehaviour {
 
         if (!gdnStreamDriver.producerStatsExists) {
             gdnStreamDriver.CreateStatsProducer(gdnStreamDriver.serverStatsStreamName);
+            GameDebug.Log("try producerStatsExists");
             return;
         }
-
+        
+        if (!gdnStreamDriver.producerGameStatsExists) {
+            gdnStreamDriver.CreateGameStatsProducer(gdnStreamDriver.gameStatsStreamName);
+            GameDebug.Log("try producerGameStatsExists");
+            return;
+        }
+        
         if (!gdnStreamDriver.setupComplete) {
+            if (GDNStreamDriver.isPlayStatsClientOn) {
+                PingStatsGroup.Init(Application.dataPath, "LatencyStats", gdnStreamDriver.statsGroupSize); 
+            }
             GameDebug.Log("Set up Complete as " + RwConfig.ReadConfig().gameName + " : " + gdnStreamDriver.consumerName);
             gdnStreamDriver.setupComplete = true;
             GDNTransport.setupComplete = true;
@@ -181,6 +206,7 @@ public class GDNNetworkDriver : MonoBehaviour {
             gdnStreamDriver.sendConnect = true;
             
         }
+        
         if (GDNStreamDriver.isSocketPingOn && !gdnStreamDriver.pingStarted ) {
             gdnStreamDriver.pingStarted = true;
             if (GDNStreamDriver.isStatsOn) {
@@ -190,8 +216,7 @@ public class GDNNetworkDriver : MonoBehaviour {
             }
             StartCoroutine(gdnStreamDriver.RepeatTransportPing());
         }
-
-       
+        
         if (!isMonitor && isServer) {
             if (nextKVValuePut < Time.time) {
                //GameDebug.Log("loop kvValuePut");
@@ -239,6 +264,7 @@ public class GDNNetworkDriver : MonoBehaviour {
         public string destination;
         public int port;
         public int id;
+        public string playerName;
     }
     
     public struct DriverTransportEvent {

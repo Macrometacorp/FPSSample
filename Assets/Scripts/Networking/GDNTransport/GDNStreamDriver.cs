@@ -8,11 +8,14 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Pkix;
 using BestHTTP.WebSocket;
+using JetBrains.Annotations;
 using Macrometa.Lobby;
 using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Networking;
+using Object = System.Object;
 using Random = UnityEngine.Random;
 
 namespace Macrometa {
@@ -20,6 +23,10 @@ namespace Macrometa {
     [Serializable]
     public class GDNStreamDriver {
         private MonoBehaviour _monobehaviour;
+        public bool  isPlayStatsServerOn = true; //Used to SendMessage data start stats sts stream
+        
+        // used to collect throughput, shots fired , health , maybe position
+        public static bool  isPlayStatsClientOn = false; 
         public static bool isSocketPingOn = false; // must be set before webSocket is opened
         public static bool isStatsOn = false; //off by default for compatibility 
         public static bool sendDummyTraffic = false; //off by default for compatibility
@@ -39,6 +46,9 @@ namespace Macrometa {
         public WebSocket chatConsumer1;
         public WebSocket chatProducer1;
         public WebSocket producerStats;
+        public WebSocket producerGameStats;
+        
+        
         public StreamStats consumer1Stats;
         public StreamStats producer1Stats;
         public WebSocket lobbyDocumentReader; // lobby collection stream
@@ -52,6 +62,8 @@ namespace Macrometa {
         public bool serverInStreamExists = false;
         public bool serverOutStreamExists = false;
         public bool serverStatsStreamExists = false;
+        public bool gameStatsStreamExists = false;
+
         public bool chatStreamExists = false;
         public bool producerExists = false;
         public bool consumerExists = false;
@@ -59,6 +71,8 @@ namespace Macrometa {
         public bool chatConsumerExists = false;
         public bool producerStatsExists = false;
         public bool lobbyDocumentReaderExists = false;
+        public bool producerGameStatsExists = false ;
+        
         public bool lobbyUpdateAvail = false;
         public int lobbyRtt;
         public bool lobbyURttAvail;
@@ -71,8 +85,10 @@ namespace Macrometa {
         public string serverStatsStreamName;
         public string consumerStreamName;
         public string producerStreamName;
-        public string chatStreamName ;
-        public float pingFrequency = 1;
+        public string chatStreamName;
+        public string gameStatsStreamName = "FPSGame_GameStats" ;
+        
+        public float pingFrequency = 1; //hard coded here
         public float dummyFrequency = 0.05f; // FPSSample standard is 20 messages per second
         public int dummySize = 50; // FPSSample standard is under 2000 bytes per second
         
@@ -327,6 +343,39 @@ namespace Macrometa {
             }
         }
 
+        public void CreatGameStatsStream() {
+            var gsListName = _gdnData.StreamListName(gameStatsStreamName);
+            gameStatsStreamExists = listStream.result.Any(item => item.topic == gsListName);
+            if (!gameStatsStreamExists) {
+                _gdnErrorHandler.isWaiting = true;
+                _monobehaviour.StartCoroutine(MacrometaAPI.CreateStream(_gdnData, gameStatsStreamName,
+                    CreateGameStatsStreamCallback));
+            }
+        }
+
+        public void CreateGameStatsStreamCallback(UnityWebRequest www) {
+            _gdnErrorHandler.isWaiting = false;
+            if (www.isHttpError || www.isNetworkError) {
+                GameDebug.Log("Create Game StatsStream error: " + www.error);
+                _gdnErrorHandler.currentNetworkErrors++;
+                streamListDone = false;
+            }
+            else {
+
+                var baseHttpReply = JsonUtility.FromJson<BaseHtttpReply>(www.downloadHandler.text);
+                if (baseHttpReply.error == true) {
+                    GameDebug.Log("create Game Stats stream failed:" + baseHttpReply.code);
+                    _gdnErrorHandler.currentNetworkErrors++;
+                    streamListDone = false;
+                }
+                else {
+                    GameDebug.Log("Create Game StatsStream ");
+                    gameStatsStreamExists = true;
+                    _gdnErrorHandler.currentNetworkErrors = 0;
+                }
+            }
+        }
+        
         public void CreateProducer(string streamName) {
             _gdnErrorHandler.isWaiting = true;
             producer1Stats = new StreamStats() {
@@ -439,6 +488,66 @@ namespace Macrometa {
             };
             ws.Open();
         }
+        
+        public void CreateGameStatsProducer(string streamName) {
+            _gdnErrorHandler.isWaiting = true;
+            GameDebug.Log("Create Game StatsProducer: " + streamName);
+            _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetGameStatsProducer,_gdnErrorHandler));
+        }
+
+        public void SetGameStatsProducer(WebSocket ws, string debug = "") {
+            producerGameStats = ws;
+            ws.OnOpen += (o) => {
+                _gdnErrorHandler.isWaiting = false;
+                producerGameStatsExists = true;
+                GameDebug.Log("Open " + debug);
+            };
+
+            ws.OnError += (sender, e) => {
+                GameDebug.Log("WebSocket Error" + debug + " : " + e);
+                if (ws != null && ws.IsOpen) {
+                    ws.Close();
+                }
+                else {
+                    GameDebug.Log("WebSocket " + debug);
+                    producerGameStatsExists = false;
+                    _gdnErrorHandler.isWaiting = false;
+                }
+            };
+
+            ws.OnClosed += (socket, code, message) => {
+                producerGameStatsExists = false;
+                _gdnErrorHandler.isWaiting = false;
+                GameDebug.Log("Produce closed: " + debug + " : " + code + " : " + message);
+            };
+            ws.Open();
+        }
+        
+        // send message to clients
+        // killed
+        //destination All
+        //message killed
+        //playername
+        public void ProducerSendKilled(string playerName) {
+            var properties = new MessageProperties() {
+                t =  VirtualMsgType.Internal,
+                p = 9,
+                d = "all",
+                s = consumerName,
+                z =0,
+                killedPlayerName =  playerName
+            };
+            var message = new SendMessage() {
+                properties = properties,
+                payload = Convert.ToBase64String(new byte[0])
+            };
+            string msgJSON = JsonUtility.ToJson(message);
+            producer1.Send(msgJSON);
+            if (isStatsOn || isPlayStatsClientOn) {
+                producer1Stats.IncrementCounts(msgJSON.Length);
+            }
+        }
+        
 
         public void ProducerSend(int id, VirtualMsgType msgType, byte[] payload,
             int pingId = 0, int pingTimeR = 0, int pingTimeO = 0, string localId = "") {
@@ -455,21 +564,48 @@ namespace Macrometa {
         private void ProducerSend(GDNNetworkDriver.GDNConnection gdnConnection, VirtualMsgType msgType,
             byte[] payload, int pingId, int pingTimeR, int pingTimeO,
             string localId ) {
+            if (msgType == VirtualMsgType.Connect) {
+                GameDebug.Log("ProducerSend connect: "+ GDNStats.playerName);
+            }
+
             var properties = new MessageProperties() {
                 t = msgType,
                 p = gdnConnection.port,
                 d = gdnConnection.destination,
                 s = gdnConnection.source,
-                z = payload.Length
+                z = payload.Length,
+                localId = GDNStats.playerName
             };
-            if (msgType == VirtualMsgType.Ping || msgType == VirtualMsgType.Pong) {
+            if (msgType == VirtualMsgType.Ping ) {
                 properties.i = pingId;
                 properties.r = pingTimeR;
                 properties.o = pingTimeO;
-                properties.localId = localId;
                 properties.host = region.host;
                 properties.city = region.locationInfo.city;
                 properties.countrycode = region.locationInfo.countrycode;
+               
+            }
+            
+            if ( msgType == VirtualMsgType.Pong) {
+                properties.i = pingId;
+                properties.r = pingTimeR;
+                properties.o = pingTimeO;
+                properties.host = region.host;
+                properties.city = region.locationInfo.city;
+                properties.countrycode = region.locationInfo.countrycode;
+                properties.rifleShots = PlayStats.GetRifle();
+                properties.grenadeShots =   PlayStats.GetGrenade();
+                properties.fps = PlayStats.FPS;
+                properties.health = PlayStats.health;
+                properties.posX = PlayStats.position.x;
+                properties.posY = PlayStats.position.y;
+                properties.posZ = PlayStats.position.z;
+                properties.orientation = PlayStats.orientation;
+                properties.remotePlayerCity = PlayStats.remotePlayerCity;
+                properties.remotePlayerCountrycode = PlayStats.remotePlayerCountry;
+                properties.remoteConnectin_Type = PlayStats.remoteConnectin_Type;
+                
+                //GameDebug.Log("pong to: "+ gdnConnection.destination + " rifle: " +properties.rifleShots );
             }
 
             var message = new SendMessage() {
@@ -486,7 +622,7 @@ namespace Macrometa {
             }
 
             producer1.Send(msgJSON);
-            if (isStatsOn) {
+            if (isStatsOn || isPlayStatsClientOn) {
                 producer1Stats.IncrementCounts(msgJSON.Length);
             }
         }
@@ -508,6 +644,19 @@ namespace Macrometa {
 
         }
 
+        public void ProducerGameStatsSend(Object data) {
+            GameDebug.Log("Producer Game StatsSend ");
+            
+            var json = JsonUtility.ToJson(data);
+            string payload = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(json));
+            var message = new StatsSendMessage() {
+                payload = payload
+            };
+            string msgJSON = JsonUtility.ToJson(message);
+            producerGameStats.Send(msgJSON);
+
+        }
+        
         public void CreateConsumer(string streamName, string consumerName) {
             _gdnErrorHandler.isWaiting = true;
             consumer1Stats = new StreamStats() {
@@ -539,6 +688,12 @@ namespace Macrometa {
                 if (isStatsOn) {
                     consumer1Stats.IncrementCounts(e.Length);
                     //GameDebug.Log("Consumer1.OnMessage");
+                }
+
+                if (receivedMessage.properties != null &&
+                    receivedMessage.properties.d == "all"
+                ) {
+                    PlayStats.PlayerKilled(receivedMessage.properties.killedPlayerName);
                 }
 
                 if (receivedMessage.properties != null &&
@@ -578,6 +733,7 @@ namespace Macrometa {
                             break;
                         case VirtualMsgType.Connect:
                             GameDebug.Log("Consumer1.OnMessage Connect: " + receivedMessage.properties.s);
+                            GameDebug.Log("Consumer1.OnMessage Connect: " + receivedMessage.properties.localId);
                             if (_isServer) {
                                 command = new GDNStreamDriver.Command() {
                                     command = QueueCommand.ConnectClient,
@@ -989,7 +1145,8 @@ namespace Macrometa {
             var connection = new GDNNetworkDriver.GDNConnection() {
                 source = receivedMessage.properties.d,
                 destination = receivedMessage.properties.s,
-                port = receivedMessage.properties.p
+                port = receivedMessage.properties.p,
+                playerName =  receivedMessage.properties.localId,
             };
 
             var id = AddOrGetConnectionId(connection);
@@ -1073,6 +1230,7 @@ namespace Macrometa {
             var connection = new GDNNetworkDriver.GDNConnection() {
                 source = consumerName,
                 destination = serverName,
+                playerName = GDNStats.playerName,
                 port = 443
             };
 
@@ -1144,9 +1302,21 @@ namespace Macrometa {
 
         public void RemoveConnectionId(int connectionID) {
             if (gdnConnections.ContainsKey(connectionID)) {
+                GameDebug.Log(" Remove player: "+ gdnConnections[connectionID].playerName);
+                var aPlayerName = gdnConnections[connectionID].playerName;
+                DisconnectPlayer(aPlayerName);
                 gdnConnections.Remove(connectionID);
-                //GameDebug.Log("modifying connection collection remove");
+               
             }
+        }
+
+        public void DisconnectPlayer(string aPlayerName) {
+            var ps = GDNStats.baseGameStats.CopyOf();
+            //GameDebug.Log("GenerataPeriodicGameStats2 B");
+            ps.timeStamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+            ps.playerName = aPlayerName;
+            ps.disconnect = true;
+            ProducerGameStatsSend(ps);
         }
 
         public void PushEventQueue(GDNNetworkDriver.DriverTransportEvent driverTransportEvent) {
@@ -1188,22 +1358,39 @@ namespace Macrometa {
         public void ReceiveTransportPong(ReceivedMessage receivedMessage) {
             var transportPing = TransportPings.Remove(receivedMessage.properties.i);
             pongOnlyRtt = transportPing.elapsedTime;
+
+
             if (isStatsOn) {
+               
                 var networkStatsData = pingStatsGroup.AddRtt(transportPing.elapsedTime,
                     producer1.Latency, consumer1.Latency,
                     receivedMessage.properties.o, receivedMessage.properties.r,
                     receivedMessage.properties.localId,
-                    receivedMessage.properties.host,receivedMessage.properties.city, receivedMessage.properties.countrycode);
+                    receivedMessage.properties.host, receivedMessage.properties.city,
+                    receivedMessage.properties.countrycode);
+                
                 if (networkStatsData != null) {
-                    ProducerStatsSend(networkStatsData);
+                   // GameDebug.Log("ReceiveTransportPong C");
+                    if (isPlayStatsServerOn) {
+                        //GameDebug.Log("ReceiveTransportPong D ");
+                        var gameStats2 = PlayStats.GenerataPeriodicGameStats2(networkStatsData,receivedMessage);
+                       // GameDebug.Log("ReceiveTransportPong E ");
+                        ProducerGameStatsSend(gameStats2);
+                       // GameDebug.Log("GameStats: " + gameStats2);
+                    }
+                    else {
+                        ProducerStatsSend(networkStatsData);
+                    }
                 }
             }
         }
 
+
+
         public void ReceiveChatTransportPong(string rttClientId) {
 
             var rtt = (int) chatPingStopwatch.ElapsedMilliseconds;
-            GameDebug.Log("lRtt: " + rttClientId + " : " + rtt);
+            //GameDebug.Log("lRtt: " + rttClientId + " : " + rtt);
             ChatSendSetRttTime(rttClientId,rtt);
             
         }
@@ -1257,9 +1444,9 @@ namespace Macrometa {
                 destination = receivedMessage.properties.s,
                 port = receivedMessage.properties.p
             };
-            //GameDebug.Log("send pong : "+ receivedMessage.properties.s);
+            GameDebug.Log("send pong : "+ receivedMessage.properties.s);
             ProducerSend(connection, VirtualMsgType.Pong, new byte[0], receivedMessage.properties.i,
-                producer1.Latency, consumer1.Latency, localId);
+                producer1.Latency, consumer1.Latency,GDNStats.playerName);
         }
         
         public void SendChatTransportPing() {

@@ -263,23 +263,22 @@ public class GameModeSystemServer : ComponentSystem
                 if (healthState.health == 0)
                 {
                     // Send kill msg
-                    if (healthState.deathTick == m_World.worldTime.tick)
-                    {
+                    if (healthState.deathTick == m_World.worldTime.tick) {
                         var killerEntity = healthState.killedBy;
                         var killerIndex = FindPlayerControlling(ref playerStates, killerEntity);
                         PlayerState killerPlayer = null;
-                        if (killerIndex != -1)
-                        {
+                        if (killerIndex != -1) {
                             killerPlayer = playerStates[killerIndex];
                             var format = s_KillMessages[Random.Range(0, s_KillMessages.Length)];
-                            var l = StringFormatter.Write(ref _msgBuf, 0, format, killerPlayer.playerName, player.playerName, m_TeamColors[killerPlayer.teamIndex], m_TeamColors[player.teamIndex]);
+                            var l = StringFormatter.Write(ref _msgBuf, 0, format, killerPlayer.playerName,
+                                player.playerName, m_TeamColors[killerPlayer.teamIndex],
+                                m_TeamColors[player.teamIndex]);
                             chatSystem.SendChatAnnouncement(new CharBufView(_msgBuf, l));
-                            GameDebug.Log("CharacterUISystems.cs line 274 "+  killerPlayer.playerName + " killed "
-                                          + player.playerName );
-                            PlayStats.AddPlayerStat( player.playerName,killerPlayer.playerName ,"", m_CurrentGameModeName);
-                            PlayStats.AddPlayerStat( killerPlayer.playerName,"", player.playerName, m_CurrentGameModeName);
+                            GameDebug.Log("CharacterUISystems.cs line 274 " + killerPlayer.playerName + " killed "
+                                          + player.playerName);
+                            PlayStats.AddPlayerStat(player.playerName, killerPlayer.playerName);
                         }
-                        
+                    
                         else
                         {
                             var format = s_SuicideMessages[Random.Range(0, s_SuicideMessages.Length)];
@@ -287,7 +286,7 @@ public class GameModeSystemServer : ComponentSystem
                             chatSystem.SendChatAnnouncement(new CharBufView(_msgBuf, l));
                             GameDebug.Log("CharacterUISystems.cs line 281 "+  player.playerName +
                                           "self killed " +  player.playerName);
-                            PlayStats.AddPlayerStat( player.playerName,"",killerPlayer.playerName , m_CurrentGameModeName);
+                            PlayStats.AddPlayerStat( player.playerName,player.playerName );
                         }
                         m_GameMode.OnPlayerKilled(player, killerPlayer);
                     }

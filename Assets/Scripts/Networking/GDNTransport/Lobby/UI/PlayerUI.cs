@@ -75,5 +75,10 @@ public class PlayerUI : MonoBehaviour {
     public void RttTargetClicked() {
         lobby.SetRttTarget(clientID);
     }
+
+    public void StartGameClicked() {
+        GameDebug.Log("StartGameClicked");
+        lobby.StartGame();
+    }
     
 }

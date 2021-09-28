@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 
 public class LobbyUI : MonoBehaviour {
+   public MainMenu mainMenu;
    public TMP_Text title;
    public TeamUI team0;
    public TeamUI team1;
@@ -72,6 +73,10 @@ public class LobbyUI : MonoBehaviour {
       blockUIPanel.SetActive(true);
       gameInitMsg.SetActive(true);
    }
-   
+
+   public void StartGame() {
+      GameDebug.Log("LobbyUi start game");
+      mainMenu.CreateGameFromLobby();
+   }
    
 }

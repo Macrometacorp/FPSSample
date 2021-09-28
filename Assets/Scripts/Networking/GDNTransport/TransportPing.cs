@@ -87,7 +87,7 @@ namespace Macrometa {
         
         
         public static TransportPing Remove(int id) {
-            GameDebug.Log("Ping Remove count: "+ pings.Count);
+            //GameDebug.Log("Ping Remove count: "+ pings.Count);
             TransportPing result;
             if (pings.ContainsKey(id)) {
                 result = pings[id];
@@ -102,7 +102,7 @@ namespace Macrometa {
                 GameDebug.LogError("missing stopwatch ping: " + id);
             }
             result.elapsedTime = result.stopwatch.ElapsedMilliseconds;
-            GameDebug.Log("Ping Removed OK: "+ id + " : " + result.elapsedTime);
+            //GameDebug.Log("Ping Removed OK: "+ id + " : " + result.elapsedTime);
             stopWatchPool.Return(result.stopwatch);
             result.stopwatch = null;
             return result;
@@ -120,7 +120,7 @@ namespace Macrometa {
         }
 
         /// <summary>
-        /// return elapsed time on frirst ping or 0 if no pings
+        /// return elapsed time on first ping or 0 if no pings
         /// </summary>
         /// <returns></returns>
         public static  float PingTime() {
@@ -147,7 +147,7 @@ namespace Macrometa {
     }
     
     public class PingStatsGroup {
-        public static int latencyGroupSize = 10; //10 seconds 
+        public static int latencyGroupSize = 1; //1 seconds 
 
         static System.IO.StreamWriter logFile = null;
 
@@ -200,7 +200,7 @@ namespace Macrometa {
         public DateTime dateTime;
         
         public static void Init(string logfilePath, string logBaseName, int aLatencyGroupSize) {
-
+/*
             // Try creating logName; attempt a number of suffixes
             string name = "";
             for (var i = 0; i < 10; i++) {
@@ -215,9 +215,9 @@ namespace Macrometa {
                     name = "<none>";
                 }
             }
-
+*/
             latencyGroupSize = aLatencyGroupSize;
-            GameDebug.Log("Stats logging initialized. Logging to " + logfilePath + "/" + name);
+           // GameDebug.Log("Stats logging initialized. Logging to " + logfilePath + "/" + name);
         }
 
         /// <summary>
@@ -355,20 +355,23 @@ namespace Macrometa {
             public string sessionID;   // unique ID for each session of latency monitoring
             public string streamOutName; //stream server sends on
             public string streamInName;   //server stream receives on
+            public int fps;
+            
+            
         }
 
 
     
         
         public NetworkStatsData AddRtt(float rtt, float outLocalPing, float inLocalPing,
-            float outRemotePing,float inRemotePing, string localId, string host, string city, string countrycode) {
+            float outRemotePing,float inRemotePing, string remoteId, string host, string city, string countrycode) {
             NetworkStatsData result= null;
             rttTotal += rtt;
             streamOutLocalPingTotal += outLocalPing;
             streamInLocalPingTotal += inLocalPing;
             streamOutRemotePingTotal += outRemotePing;
             streamInRemotePingTotal += inRemotePing;
-            remoteId = localId;
+            this.remoteId = remoteId;
             remoteHost = host;
             remoteCity = city;
             remoteCountrycode = countrycode;
@@ -377,7 +380,6 @@ namespace Macrometa {
                 result =GenerateStatsNow();
                 GameDebug.Log(SimpleStats());
                 GameDebug.Log(SimpleStats2());
-
             }
             return result;
         }
@@ -459,7 +461,7 @@ namespace Macrometa {
         public string SimpleStats2() {
             return " Stream out: " + streamOutBytes + " Stream In: " + streamInBytes +
                    " Stream msgs: " + streamOutMessages + " Stream msgs: " + streamInMessages +
-                   " " + dateTime.ToString();
+                   " " + dateTime.ToString() + " remoteId:" + remoteId;
         }
         
     }
@@ -473,7 +475,9 @@ namespace Macrometa {
         JSON,
         Byte
     }
+    
 
+    
     public class StreamStats {
         public string streamName;
         public StreamType streamType;

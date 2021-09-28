@@ -776,7 +776,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 20.000046}
+  m_AnchoredPosition: {x: 0, y: 19.99996}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &114635037818496874
@@ -5620,7 +5620,7 @@ GameObject:
   - component: {fileID: 8848013117439318431}
   - component: {fileID: 114465761460212510}
   m_Layer: 0
-  m_Name: ClientFrontend
+  m_Name: ClientFrontend Lobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7305,6 +7305,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyListWait: {fileID: 3146322179701475995}
   createLobbyWait: {fileID: 8595599806920068511}
+  lobbyListUi: {fileID: 0}
+  gdnClientLobbyNetworkDriver2: {fileID: 0}
 --- !u!1 &561713328980753963
 GameObject:
   m_ObjectHideFlags: 0
@@ -12337,7 +12339,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4146616146296342882}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14551,7 +14553,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8841684530773784548}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 0.5384616
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16041,6 +16043,7 @@ MonoBehaviour:
     isGlobal: 0
   isServer: 0
   gdnStreamDriver:
+    isPlayStatsServerOn: 0
     nodeId: 
     listStream:
       error: 0
@@ -16070,6 +16073,7 @@ MonoBehaviour:
     serverInStreamExists: 0
     serverOutStreamExists: 0
     serverStatsStreamExists: 0
+    gameStatsStreamExists: 0
     chatStreamExists: 0
     producerExists: 0
     consumerExists: 0
@@ -16077,7 +16081,10 @@ MonoBehaviour:
     chatConsumerExists: 0
     producerStatsExists: 0
     lobbyDocumentReaderExists: 0
+    producerGameStatsExists: 0
     lobbyUpdateAvail: 0
+    lobbyRtt: 0
+    lobbyURttAvail: 0
     lobbyUpdate:
       clientId: 
       baseName: 
@@ -16118,6 +16125,12 @@ MonoBehaviour:
         slots: []
       frozen: 0
       serverClientChosen: 0
+      closeLobbyNow: 0
+      showGameInitNow: 0
+      joinGameNow: 0
+      rttTarget: 
+      serverAllowed: 
+      key: 
     sendConnect: 0
     setupComplete: 0
     pingStarted: 0
@@ -16127,6 +16140,7 @@ MonoBehaviour:
     consumerStreamName: 
     producerStreamName: 
     chatStreamName: 
+    gameStatsStreamName: 
     pingFrequency: 0
     dummyFrequency: 0
     dummySize: 0
@@ -16223,56 +16237,26 @@ MonoBehaviour:
       slots: []
     frozen: 0
     serverClientChosen: 0
+    closeLobbyNow: 0
+    showGameInitNow: 0
+    joinGameNow: 0
+    rttTarget: 
+    serverAllowed: 
+    key: 
   lobbyUpdateAvail: 1
-  isLobbyAdmin: 0
   nextUpdateLobby: 0
+  lobbyClosingTime: 0
+  closeLobby: 0
+  closeLobbyInactiveTime: 0
+  closeLobbyInactive: 1
+  closeLobbyInactiveDelay: 30
   lobbyList:
     lobbies: []
     isDirty: 0
   nextRefreshLobbyList: 0
   sendTransportPing: 0
-  debugPingData:
-    lobbyValue:
-      clientId: 
-      baseName: 
-      serialNumber: 0
-      gameMode: 
-      mapName: 
-      maxPlayers: 0
-      status: 
-      ping: 0
-      streamName: 
-      adminName: 
-      region:
-        _key: 
-        host: 
-        local: 0
-        name: 
-        port: 0
-        spot_region: 0
-        status: 0
-        locationInfo:
-          city: 
-          countrycode: 
-          countryname: 
-          latitude: 0
-          longitude: 0
-          url: 
-      team0:
-        name: 
-        maxSize: 4
-        slots: []
-      team1:
-        name: 
-        maxSize: 4
-        slots: []
-      unassigned:
-        name: 
-        maxSize: 0
-        slots: []
-      frozen: 0
-      serverClientChosen: 0
-    pingCount: 0
+  pingCount: 0
+  maxPing: 3
   waitStreamClearing: 0
   streamClearTime: 0
 --- !u!1 &3057187773982493510
@@ -18232,7 +18216,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4111423720167939573}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.9999999
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -26184,7 +26168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00004696053, y: 0.000014969844}
+  m_AnchoredPosition: {x: -0.00012820913, y: 0.00007879042}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!33 &4931950643415678406
@@ -27799,7 +27783,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &7682642984743684416
