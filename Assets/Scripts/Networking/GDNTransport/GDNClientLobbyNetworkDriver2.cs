@@ -17,7 +17,6 @@ namespace Macrometa {
         public string mapName;
         public int maxPlayers; 
         
-        
         public bool tryDocumentInit = false;
         public string clientId;
 
@@ -52,7 +51,7 @@ namespace Macrometa {
         
         private ConcurrentQueue<LobbyCommand> _lobbyQueue = new ConcurrentQueue<LobbyCommand>();
 
-        static  GDNClientLobbyNetworkDriver2 _inst;
+        static public GDNClientLobbyNetworkDriver2 _inst;
         
         public override void Awake() {
             _inst = this;

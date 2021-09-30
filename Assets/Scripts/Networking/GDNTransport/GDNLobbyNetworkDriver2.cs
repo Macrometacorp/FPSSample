@@ -11,8 +11,10 @@ namespace Macrometa {
         public bool lobbyUpdated = false;
         public bool lobbyJoinGameNowSet = false;
         public string savedKey;
+        static public GDNLobbyNetworkDriver2 inst;
         
         public override void Awake() {
+            inst = this;
             GameDebug.Log("  GDNNetworkDriver Awake");
             PlayStats.remotePlayerCity = RwConfig.ReadConfig().userCity;
             PlayStats.remotePlayerCountry = RwConfig.ReadConfig().userCountry;
@@ -58,7 +60,7 @@ namespace Macrometa {
             gdnStreamDriver.serverStatsStreamName = "Unity" + "_StatsStream";
             gdnStreamDriver.serverName = gdnStreamDriver.consumerName;
             GDNStats.gameName = RwConfig.ReadConfig().streamName;
-
+            GDNStats.Make();
             if (isServer) {
                 gdnStreamDriver.consumerStreamName = gdnStreamDriver.serverInStreamName;
                 gdnStreamDriver.producerStreamName = gdnStreamDriver.serverOutStreamName;
@@ -68,7 +70,7 @@ namespace Macrometa {
                 gdnStreamDriver.producerStreamName = gdnStreamDriver.serverInStreamName;
                 gdnStreamDriver.setRandomClientName();
             }
-
+            
             //ToDo record value be removed?
             if (!isMonitor && isServer) {
                 gameRecordValue = new GameRecordValue() {
@@ -82,7 +84,7 @@ namespace Macrometa {
                     clientId = gdnStreamDriver.consumerName
                 };
             }
-
+            
             LogFrequency.AddLogFreq("consumer1.OnMessage", 1, "consumer1.OnMessage data: ", 3);
             LogFrequency.AddLogFreq("ProducerSend Data", 1, "ProducerSend Data: ", 3);
 
@@ -147,6 +149,8 @@ namespace Macrometa {
                     savedKey = lobbyValue.key;
                     gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, lobbyValue.key);
                     lobbyUpdated = true;
+                   
+                    GDNStats.BaseGameFromLobby(lobbyValue);
                 }
 
                 if (!gdnDocumentLobbyDriver.postLobbyStuff) {

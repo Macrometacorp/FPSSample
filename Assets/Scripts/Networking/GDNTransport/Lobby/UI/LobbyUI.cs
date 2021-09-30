@@ -35,9 +35,10 @@ public class LobbyUI : MonoBehaviour {
       if (lobbyValue.closeLobbyNow) {
          LobbyClosing();
       }
-      
-      //still need other lobby level code??
 
+      if (lobbyValue.joinGameNow) {
+         JoinGame();
+      }
    }
 
    public void SetRttTarget(string clientId) {
@@ -78,5 +79,8 @@ public class LobbyUI : MonoBehaviour {
       GameDebug.Log("LobbyUi start game");
       mainMenu.CreateGameFromLobby();
    }
-   
+
+   public void JoinGame() {
+      mainMenu.JoinGame();
+   }
 }

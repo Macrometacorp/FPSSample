@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TestLobbyTransport2 : MonoBehaviour {
-    public string localId = "GrantAdmin";
+    public string localId = "";
     public string gameMode = "DeathMatch";
     public string mapName = "Level 01";
     public int maxPlayers = 8;
@@ -30,7 +30,7 @@ public class TestLobbyTransport2 : MonoBehaviour {
     ///  should wait for gdnStreamDriver.chatConsumerExists
     /// </summary>
     public void Start() {
-        gdnClientLobbyNetworkDriver2.localId = localId;
+        localId = GDNStreamDriver.localId;
         inputField.Select();
         inputField.ActivateInputField();
         prelobby.gdnClientLobbyNetworkDriver2 = gdnClientLobbyNetworkDriver2;

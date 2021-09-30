@@ -36,7 +36,8 @@ public class JoinMenu : MonoBehaviour
         serverListEntryTemplateHeight = ((RectTransform)serverListEntryTemplate.transform).rect.height + 10.0f;
         
         UpdateGdnFields();
-       
+        playername.text = ClientGameLoop.clientPlayerName.Value;
+        OnNameChanged();
     }
 
     public void Start() {
@@ -52,7 +53,7 @@ public class JoinMenu : MonoBehaviour
         }
 
         if (playername.text == "Noname") {
-            playername.text = MakePlayerName();
+           playername.text = MakePlayerName();
             OnNameChanged();
         }
 
@@ -219,7 +220,9 @@ public class JoinMenu : MonoBehaviour
         Console.EnqueueCommandNoHistory("client.playername \"" + playername.text + '"');
         Console.EnqueueCommandNoHistory("saveconfig");
         GDNStreamDriver.localId = playername.text;
-
+        GDNClientLobbyNetworkDriver2._inst.localId = GDNStreamDriver.localId;
+        ClientGameLoop.clientPlayerName.Value = playername.text;
+        mainMenu.NameChanged(playername.text);
     }
 
     public void OnDisable() {

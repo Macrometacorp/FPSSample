@@ -172,7 +172,12 @@ namespace Macrometa.Lobby {
         public string serverAllowed;
         public string key;
 
-
+        public int PlayerTeam(string playerName) {
+            if (null == team0.slots.Find(slot => slot.playerName == playerName)) {
+                return 1;
+            }
+            return 0;
+        }
        
         
         public string DisplayName() {

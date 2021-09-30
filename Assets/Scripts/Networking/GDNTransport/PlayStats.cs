@@ -170,7 +170,10 @@ namespace Macrometa {
         }
         
         public static void AddPlayerStat(string killed, string killedBy) {
-           
+            GameDebug.Log(" AddPlayerStat GDNStats.baseGameStats" + ( GDNStats.baseGameStats != null));
+            GameDebug.Log("AddPlayerStat team0: "+ (GDNStats.baseGameStats.team0 != null) );
+            GameDebug.Log("AddPlayerStat team1: "+ (GDNStats.baseGameStats.team1 != null) );
+
             var ps = GDNStats.baseGameStats.CopyOf();
             //ps.timeStamp = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             ps.killed = killed;
@@ -213,8 +216,11 @@ namespace Macrometa {
         
         public static GameStats2 GenerataPeriodicGameStats2(PingStatsGroup.NetworkStatsData networkStatsData,
             ReceivedMessage receivedMessage) {
-            //GameDebug.Log("GenerataPeriodicGameStats2 A");
+            GameDebug.Log("GenerataPeriodicGameStats2 A: "+ (GDNStats.baseGameStats != null) );
+            GameDebug.Log("GenerataPeriodicGameStats2 a: team0: "+ (GDNStats.baseGameStats.team0 != null) );
+            GameDebug.Log("GenerataPeriodicGameStats2 a: team1: "+ (GDNStats.baseGameStats.team1 != null) );
             var ps = GDNStats.baseGameStats.CopyOf();
+            GameDebug.Log("GenerataPeriodicGameStats2 B");
             //GameDebug.Log("GenerataPeriodicGameStats2 B");
             ps.timeStamp = (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
             ps.playerName = networkStatsData.remoteId;
@@ -290,6 +296,7 @@ public class GameStats2 {
     }
 
     public GameStats2 CopyOf() {
+        GameDebug.Log("GameStats2 CopyOf() ");
         var result = new GameStats2() {
             gameName = gameName,
             gameId = gameId,

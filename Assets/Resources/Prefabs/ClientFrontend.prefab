@@ -2879,7 +2879,8 @@ MonoBehaviour:
   optionMenu: {fileID: 5334619849375555672}
   disconnectedMenu: {fileID: 7136327633426453273}
   isDisconnected: 0
-  gdnClientBrowserNetworkDriver: {fileID: 0}
+  gdnClientBrowserNetworkDriver: {fileID: 8984113473883270069}
+  testLobbyTransport2: {fileID: 0}
   activeSubmenuNumber: 0
 --- !u!225 &225308890434892864
 CanvasGroup:
@@ -12320,8 +12321,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 318008911069314333}
   m_HandleRect: {fileID: 4146616146296342882}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9999999
+  m_Value: 0
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -26175,7 +26176,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00014612486, y: -0.000034356122}
+  m_AnchoredPosition: {x: -0.00014612486, y: 0.0000074035634}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!33 &4931950643415678406
@@ -31767,6 +31768,11 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 29.95
       objectReference: {fileID: 0}
+    - target: {fileID: 486330875702730818, guid: f5e6b702da1ee44909bda20c93637d30,
+        type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 586664905845131215, guid: f5e6b702da1ee44909bda20c93637d30,
         type: 3}
       propertyPath: m_fontSize
@@ -32346,6 +32352,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7520701403929295547, guid: f5e6b702da1ee44909bda20c93637d30,
+        type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7776252731868504767, guid: f5e6b702da1ee44909bda20c93637d30,
         type: 3}

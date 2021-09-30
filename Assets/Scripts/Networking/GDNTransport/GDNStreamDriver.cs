@@ -111,7 +111,7 @@ namespace Macrometa {
 
         public bool receivedPongOnly = false;
         public float pongOnlyRtt = 0;
-
+        public GDNStats dummyForSetupGDNStats ;
         public class ChatBuffer {
             public static Queue<ReceivedMessage> chatReceivedMessages = new Queue<ReceivedMessage>();
             public static void Add(ReceivedMessage receivedMessage) {
@@ -132,6 +132,9 @@ namespace Macrometa {
             _gdnData = gdnNetworkDriver.baseGDNData;
             // _gdnNetworkDriver = gdnNetworkDriver;
             _isServer = gdnNetworkDriver.isServer;
+            dummyForSetupGDNStats = GDNStats.instance;
+            GameDebug.Log(" //dummyForSetupGDNStats.Start(); " );
+            //dummyForSetupGDNStats.Start();
         }
 
         public void setRandomClientName() {
@@ -1311,8 +1314,12 @@ namespace Macrometa {
         }
 
         public void DisconnectPlayer(string aPlayerName) {
+            GameDebug.Log(" DisconnectPlayer GDNStats.baseGameStats" + ( GDNStats.baseGameStats != null));
+            GameDebug.Log("DisconnectPlayer team0: "+ (GDNStats.baseGameStats.team0 != null) );
+            GameDebug.Log("DisconnectPlayer team1: "+ (GDNStats.baseGameStats.team1 != null) );
+
             var ps = GDNStats.baseGameStats.CopyOf();
-            //GameDebug.Log("GenerataPeriodicGameStats2 B");
+           // GameDebug.Log("GenerataPeriodicGameStats2 B");
             ps.timeStamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
             ps.playerName = aPlayerName;
             ps.disconnect = true;
@@ -1369,19 +1376,21 @@ namespace Macrometa {
                     receivedMessage.properties.host, receivedMessage.properties.city,
                     receivedMessage.properties.countrycode);
                 
-                if (networkStatsData != null) {
-                   // GameDebug.Log("ReceiveTransportPong C");
+                if (networkStatsData != null) { 
+                    GameDebug.Log("ReceiveTransportPong C");
                     if (isPlayStatsServerOn) {
-                        //GameDebug.Log("ReceiveTransportPong D ");
+                        GameDebug.Log("ReceiveTransportPong D ");
                         var gameStats2 = PlayStats.GenerataPeriodicGameStats2(networkStatsData,receivedMessage);
-                       // GameDebug.Log("ReceiveTransportPong E ");
-                        ProducerGameStatsSend(gameStats2);
-                       // GameDebug.Log("GameStats: " + gameStats2);
+                        GameDebug.Log("ReceiveTransportPong E ");
+                        ProducerGameStatsSend(gameStats2); 
+                        GameDebug.Log("GameStats e2:  " + gameStats2);
                     }
                     else {
+                        GameDebug.Log("ReceiveTransportPong F");
                         ProducerStatsSend(networkStatsData);
                     }
                 }
+                GameDebug.Log("ReceiveTransportPong G ");
             }
         }
 

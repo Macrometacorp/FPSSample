@@ -47,7 +47,13 @@ public class GameModeDeathmatch : IGameMode
         var gameModeState = m_GameModeSystemServer.gameModeState;
 
         var players = m_GameModeSystemServer.playersComponentGroup.GetComponentArray<PlayerState>();
-
+        /*
+        for (int j = 0; j < players.Length; j++) {
+            players[j].teamIndex = GDNLobbyNetworkDriver2.inst.lobbyValue.PlayerTeam(players[j].playerName);
+        }
+        */
+        //var teamsRename = m_GameModeSystemServer.teams;
+        //teamsRename[0].name = "Alpha";
         switch (m_Phase)
         {
             case Phase.Countdown:

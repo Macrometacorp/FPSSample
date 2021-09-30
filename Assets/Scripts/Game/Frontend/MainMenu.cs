@@ -36,12 +36,17 @@ public class MainMenu : MonoBehaviour
     public bool isDisconnected = false;
     //public GDNClientBrowserNetworkDriver gdnClientBrowserNetworkDriver;
     public GDNClientLobbyNetworkDriver2 gdnClientBrowserNetworkDriver;
+    public TestLobbyTransport2 testLobbyTransport2;
 
     // Currently active submenu, used by menu backdrop to track what is going on
     public int activeSubmenuNumber;
 
     CanvasGroup m_CanvasGroup;
 
+    public void NameChanged(string playerName) {
+        testLobbyTransport2.localId = playerName;
+    }
+    
     public void SetPanelActive(ClientFrontend.MenuShowing menuShowing)
     {
         var active = menuShowing != ClientFrontend.MenuShowing.None;
@@ -286,6 +291,10 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void JoinGame() {
+        Console.EnqueueCommand("connect localhost");
+    }
+    
     IEnumerator SendConnect(float delay)
     {
         Debug.Log("mainMenu OnCreateGame waiting: " + delay);
