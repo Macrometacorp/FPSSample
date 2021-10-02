@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Macrometa;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class AutomaticRifleUI : AbilityUI
             m_ClipSize = settings.clipSize;
             m_ClipSizeText.text = "/ " + m_ClipSize.ToString();
         }
+        PlayStats.UpdateRifleShots(m_ClipSize,m_AmmoInClip);
 /*
         if (m_AmmoInClip < (m_ClipSize )) {
             GameDebug.Log(" AutomaticRifleUI " + m_AmmoInClip);

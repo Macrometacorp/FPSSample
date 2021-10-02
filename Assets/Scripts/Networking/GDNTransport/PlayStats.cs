@@ -79,7 +79,7 @@ namespace Macrometa {
             }
         }
         
-        static public void CheckCameTimerMessage( string message) {
+        static public void CheckGameTimerMessage( string message) {
             if (message == gameTimerMessage) return;
             gameTimerMessage = message;
             if ("PreMatch" == gameTimerMessage) {

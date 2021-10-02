@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Macrometa;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,7 @@ public class RocketLauncherUI : AbilityUI
         bool showCooldown = behaviorCtrl.behaviorState == AbilityControl.State.Cooldown;
         cooldownText.gameObject.SetActive(showCooldown);
         disabledOverlay.SetActive(showCooldown);
+        PlayStats.UpdateGrenade(showCooldown);
         if (showCooldown)
         {
             float cooldownLeft = settings.cooldownDuration - time.DurationSinceTick(predictedState.activeTick);

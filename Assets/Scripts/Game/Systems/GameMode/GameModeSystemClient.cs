@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Macrometa;
 using UnityEngine;
 using Unity.Entities;
 using UnityEngine.UI;
@@ -138,6 +139,7 @@ public class GameModeSystemClient : ComponentSystem
 
             overlayUI.timer.Format("{0}:{1:00}", timeLeft.Minutes, timeLeft.Seconds);
             overlayUI.timerMessage.text = gameMode.gameTimerMessage;
+            PlayStats.CheckGameTimerMessage(gameMode.gameTimerMessage);
             overlayUI.objective.text = m_LocalPlayer.goalString;
             overlayUI.SetObjectiveProgress(m_LocalPlayer.goalCompletion, (int)m_LocalPlayer.goalAttackers, (int)m_LocalPlayer.goalDefenders, Game.game.gameColors[m_LocalPlayer.goalDefendersColor], Game.game.gameColors[m_LocalPlayer.goalAttackersColor]);
         }

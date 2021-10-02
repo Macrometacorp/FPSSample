@@ -150,7 +150,9 @@ namespace Macrometa {
                     gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, lobbyValue.key);
                     lobbyUpdated = true;
                    
+                    
                     GDNStats.BaseGameFromLobby(lobbyValue);
+                    
                 }
 
                 if (!gdnDocumentLobbyDriver.postLobbyStuff) {

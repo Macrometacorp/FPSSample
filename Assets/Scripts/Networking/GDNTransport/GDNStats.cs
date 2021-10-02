@@ -35,7 +35,7 @@ public class GDNStats {
             GameDebug.Log("GDNStats creation Make" );
             instance = new GDNStats();
         }
-        //x.Start();
+        instance.Start();
     }
     
     public static void SetPlayerName(string playerName) {

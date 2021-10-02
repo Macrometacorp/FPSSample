@@ -325,10 +325,37 @@ public class GameModeSystemServer : ComponentSystem
 
         // Update clients
         var idx = teams.Count - 1;
-        if (idx == 0) gameModeState.teamName0 = name;
-        if (idx == 1) gameModeState.teamName1 = name;
+
+        if (idx == 0) {
+            //gameModeState.teamName0 = GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name;
+            gameModeState.teamName0 = "Alpha A";
+        }
+
+        if (idx == 1) {
+            //gameModeState.teamName1 = GDNLobbyNetworkDriver2.inst.lobbyValue.team1.name;
+            gameModeState.teamName1 = "Bravo B";
+        }
     }
 
+    public void AssignTeams() {
+        var players = m_PlayersComponentGroup.GetComponentArray<PlayerState>();
+        for (int j = 0; j < players.Length; j++) {
+            players[j].teamIndex = GDNLobbyNetworkDriver2.inst.lobbyValue.PlayerTeam(players[j].playerName);
+        }
+    }
+    public void NameTeam(string name, int idx)
+    {
+        if (idx == 0) {
+            //gameModeState.teamName0 = GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name;
+            gameModeState.teamName0 = name;
+        }
+
+        if (idx == 1) {
+            //gameModeState.teamName1 = GDNLobbyNetworkDriver2.inst.lobbyValue.team1.name;
+            gameModeState.teamName1 = name;
+        }
+    }
+    
     // Assign to team with fewest members
     public void AssignTeam(PlayerState player)
     {
