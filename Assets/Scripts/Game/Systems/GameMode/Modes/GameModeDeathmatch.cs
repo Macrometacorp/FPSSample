@@ -226,6 +226,8 @@ public class GameModeDeathmatch : IGameMode
     {
         GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "+player.teamIndex );
         m_GameModeSystemServer.GetRandomSpawnTransform(player.teamIndex, ref position, ref rotation);
+        GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "
+                      + player.teamIndex + " :: "+ position);
     }
 
     enum Phase

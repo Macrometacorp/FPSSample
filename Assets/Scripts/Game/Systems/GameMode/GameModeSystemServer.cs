@@ -218,7 +218,7 @@ public class GameModeSystemServer : ComponentSystem
             {
                 var position = new Vector3(0.0f, 0.2f, 0.0f);
                 var rotation = Quaternion.identity;
-                GetRandomSpawnTransform(player.teamIndex, ref position, ref rotation);
+                //GetRandomSpawnTransform(player.teamIndex, ref position, ref rotation);
                 
                 m_GameMode.OnPlayerRespawn(player, ref position, ref rotation);
 
@@ -429,8 +429,8 @@ public class GameModeSystemServer : ComponentSystem
         m_prevTeamSpawnPointIndex[teamIndex] = index;
         pos = teamSpawns[index].transform.position;
         rot = teamSpawns[index].transform.rotation;
-
-        GameDebug.Log("spawning at " + teamSpawns[index].name);
+        GameDebug.Log("spawning at " + teamIndex + " : " + teamSpawns[index].transform.position.x +
+                      " : " + teamSpawns[index].name);
 
         return true;
     }
