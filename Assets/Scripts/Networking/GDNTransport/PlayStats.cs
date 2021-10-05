@@ -107,14 +107,14 @@ namespace Macrometa {
         
         static public void SetHealth(int val) {
             PlayStats.health= val;
-            Debug.Log("SetHealth :" + val);
+            //Debug.Log("SetHealth :" + val);
             if (health == 0) {
                 ReloadRifleShots();
             }
         }
         //use when avatar dies.
         static public void ReloadRifleShots() {
-            Debug.Log( "ReloadRifleShots()  :" + rifleShotsFired.shotsFired);
+            //Debug.Log( "ReloadRifleShots()  :" + rifleShotsFired.shotsFired);
             rifleShotsFired.Reload();
         }
         static public void UpdateRifleShots(int aClipSize, int anAmmoInClip) {

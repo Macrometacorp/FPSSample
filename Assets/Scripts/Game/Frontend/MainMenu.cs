@@ -37,7 +37,6 @@ public class MainMenu : MonoBehaviour
     //public GDNClientBrowserNetworkDriver gdnClientBrowserNetworkDriver;
     public GDNClientLobbyNetworkDriver2 gdnClientBrowserNetworkDriver;
     public TestLobbyTransport2 testLobbyTransport2;
-
     // Currently active submenu, used by menu backdrop to track what is going on
     public int activeSubmenuNumber;
 
@@ -46,7 +45,7 @@ public class MainMenu : MonoBehaviour
     public void NameChanged(string playerName) {
         testLobbyTransport2.localId = playerName;
     }
-    
+
     public void SetPanelActive(ClientFrontend.MenuShowing menuShowing)
     {
         var active = menuShowing != ClientFrontend.MenuShowing.None;
@@ -70,7 +69,9 @@ public class MainMenu : MonoBehaviour
 
     public void Awake()
     {
+        createGameMenu.SetActive(false);
         joinMenu.UpdateGdnFields();
+        optionMenu.UpdateGdnFields();
         m_CanvasGroup = GetComponent<CanvasGroup>();
 
         uiBinding.gamemode.options.Clear();
@@ -166,8 +167,8 @@ public class MainMenu : MonoBehaviour
     }
 
     public void OnCreateGame() {
-     // gdnClientBrowserNetworkDriver.tryKVInit = true;
-     CreateGame();
+        CreateGame();
+        //gdnClientBrowserNetworkDriver.tryKVInit = true;
     }
     
     public void CreateGame(){   
@@ -193,6 +194,7 @@ public class MainMenu : MonoBehaviour
                 // TODO : We should look to make this more robust but for now we just
                 // kill other processes to avoid running multiple servers locally
                 var thisProcess = System.Diagnostics.Process.GetCurrentProcess();
+                /*
                 var processes = System.Diagnostics.Process.GetProcesses();
                 foreach (var p in processes)
                 {
@@ -200,14 +202,14 @@ public class MainMenu : MonoBehaviour
                     {
                         try
                         {
-                           // p.Kill();
+                            p.Kill();
                         }
                         catch (System.Exception)
                         {
                         }
                     }
                 }
-
+                */
                 process.StartInfo.FileName = thisProcess.MainModule.FileName;
                 process.StartInfo.WorkingDirectory = thisProcess.StartInfo.WorkingDirectory;
                 GameDebug.Log(string.Format("filename='{0}', dir='{1}'", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
@@ -217,19 +219,22 @@ public class MainMenu : MonoBehaviour
             process.StartInfo.Arguments = " -batchmode -nographics -noboot -consolerestorefocus" +
                                           " +serve " + levelname + " +game.modename " + gamemode.ToLower() +
                                           " +servername \"" + servername + "\"";
+           
+            
             if (process.Start()){
                 GameDebug.Log("game process started");
                 //StartCoroutine(SendConnect(10));
                 ShowSubMenu(introMenu);
             }
+            
         }
         else
         {
             Console.EnqueueCommand("serve " + levelname);
             Console.EnqueueCommand("servername \"" + servername + "\"");
         }
+        
     }
-
     public void CreateGameFromLobby() {
              var servername = uiBinding.servername.text;
 

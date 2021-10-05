@@ -256,6 +256,18 @@ namespace Macrometa.Lobby {
             }
             return team.slots[index];
         }
+
+        public int FindPlayerPos(string playerId) {
+            var index =team0.Find(playerId) ;
+            if (index > -1) {
+                return index;
+            }
+            index = team1.Find(playerId);
+            if (index > -1) {
+                return index + team0.slots.Count;
+            }
+            return -1;
+        }
         
         public bool OnTeam(Team team, string clientId) {
             if (team == null) return false;

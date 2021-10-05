@@ -119,6 +119,14 @@ public class GameModeSystemServer : ComponentSystem
         m_TeamBaseComponentGroup = GetComponentGroup(typeof(TeamBase));
         m_SpawnPointComponentGroup = GetComponentGroup(typeof(SpawnPoint));
         m_PlayersComponentGroup = GetComponentGroup(typeof(PlayerState), typeof(PlayerCharacterControl));
+       /*
+        var spawnPoints = m_SpawnPointComponentGroup.GetComponentArray<SpawnPoint>();
+        for (var i = 0; i < spawnPoints.Length; i++)
+        {
+            var spawnPoint = spawnPoints[i];
+            GameDebug.Log("spawn: " + spawnPoint.teamIndex+ " "+spawnPoint.name + " " + spawnPoint.transform.position );
+        }
+        */
     }
 
     new public ComponentGroup GetComponentGroup(params ComponentType[] componentTypes)
@@ -167,7 +175,7 @@ public class GameModeSystemServer : ComponentSystem
             }
             PlayStats.UpdateGameType(m_CurrentGameModeName);
             m_GameMode.Initialize(m_World, this);
-            GameDebug.Log("CharacterUISystems.cs line 167 New gamemode : '" + m_GameMode.GetType().ToString() + "'");
+            GameDebug.Log("CharacterUISystems.cs line 170 New gamemode : '" + m_GameMode.GetType().ToString() + "'");
             Restart();
             return;
         }
@@ -338,9 +346,11 @@ public class GameModeSystemServer : ComponentSystem
     }
 
     public void AssignTeams() {
+        GameDebug.Log("AssignTeams()");
         var players = m_PlayersComponentGroup.GetComponentArray<PlayerState>();
         for (int j = 0; j < players.Length; j++) {
             players[j].teamIndex = GDNLobbyNetworkDriver2.inst.lobbyValue.PlayerTeam(players[j].playerName);
+            GameDebug.Log("AssignTeam name:" + players[j].playerName + " team: "+  players[j].teamIndex );
         }
     }
     public void NameTeam(string name, int idx)

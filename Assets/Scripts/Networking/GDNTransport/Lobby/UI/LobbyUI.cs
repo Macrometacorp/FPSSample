@@ -18,7 +18,9 @@ public class LobbyUI : MonoBehaviour {
    public GameObject gameInitMsg;
    public GameObject lobbyClosingMsg;
    public bool isAdmin;
-   
+
+   private bool _joinStarted = false;
+
    public string ownerId;
    
    public void DisplayLobbyValue(LobbyValue aLobbyValue,string anOwnerId) {
@@ -36,11 +38,24 @@ public class LobbyUI : MonoBehaviour {
          LobbyClosing();
       }
 
-      if (lobbyValue.joinGameNow) {
-         JoinGame();
+      if (lobbyValue.joinGameNow && !_joinStarted) {
+         _joinStarted = true;
+            StartCoroutine(StartJoin());
       }
    }
 
+   IEnumerator StartJoin() {
+      var pos = lobbyValue.FindPlayerPos(ownerId);
+      if (pos == -1) {
+         //exit lobby immediately nice but
+         //should exit when lobby closes
+      }
+      Debug.Log("StartJoin() ownerId: " + ownerId + " : "+ pos );
+      yield return new WaitForSeconds(1+pos);
+      Debug.Log("StartJoin() ownerId  B: " + ownerId + " : "+ pos );
+      JoinGame();
+   }
+   
    public void SetRttTarget(string clientId) {
       GDNClientLobbyNetworkDriver2.SetRttTarget(clientId);
    }

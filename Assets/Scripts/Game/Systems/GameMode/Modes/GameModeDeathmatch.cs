@@ -10,7 +10,7 @@ public class GameModeDeathmatch : IGameMode
 {
     [ConfigVar(Name = "game.dm.minplayers", DefaultValue = "2", Description = "Minimum players before match starts")]
     public static ConfigVar minPlayers;
-    [ConfigVar(Name = "game.dm.prematchtime", DefaultValue = "20", Description = "Time before match starts")]
+    [ConfigVar(Name = "game.dm.prematchtime", DefaultValue = "60", Description = "Time before match starts")]
     public static ConfigVar preMatchTime;
     [ConfigVar(Name = "game.dm.postmatchtime", DefaultValue = "10", Description = "Time after match ends before new will begin")]
     public static ConfigVar postMatchTime;
@@ -44,16 +44,35 @@ public class GameModeDeathmatch : IGameMode
     char[] _msgBuf = new char[256];
     public void Update()
     {
+        //GameDebug.Log(" GameModeDeathmatch.update A");
         var gameModeState = m_GameModeSystemServer.gameModeState;
-
+        //GameDebug.Log(" GameModeDeathmatch.update B");
         var players = m_GameModeSystemServer.playersComponentGroup.GetComponentArray<PlayerState>();
+        //GameDebug.Log(" GameModeDeathmatch.update C");
        
-        m_GameModeSystemServer.AssignTeams();
+        /*
+        GameDebug.Log(" GameModeDeathmatch.update D 1");
+        GameDebug.Log(" GameModeDeathmatch.update D A:" +
+                      GDNLobbyNetworkDriver2.inst);
+        GameDebug.Log(" GameModeDeathmatch.update D B:" +
+                      GDNLobbyNetworkDriver2.inst.lobbyValue);
+        GameDebug.Log(" GameModeDeathmatch.update D C:" +
+                      GDNLobbyNetworkDriver2.inst.lobbyValue.team0);
+        GameDebug.Log(" GameModeDeathmatch.update D E:" +
+                      GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name);
         m_GameModeSystemServer.NameTeam( GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name,0);
+        GameDebug.Log(" GameModeDeathmatch.update E 1");
+        GameDebug.Log(" GameModeDeathmatch.update E 1:" +
+                      GDNLobbyNetworkDriver2.inst.lobbyValue.team1.name
+                      );
+                      */
         m_GameModeSystemServer.NameTeam( GDNLobbyNetworkDriver2.inst.lobbyValue.team1.name,1);
+        
+        //GameDebug.Log(" GameModeDeathmatch.update F");
         switch (m_Phase)
         {
             case Phase.Countdown:
+                //GameDebug.Log(" GameModeDeathmatch.update Countdown");
                 if (m_GameModeSystemServer.GetGameTimer() == 0)
                 {
                     if (players.Length < minPlayers.IntValue)
@@ -66,10 +85,24 @@ public class GameModeDeathmatch : IGameMode
                         m_GameModeSystemServer.StartGameTimer(roundLength, "");
                         m_Phase = Phase.Active;
                         m_GameModeSystemServer.chatSystem.SendChatAnnouncement("Match started!");
+                        m_GameModeSystemServer.AssignTeams();
+                        // kill all players to get them to respawn
+                        for (int i = 0, c = players.Length; i < c; i++) {
+                            var playerState = players[i];
+                            if (playerState.controlledEntity != Entity.Null) {
+                                var healthState = m_world.GetEntityManager()
+                                    .GetComponentData<HealthStateData>(playerState.controlledEntity);
+                                healthState.health = 0.0f;
+                                healthState.deathTick = -1;
+                                m_world.GetEntityManager()
+                                    .SetComponentData(playerState.controlledEntity, healthState);
+                            }
+                        }
                     }
                 }
                 break;
             case Phase.Active:
+                //GameDebug.Log(" GameModeDeathmatch.update Active");
                 if (m_GameModeSystemServer.GetGameTimer() == 0)
                 {
                     // Find winner team
@@ -143,7 +176,7 @@ public class GameModeDeathmatch : IGameMode
                 }
                 break;
         }
-
+        //GameDebug.Log(" GameModeDeathmatch.update afterPhase");
         for(int i = 0; i < players.Length; i++)
         {
             var player = players[i];
@@ -191,6 +224,7 @@ public class GameModeDeathmatch : IGameMode
 
     public void OnPlayerRespawn(PlayerState player, ref Vector3 position, ref Quaternion rotation)
     {
+        GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "+player.teamIndex );
         m_GameModeSystemServer.GetRandomSpawnTransform(player.teamIndex, ref position, ref rotation);
     }
 
