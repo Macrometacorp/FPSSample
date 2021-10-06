@@ -296,6 +296,38 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+     public void RestartClient(){   
+       
+            var process = new System.Diagnostics.Process();
+            if (Application.isEditor)
+            {
+                process.StartInfo.FileName = k_AutoBuildPath + "/" + k_AutoBuildExe;
+                process.StartInfo.WorkingDirectory = k_AutoBuildPath;
+            }
+            else
+            {
+                // TODO : We should look to make this more robust but for now we just
+                // kill other processes to avoid running multiple servers locally
+                var thisProcess = System.Diagnostics.Process.GetCurrentProcess();
+               
+                process.StartInfo.FileName = thisProcess.MainModule.FileName;
+                process.StartInfo.WorkingDirectory = thisProcess.StartInfo.WorkingDirectory;
+                GameDebug.Log(string.Format("filename='{0}', dir='{1}'", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
+            }
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.Arguments ="";
+           
+            
+            if (!process.Start()){
+                GameDebug.Log("client restart failed");
+            }
+            else {
+                Application.Quit();
+            }
+
+     }
+    
     public void JoinGame() {
         Console.EnqueueCommand("connect localhost");
     }
