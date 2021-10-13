@@ -100,6 +100,12 @@ expireAfter: The time (in seconds) after a document's creation after which the d
             return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"/"+ key;
         }
         
+        ///_fabric/{fabric}/_api/document/{collection}/{key} Update single document  patch
+        
+        public string PatchDocumentURL(string collection, string key) {
+            return "https://" + requestURL + "/_fabric/" + fabric + "/_api/document/" + collection +"/"+ key;
+        }
+
         #endregion Document URLS
     
         #region Stream URLS
@@ -449,6 +455,16 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         }
         public static UnityWebRequest WebPut(string url, string data,GDNData gdnData) {
             UnityWebRequest www = new UnityWebRequest(url, "PUT");
+            byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
+            www.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
+            www.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+            www.SetRequestHeader("Content-Type", "application/json");
+            www.SetRequestHeader("Authorization", "apikey " + gdnData.apiKey);
+            return www;
+        }
+        
+        public static UnityWebRequest WebPatch(string url, string data,GDNData gdnData) {
+            UnityWebRequest www = new UnityWebRequest(url, "PATCH");
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
             www.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
             www.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();

@@ -74,14 +74,16 @@ public class OptionsMenu : MonoBehaviour
     float height = 0.0f;
 
     public GDNFields gdnFields;
+    public GameObject saveEnabled;
     
     void Awake() {
         GDNFields.PopulateDropDownWithList(gdnFields.connectionType,gdnFields.connectionTypes);
         //var gdnConfig = RwConfig.ReadConfig();
         //gdnFields.gdnFederationURL.text = gdnConfig.gdnData.federationURL;
         UpdateGdnFields();
+        UpdateConnectionFields();
     }
-    
+
     void AddOption(OptionUI o)
     {
         options.Add(o);
@@ -154,6 +156,7 @@ public class OptionsMenu : MonoBehaviour
     void Start()
     {
         UpdateGdnFields();
+        UpdateConnectionFields();
         var resHash = new HashSet<string>();
         foreach (var r in Screen.resolutions)
             resHash.Add(r.width + "x" + r.height/* + "@" + r.refreshRate*/);
@@ -233,20 +236,62 @@ public class OptionsMenu : MonoBehaviour
 #endif
   
     public void UpdateGdnFields() {
+        
         var gdnConfig = RwConfig.ReadConfig();
-       
-        UpdateGDNTextField(gdnFields.gdnFederationURL, gdnConfig.gdnData.federationURL);
-        UpdateGDNTextField(gdnFields.gdnAPIKey, gdnConfig.gdnData.apiKey);
         UpdateGDNTextField(gdnFields.city, gdnConfig.userCity);
         UpdateGDNTextField(gdnFields.country, gdnConfig.userCountry );
         UpdateDropdown(gdnFields.connectionType, gdnConfig.connectionType, gdnFields.connectionTypes);
-        
+       
+    }
+
+    public void UpdateConnectionFields() {
+        var gdnConfig = RwConfig.ReadConfig();
+        UpdateGDNTextField(gdnFields.gdnFederationURL, gdnConfig.gdnData.federationURL);
+        UpdateGDNTextField(gdnFields.gdnAPIKey, gdnConfig.gdnData.apiKey);
+        saveEnabled.SetActive(false);
     }
     
-    public void SaveToGDNConfig() {
+    public void EnableSave() {
+        GameDebug.Log("SaveEnabled");
+        saveEnabled.SetActive(true);
+    }
+
+    public void SaveAndReconnect() {
+        GameDebug.Log("SaveAndReconnect() A");
+        SaveConnectionParams();
+        GameDebug.Log("SaveAndReconnect() B");
+        RestartClient(); 
+    }
+    
+    public void RestartClient(){
+        var process = new System.Diagnostics.Process();
+        if (Application.isEditor) {
+            process.StartInfo.FileName =MainMenu.k_AutoBuildPath + "/" + MainMenu.k_AutoBuildExe;
+            process.StartInfo.WorkingDirectory = MainMenu.k_AutoBuildPath;
+        }
+        else {
+            // TODO : We should look to make this more robust but for now we just
+            // kill other processes to avoid running multiple servers locally
+            var thisProcess = System.Diagnostics.Process.GetCurrentProcess();
+               
+            process.StartInfo.FileName = thisProcess.MainModule.FileName;
+            process.StartInfo.WorkingDirectory = thisProcess.StartInfo.WorkingDirectory;
+            GameDebug.Log(string.Format("filename='{0}', dir='{1}'", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
+        }
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.Arguments ="";
+        if (!process.Start()){
+            GameDebug.Log("client restart failed");
+        }
+        else {
+            Application.Quit();
+        }
+    }
+
+    public void SaveConnectionParams() {
+        GameDebug.Log("SaveConnectionParams() A");
         bool dirty = false;
         var gdnConfig = RwConfig.ReadConfig();
-       
         if (gdnConfig.gdnData.federationURL != gdnFields.gdnFederationURL.text && gdnFields.gdnFederationURL.text != "" ) {
             gdnConfig.gdnData.federationURL = gdnFields.gdnFederationURL.text;
             dirty = true;
@@ -264,6 +309,18 @@ public class OptionsMenu : MonoBehaviour
         if (gdnFields.gdnAPIKey.text != "") {
             GameDebug.Log("tried changing API to blank");
         }
+
+        if (dirty) {
+            RwConfig.Change(gdnConfig);
+            RwConfig.Flush();
+        }
+        GameDebug.Log("SaveConnectionParams() Z");
+    } 
+    
+    public void SaveToGDNConfig() {
+        bool dirty = false;
+        var gdnConfig = RwConfig.ReadConfig();
+       
         
         if (gdnConfig.userCity != gdnFields.city.text) {
             gdnConfig.userCity = gdnFields.city.text;
@@ -283,33 +340,13 @@ public class OptionsMenu : MonoBehaviour
             dirty = true;
             GameDebug.Log("Dirty: connectionType" );
         }
-        /*
-        if (gdnConfig.gdnData.fabric != gdnFabric.text) {
-            gdnConfig.gdnData.fabric = gdnFabric.text;
-            dirty = true;
-            GameDebug.Log("Dirty:  gdnFabric" );
-        }
-        if (gdnConfig.gdnData.tenant != gdnTenant.text) {
-            gdnConfig.gdnData.tenant = gdnTenant.text;
-            dirty = true;
-            GameDebug.Log("Dirty:   gdnTenant" );
-        }
-        if (gdnConfig.gdnData.isGlobal != isGlobal.isOn) {
-            gdnConfig.gdnData.isGlobal = isGlobal.isOn;
-            dirty = true;
-            GameDebug.Log("Dirty:  isGlobal" );
-        }
-        */
+       
         if (dirty) {
             RwConfig.Change(gdnConfig);
             RwConfig.Flush();
         }
     }
-/*
-    private void Update() {
-      RwConfig.Flush();
-    }
-*/
+
     public void UpdateGDNTextField(TMPro.TMP_InputField field, string value) {
         if (!field.isFocused)
             field.text =value;

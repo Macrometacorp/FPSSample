@@ -9,7 +9,10 @@ namespace Macrometa {
         public float nextRefreshLobbyList= 0;
         public LobbyValue lobbyValue;
         public bool lobbyUpdated = false;
-        public bool lobbyJoinGameNowSet = false;
+        public int maxSetJoinCount = 10;
+        public int currentSetJoinCount = 0;
+        public float nextJoinLobbySetTime = 0;
+        public float joinLobbySetDelay = 1;  //seconds
         public string savedKey;
         static public GDNLobbyNetworkDriver2 inst;
         
@@ -149,10 +152,7 @@ namespace Macrometa {
                     savedKey = lobbyValue.key;
                     gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, lobbyValue.key);
                     lobbyUpdated = true;
-                   
-                    
                     GDNStats.BaseGameFromLobby(lobbyValue);
-                    
                 }
 
                 if (!gdnDocumentLobbyDriver.postLobbyStuff) {
@@ -220,13 +220,14 @@ namespace Macrometa {
                 GDNTransport.setupComplete = true;
             }
             
-            if (!lobbyJoinGameNowSet && isServer) {
+            if ( isServer &&   maxSetJoinCount > currentSetJoinCount && Time.time > nextJoinLobbySetTime) {
                 GameDebug.Log("lobbyJoinGameNowSet after complete A");
                 lobbyValue.joinGameNow = true;
                 var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
                 gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, savedKey);
-                lobbyJoinGameNowSet = true;
-                GameDebug.Log("lobbyJoinGameNowSet after complete Z");
+                currentSetJoinCount++;
+                nextJoinLobbySetTime = Time.time + joinLobbySetDelay;
+                GameDebug.Log("lobbyJoinGameNowSet after complete Z count: " + currentSetJoinCount);
             }
             
             if (!gdnStreamDriver.sendConnect && !isServer) {

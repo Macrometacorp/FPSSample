@@ -1109,7 +1109,7 @@ namespace Macrometa {
             };
 
             lobbyDocumentReader.OnMessage += (sender, e) => {
-                GameDebug.Log(" LobbyDocumentReader.OnMessage: " );
+                GameDebug.Log(" LobbyDocumentReader.OnMessage " );
                 var receivedMessage = JsonUtility.FromJson<ReceivedMessage>(e);
                 var json  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
                 var lobbyBase = JsonUtility.FromJson<LobbyBase>(json);
