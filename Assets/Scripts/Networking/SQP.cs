@@ -480,14 +480,17 @@ namespace SQP
 
         public SQPServer(int port)
         {
+            /*
             m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             m_Socket.SetupAndBind(port);
             m_Random = new System.Random();
-            GameDebug.Log("SQP Initialized. Listening on port " + port);
+            */
+            GameDebug.Log("SQP Initialized. Listening on port NOT active" + port);
         }
 
         public void Update()
         {
+            /*
             if (m_Socket.Poll(0, SelectMode.SelectRead))
             {
                 int read = m_Socket.ReceiveFrom(m_Buffer, m_Buffer.Length, SocketFlags.None, ref endpoint);
@@ -557,6 +560,7 @@ namespace SQP
 
                 }
             }
+            */
         }
 
         uint GetNextToken()
