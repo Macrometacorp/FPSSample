@@ -27,7 +27,7 @@ public class GDNFields {
     public TMPro.TMP_InputField gdnFabric;
     public Toggle isGlobal;
     public TMPro.TMP_InputField gdnAPIKey;
-    public Button saveAndReconnect;
+    //public Button saveAndReconnect;
     public TMPro.TMP_Dropdown connectionType;
     public TMPro.TMP_InputField city;
     public TMPro.TMP_InputField country;
@@ -56,8 +56,8 @@ public class GDNFields {
     }
 }
 
-public class OptionsMenu : MonoBehaviour
-{
+public class OptionsMenu : MonoBehaviour {
+    public MainMenu mainMenu;
     public OptionToggle toggleTemplate;
     public OptionDropdown dropdownTemplate;
     public OptionInput inputTemplate;
@@ -249,16 +249,18 @@ public class OptionsMenu : MonoBehaviour
         UpdateGDNTextField(gdnFields.gdnFederationURL, gdnConfig.gdnData.federationURL);
         UpdateGDNTextField(gdnFields.gdnAPIKey, gdnConfig.gdnData.apiKey);
         saveEnabled.SetActive(false);
+        mainMenu.button_JoinGame.gameObject.SetActive(true);
     }
     
     public void EnableSave() {
         GameDebug.Log("SaveEnabled");
         saveEnabled.SetActive(true);
+        mainMenu.button_JoinGame.gameObject.SetActive(false);
     }
 
     public void SaveAndReconnect() {
         GameDebug.Log("SaveAndReconnect() A");
-        SaveConnectionParams();
+        //SaveConnectionParams();
         GameDebug.Log("SaveAndReconnect() B");
         RestartClient(); 
     }

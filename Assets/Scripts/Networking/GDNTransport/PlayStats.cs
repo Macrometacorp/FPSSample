@@ -66,6 +66,8 @@ namespace Macrometa {
            }
            GameDebug.Log(" killCounts: " +  killCounts.Count);
            updateGDNStatsKills();
+           GDNStats.baseGameStats.killed = killed;
+           GDNStats.baseGameStats.killedBy = killedBy;
         }
 
         static public void updateGDNStatsKills() {

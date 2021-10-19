@@ -30,6 +30,7 @@ public class MainMenu : MonoBehaviour
     public GameObject createGameMenu;
     public GameObject createFailMsg;
     public GameObject introMenu;
+    public GameObject button_JoinGame;
     public JoinMenu joinMenu;
     public OptionsMenu optionMenu;
     public GameObject disconnectedMenu;
