@@ -18,9 +18,9 @@ using UnityEngine;
             itemHolder.transform.DetachChildren();
             foreach (var lv in lobbyList.lobbies) {
                 if (lv.closeLobbyNow || lv.showGameInitNow || lv.joinGameNow) continue;
-                var lli = Instantiate<LobbyListItemUI>(prefabItem);
+                var lli = Instantiate<LobbyListItemUI>(prefabItem,itemHolder.transform,false);
                 lli.gameObject.SetActive(true);
-                lli.transform.SetParent(itemHolder.transform);
+                //lli.transform.SetParent(itemHolder.transform);
                 lli.DisplayLobbyValue(lv);
             }
         }

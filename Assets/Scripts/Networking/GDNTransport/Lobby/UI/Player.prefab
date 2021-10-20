@@ -353,6 +353,7 @@ MonoBehaviour:
   emptySlot: {fileID: 1487671284872263835}
   activePlayer: {fileID: 1487671284270860297}
   playerName: {fileID: 1487671285314483089}
+  playerRegionName: {fileID: 5856252635229929851}
   pingTime: {fileID: 1487671285610521998}
   rttTime: {fileID: 1487671283999901145}
   rttTargetButton: {fileID: 2718412564564522900}
@@ -1922,9 +1923,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Singapore, Sg
-
-'
+  m_text: defualt, Sg
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1952,7 +1951,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 37.65
+  m_fontSize: 44.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1993,9 +1992,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 5856252635229929851}
-    characterCount: 14
+    characterCount: 11
     spriteCount: 0
-    spaceCount: 2
+    spaceCount: 1
     wordCount: 2
     linkCount: 0
     lineCount: 1

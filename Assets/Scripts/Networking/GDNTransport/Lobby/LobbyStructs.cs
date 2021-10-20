@@ -182,7 +182,7 @@ namespace Macrometa.Lobby {
         
         public string DisplayName() {
             string displaySerial = serialNumber == 1 ? "" : " "+serialNumber.ToString();
-            return baseName + displaySerial + " By " + adminName+ "\n"+ region.DisplayLocation();
+            return baseName + displaySerial + " By " + adminName;//+ "\n"+ region.DisplayLocation();
         }
 
        /// <summary>

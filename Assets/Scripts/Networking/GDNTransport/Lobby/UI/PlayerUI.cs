@@ -12,6 +12,7 @@ public class PlayerUI : MonoBehaviour {
     public GameObject emptySlot;
     public GameObject activePlayer;
     public TMP_Text playerName;
+    public TMP_Text playerRegionName;
     public TMP_Text pingTime;
     public TMP_Text rttTime;
     public Button rttTargetButton; ////shown to admin to select who to ping
@@ -33,6 +34,7 @@ public class PlayerUI : MonoBehaviour {
         emptySlot.SetActive(false);
         activePlayer.SetActive(true);
         playerName.text = teamSlot.playerName;
+        playerRegionName.text = teamSlot.region.DisplayLocation();
         pingTime.text = teamSlot.ping.ToString();
         if (teamSlot.rtt > 0) {
             rttTime.text = teamSlot.rtt.ToString();
