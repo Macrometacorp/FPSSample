@@ -3,6 +3,7 @@ using Macrometa;
 using Macrometa.Lobby;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 
     public class LobbyListUI : MonoBehaviour {
@@ -16,7 +17,8 @@ using UnityEngine;
                Destroy(child.gameObject);
             }
             itemHolder.transform.DetachChildren();
-            foreach (var lv in lobbyList.lobbies) {
+            var sorted  = lobbyList.lobbies.OrderBy(x=> x.adminName).ToList();
+            foreach (var lv in sorted) {
                 if (lv.closeLobbyNow || lv.showGameInitNow || lv.joinGameNow) continue;
                 var lli = Instantiate<LobbyListItemUI>(prefabItem,itemHolder.transform,false);
                 lli.gameObject.SetActive(true);
