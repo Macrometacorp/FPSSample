@@ -918,6 +918,12 @@ MonoBehaviour:
       slots: []
     frozen: 0
     serverClientChosen: 0
+    closeLobbyNow: 0
+    showGameInitNow: 0
+    joinGameNow: 0
+    rttTarget: 
+    serverAllowed: 
+    key: 
   prelobby: {fileID: 6092579386911911977}
 --- !u!1 &4947763630561389642
 GameObject:
@@ -1027,7 +1033,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4947763631324594563
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1101,7 +1107,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48.85
+  m_fontSize: 48.9
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
