@@ -278,7 +278,8 @@ namespace Macrometa {
                         serialNumber = nextGameSerialnumber,
                         region = gdnStreamDriver.region,
                     };
-
+                    lobbyValue.team0.name = "Alpha";
+                    lobbyValue.team1.name = "Bravo";
                     lobbyValue.MoveToTeam(SelfTeamSlot(), 2);
                     //AddDummyTeamSlots(0, 1);
                     //AddDummyTeamSlots(1, 3);
