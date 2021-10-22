@@ -60,12 +60,13 @@ public class GameModeDeathmatch : IGameMode
                       GDNLobbyNetworkDriver2.inst.lobbyValue.team0);
         GameDebug.Log(" GameModeDeathmatch.update D E:" +
                       GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name);
-        m_GameModeSystemServer.NameTeam( GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name,0);
+       
         GameDebug.Log(" GameModeDeathmatch.update E 1");
         GameDebug.Log(" GameModeDeathmatch.update E 1:" +
                       GDNLobbyNetworkDriver2.inst.lobbyValue.team1.name
                       );
                       */
+        m_GameModeSystemServer.NameTeam( GDNLobbyNetworkDriver2.inst.lobbyValue.team0.name,0);
         m_GameModeSystemServer.NameTeam( GDNLobbyNetworkDriver2.inst.lobbyValue.team1.name,1);
         
         //GameDebug.Log(" GameModeDeathmatch.update F");

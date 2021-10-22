@@ -414,6 +414,7 @@ namespace Macrometa {
 
         static public void TeamNameChanged(string teamName, int teamIndex) {
             /// this change goes directo lobby and updates
+            GameDebug.Log("GDNClientLobbyNetworkDriver2  TeamNameChanged: "+ teamName + " : "+teamIndex);
             _inst.lobbyValue.TeamFromIndex( teamIndex).name = teamName;
             _inst.UpdateLobby();
         }

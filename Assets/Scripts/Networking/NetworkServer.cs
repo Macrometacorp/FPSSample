@@ -438,8 +438,9 @@ unsafe public class NetworkServer
 
     void OnConnect(int connectionId, INetworkCallbacks loop)
     {
-        GameDebug.Assert(!m_Connections.ContainsKey(connectionId));
         GameDebug.Log(" OnConnect: "+m_Connections.Count + "  ServerGameLoop.serverMaxClients "+ ServerGameLoop.serverMaxClients.IntValue);
+        GameDebug.Log(" OnConnect: "+m_Connections.Count + "  id: "+connectionId);
+        GameDebug.Assert(!m_Connections.ContainsKey(connectionId));
         if (m_Connections.Count >= ServerGameLoop.serverMaxClients.IntValue)
         {
             GameDebug.Log("Refusing incoming connection " + connectionId + " due to server.maxclients");

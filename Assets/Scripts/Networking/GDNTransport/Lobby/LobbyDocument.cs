@@ -215,8 +215,9 @@ namespace Macrometa.Lobby {
         //need to repeat with same post on error
         public void UpdateLobbyDocument(LobbyDocument lobbyDocument, string key) {
             _gdnErrorHandler.isWaiting = true;
-            GameDebug.Log("replace Lobby Doc : " + key + " : "+ lobbyDocument.lobbyValue.joinGameNow  );
-                          String data = JsonUtility.ToJson(lobbyDocument);
+            String data = JsonUtility.ToJson(lobbyDocument);
+            GameDebug.Log("replace Lobby Doc : "+ lobbyDocument.lobbyValue.DisplayName() + " : " + key + " : "+ lobbyDocument.lobbyValue.joinGameNow  );
+            GameDebug.Log(data);
             _monoBehaviour.StartCoroutine(PutReplaceDocument(_gdnData, lobbiesCollectionName,
                 data,key, UpdateLobbyDocumentCallback));
         }
@@ -224,13 +225,13 @@ namespace Macrometa.Lobby {
         public void UpdateLobbyDocumentCallback(UnityWebRequest www) {
             _gdnErrorHandler.isWaiting = false;
             if (www.isHttpError || www.isNetworkError) {
-                GameDebug.Log("replace Lobby Doc : " + www.error);
+                GameDebug.Log("replace Lobby Doc protocol error : " + www.error);
                 _gdnErrorHandler.currentNetworkErrors++;
             }
             else {
                 var baseHttpReply = JsonUtility.FromJson<BaseHtttpReply>(www.downloadHandler.text);
                 if (baseHttpReply.error == true) {
-                    GameDebug.Log("replace Lobby Doc :" +baseHttpReply.code);
+                    GameDebug.Log("replace Lobby Doc Http :" +baseHttpReply.code);
                     _gdnErrorHandler.currentNetworkErrors++;
                     maxSerialIsDone = false;
                 }

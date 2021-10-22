@@ -9,7 +9,7 @@ namespace Macrometa {
         public float nextRefreshLobbyList= 0;
         public LobbyValue lobbyValue;
         public bool lobbyUpdated = false;
-        public int maxSetJoinCount = 10;
+        public int maxSetJoinCount = 5;
         public int currentSetJoinCount = 0;
         public float nextJoinLobbySetTime = 0;
         public float joinLobbySetDelay = 1;  //seconds

@@ -21,6 +21,7 @@ public class PlayerUI : MonoBehaviour {
     public GameObject highlight;
     public GameObject highlightRttTarget;
     public Image highlightRttTime;
+    private bool startGameClicked = false;
     
     public void DisplayPlayer(TeamSlot teamSlot, bool isHighlight) {
         if (teamSlot == null) {
@@ -64,6 +65,7 @@ public class PlayerUI : MonoBehaviour {
         }
         else {
             startGameServer.gameObject.SetActive(false);
+            startGameClicked = false;
         }
         clientID = teamSlot.clientId;
 
@@ -79,8 +81,11 @@ public class PlayerUI : MonoBehaviour {
     }
 
     public void StartGameClicked() {
-        GameDebug.Log("StartGameClicked");
-        lobby.StartGame();
+        if (!startGameClicked) {
+            startGameClicked = true;
+            GameDebug.Log("StartGameClicked");
+            lobby.StartGame();
+        }
     }
     
 }

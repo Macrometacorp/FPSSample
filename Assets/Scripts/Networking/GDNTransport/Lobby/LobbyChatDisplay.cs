@@ -8,10 +8,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class LobbyChatDisplay: MonoBehaviour {
-    public string localId = "GrantAdmin";
+   
  
     [Space]
-    public TMP_Text textDisplay;
+    public TMP_Text  textDisplay;
     public TMP_InputField inputField;
     public ScrollRect scrollRect;
     
@@ -25,6 +25,7 @@ public class LobbyChatDisplay: MonoBehaviour {
         //gdnClientLobbyNetworkDriver2.localId = localId;
         inputField.Select();
         inputField.ActivateInputField(); 
+      
     }
 
     public void Update() {
@@ -65,7 +66,8 @@ public class LobbyChatDisplay: MonoBehaviour {
         Debug.Log( "Sent text: A " + inputField.text);
         if (inputField.text == "") return;
         Debug.Log( "Sent text: B " + inputField.text);
-        SendText("<b>" + localId + "</b>: "+inputField.text);
+        SendText("<color=black><b>" + RwConfig.ReadConfig().playerName + ":</b></color>  "
+                 +inputField.text);
         Debug.Log( "Sent text: B " + inputField.text);
         inputField.text = "";
         inputField.Select();

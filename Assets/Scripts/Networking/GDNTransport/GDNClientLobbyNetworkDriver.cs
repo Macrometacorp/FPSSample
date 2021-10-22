@@ -189,6 +189,8 @@ namespace Macrometa {
                        streamName = RwConfig.ReadConfig().gameName,
                        region = gdnStreamDriver.region,
                    };
+                   lobbyValue.team0.name = "Alpha";
+                   lobbyValue.team1.name = "Bravo";
                    lobbyValue.unassigned.slots.Add(SelfTeamSlot());
                    AddDummyTeamSlots(0, 4);
                    AddDummyTeamSlots(1, 3);
