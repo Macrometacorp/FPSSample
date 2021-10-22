@@ -9,10 +9,16 @@ namespace Macrometa {
         public float nextRefreshLobbyList= 0;
         public LobbyValue lobbyValue;
         public bool lobbyUpdated = false;
-        public int maxSetJoinCount = 5;
+        public int maxSetJoinCount = 6;
         public int currentSetJoinCount = 0;
         public float nextJoinLobbySetTime = 0;
-        public float joinLobbySetDelay = 1;  //seconds
+        public float joinLobbySetDelay = 1;
+        // making  maxSetInitCount > 1 cuase a 409 error in joinLobby updates
+        //I don't know why
+        public int maxSetInitCount = 1; 
+        public int currentSetInitCount = 0;
+        public float nextInitSetTime = 0;
+        public float initSetDelay = 1; //seconds
         public string savedKey;
         static public GDNLobbyNetworkDriver2 inst;
         
@@ -143,16 +149,18 @@ namespace Macrometa {
                     gdnDocumentLobbyDriver.lobbyListIsDone = false;
                     return;
                 }
-
-                // try to get from lobbylist
-                // if not put in lobbyValue
-                if (!lobbyUpdated) {
+                
+                if (maxSetInitCount > currentSetInitCount && Time.time > nextInitSetTime) {
+                    GameDebug.Log("lobby Init NowSet after complete A: " +  currentSetInitCount);
                     lobbyValue.showGameInitNow = true;
                     var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
                     savedKey = lobbyValue.key;
                     gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, lobbyValue.key);
-                    lobbyUpdated = true;
+                    currentSetInitCount++;
                     GDNStats.BaseGameFromLobby(lobbyValue);
+                    nextInitSetTime = Time.time + initSetDelay;
+                    GameDebug.Log("lobby Init NowSet after complete Z: " +  currentSetInitCount);
+                    return;
                 }
 
                 if (!gdnDocumentLobbyDriver.postLobbyStuff) {
@@ -221,7 +229,7 @@ namespace Macrometa {
             }
             
             if ( isServer &&   maxSetJoinCount > currentSetJoinCount && Time.time > nextJoinLobbySetTime) {
-                GameDebug.Log("lobbyJoinGameNowSet after complete A");
+                GameDebug.Log("lobbyJoinGameNowSet after complete A: "+ currentSetJoinCount);
                 lobbyValue.joinGameNow = true;
                 var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
                 gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, savedKey);
