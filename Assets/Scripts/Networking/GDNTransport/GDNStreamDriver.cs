@@ -936,6 +936,7 @@ namespace Macrometa {
                 teamSlot = GDNClientLobbyNetworkDriver2.MakeSelfTeamSlot(),
                 admin = true,
             };
+            GameDebug.Log(" ChatSendRoomRequest chatChannelId:" + chatChannelId);
             ChatSendCommand(chatChannelId,command);
         }
         public void ChatSendCloseLobby() {
@@ -960,7 +961,7 @@ namespace Macrometa {
                 admin = true,
                 intVal = val,
             };
-            GameDebug.Log("hatSendSetRttTime : "+consumerName);
+            GameDebug.Log("chatSendSetRttTime : "+consumerName);
             ChatSendCommand(chatChannelId,command);
         }
         public void ChatSendAllowServer(string clientId) {
@@ -975,6 +976,7 @@ namespace Macrometa {
                 command = LobbyCommandType.GameInit,
                 all = true,
             };
+            GameDebug.Log(" ChatSendGameInit() : "+chatChannelId );
             ChatSendCommand(chatChannelId,command);
         }
         public void ChatSendGameReady() {

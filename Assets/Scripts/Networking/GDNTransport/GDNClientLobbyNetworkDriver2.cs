@@ -345,12 +345,6 @@ namespace Macrometa {
             //this for pinging rtt clients
             // ping three time
 
-            
-                
-           
-            
-            
-            
             return false;
         }
 
@@ -426,16 +420,14 @@ namespace Macrometa {
             return val;
         }
 
-        static public bool GameInit() {
-            var val = _inst.lobbyValue.showGameInitNow;
+        static public void GameInit() {
+            _inst.lobbyValue.showGameInitNow = true;
             _inst.UpdateLobby();
-            return val;
         }
         
-        static public bool GameJoin() {
-            var val = _inst.lobbyValue.joinGameNow;
+        static public void GameJoin() {
+            _inst.lobbyValue.joinGameNow = true;
             _inst.UpdateLobby();
-            return val;
         }
 
         static public void SetServerAllowed(string consumerName) {

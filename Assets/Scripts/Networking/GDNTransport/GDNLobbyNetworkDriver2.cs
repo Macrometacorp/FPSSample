@@ -5,6 +5,8 @@ namespace Macrometa {
     //
 
     public class GDNLobbyNetworkDriver2 : GDNNetworkDriver {
+        private bool tempFlag = false;
+        
         public GdnDocumentLobbyDriver gdnDocumentLobbyDriver;
         public float nextRefreshLobbyList= 0;
         public LobbyValue lobbyValue;
@@ -68,6 +70,8 @@ namespace Macrometa {
             gdnStreamDriver.serverOutStreamName = RwConfig.ReadConfig().streamName + "_OutStream";
             gdnStreamDriver.serverStatsStreamName = "Unity" + "_StatsStream";
             gdnStreamDriver.serverName = gdnStreamDriver.consumerName;
+            gdnStreamDriver.chatStreamName = "FPSChat";
+            gdnStreamDriver.chatChannelId = "_Lobby";
             GDNStats.gameName = RwConfig.ReadConfig().streamName;
             GDNStats.Make();
             if (isServer) {
@@ -127,6 +131,18 @@ namespace Macrometa {
             }
 
             if (isServer) {
+                // setup chatstream
+
+                if (!gdnStreamDriver.chatStreamExists) {
+                    gdnStreamDriver.CreateChatStream();
+                    return;
+                }
+            
+                if (!gdnStreamDriver.chatProducerExists) {
+                    gdnStreamDriver.CreateChatProducer(gdnStreamDriver.chatStreamName);
+                    return;
+                }
+                
                 #region get lobby
 
                 if (!gdnDocumentLobbyDriver.lobbyListIsDone) {
@@ -149,6 +165,13 @@ namespace Macrometa {
                     gdnDocumentLobbyDriver.lobbyListIsDone = false;
                     return;
                 }
+
+                if (!tempFlag) {
+                    gdnStreamDriver.chatChannelId = lobbyValue.streamName;
+                    gdnStreamDriver.ChatSendGameInit();
+                    tempFlag = true;
+                }
+                /*
                 
                 if (maxSetInitCount > currentSetInitCount && Time.time > nextInitSetTime) {
                     GameDebug.Log("lobby Init NowSet after complete A: " +  currentSetInitCount);
@@ -169,7 +192,7 @@ namespace Macrometa {
                     gdnDocumentLobbyDriver.PostLobbyDocument(lobbyGameMaster);
                     return;
                 }
-                
+                */
 
                 #endregion
 
