@@ -1598,10 +1598,20 @@ namespace Macrometa {
             switch (command.command) {
                 case LobbyCommandType.RequestRoom:
                     if (isLobbyAdmin) {
-                        GameDebug.Log("Request for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
+                        GameDebug.Log("stream driver Request for lobby Room: " + command.roomNumber + " playerNAme: " + command.playerName
                                       +  "clientId " + command.source);
                         GDNClientLobbyNetworkDriver2.MoveToTeam(command.teamSlot, command.roomNumber);
                     }
+                    break;
+                case LobbyCommandType.GameInit:
+                    GameDebug.Log("stream driver lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    GDNClientLobbyNetworkDriver2.GameInit();
+                    break;
+                case LobbyCommandType.GameReady:
+                    GameDebug.Log("stream driver lobby command from source: " 
+                                  + command.command +" : "+command.source );
+                    GDNClientLobbyNetworkDriver2.GameJoin();
                     break;
                 case LobbyCommandType.AllowServer:
                     GameDebug.Log("unhandled lobby command from source: " 
@@ -1613,14 +1623,7 @@ namespace Macrometa {
                                       + command.command +" : "+command.source );
                     }
                     break;
-                case LobbyCommandType.GameInit:
-                    GameDebug.Log("unhandled lobby command from source: " 
-                                  + command.command +" : "+command.source );
-                    break;
-                case LobbyCommandType.GameReady:
-                    GameDebug.Log("unhandled lobby command from source: " 
-                                  + command.command +" : "+command.source );
-                    break;
+               
                 case LobbyCommandType.SendRttTime:
                     GameDebug.Log("unhandled lobby command from source: " 
                                   + command.command +" : "+command.source );

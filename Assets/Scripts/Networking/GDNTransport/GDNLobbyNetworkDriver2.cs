@@ -24,7 +24,7 @@ namespace Macrometa {
         
         public override void Awake() {
             inst = this;
-            GameDebug.Log("  GDNNetworkDriver Awake");
+            GameDebug.Log("  GDN Lobby NetworkDriver2 Awake");
             PlayStats.remotePlayerCity = RwConfig.ReadConfig().userCity;
             PlayStats.remotePlayerCountry = RwConfig.ReadConfig().userCountry;
             PlayStats.remoteConnectin_Type = RwConfig.ReadConfig().connectionType;

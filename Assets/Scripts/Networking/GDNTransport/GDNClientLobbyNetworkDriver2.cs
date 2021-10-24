@@ -426,6 +426,18 @@ namespace Macrometa {
             return val;
         }
 
+        static public bool GameInit() {
+            var val = _inst.lobbyValue.showGameInitNow;
+            _inst.UpdateLobby();
+            return val;
+        }
+        
+        static public bool GameJoin() {
+            var val = _inst.lobbyValue.joinGameNow;
+            _inst.UpdateLobby();
+            return val;
+        }
+
         static public void SetServerAllowed(string consumerName) {
             GameDebug.Log("pushed SetServerAllowed");
             _inst.lobbyValue.serverAllowed = consumerName;
@@ -466,24 +478,12 @@ namespace Macrometa {
 
             switch (command.command) {
                 case LobbyCommandType.RequestRoom:
-                    GameDebug.Log("Request for lobby Room: " + command.roomNumber + " playerName: " +
+                    GameDebug.Log(" GDNClientLobbyNetworkDriver2 Request for lobby Room: " + command.roomNumber + " playerName: " +
                                   command.playerName
                                   + "clientId " + command.source);
                     GDNClientLobbyNetworkDriver2.MoveToTeam(command.teamSlot, command.roomNumber);
                     // do MoveTo()
                     //      this move if possible and then send update to lobby even if not done
-                    break;
-                case LobbyCommandType.AllowServer:
-                    GameDebug.Log("unhandled lobby command from source: "
-                                  + command.command + " : " + command.source);
-                    //update last heartbeat time in heartBeat collection
-                    //update last heartbeat time
-                    break;
-                case LobbyCommandType.CloseLobby:
-                    GameDebug.Log("unhandled lobby command from source: "
-                                  + command.command + " : " + command.source);
-                    //update last heartbeat time in heartBeat collection
-                    //update last heartbeat time
                     break;
                 case LobbyCommandType.GameInit:
                     GameDebug.Log("unhandled lobby command from source: "
@@ -497,10 +497,22 @@ namespace Macrometa {
                     //update last heartbeat time in heartBeat collection
                     //update last heartbeat time
                     break;
+                case LobbyCommandType.AllowServer:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+                case LobbyCommandType.CloseLobby:
+                    GameDebug.Log("unhandled lobby command from source: "
+                                  + command.command + " : " + command.source);
+                    //update last heartbeat time in heartBeat collection
+                    //update last heartbeat time
+                    break;
+               
                 case LobbyCommandType.SendRttTime:
                     GameDebug.Log("unhandled lobby command from source: "
                                   + command.command + " : " + command.source);
-                    
                     break;
                 case LobbyCommandType.SetRttTarget:
                     GameDebug.Log("unhandled lobby command from source: "
