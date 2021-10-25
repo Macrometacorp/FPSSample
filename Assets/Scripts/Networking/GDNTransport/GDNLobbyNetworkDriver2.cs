@@ -17,7 +17,7 @@ namespace Macrometa {
         public float joinLobbySetDelay = 1;
         // making  maxSetInitCount > 1 cuase a 409 error in joinLobby updates
         //I don't know why
-        public int maxSetInitCount = 1; 
+        public int maxSetInitCount = 3; 
         public int currentSetInitCount = 0;
         public float nextInitSetTime = 0;
         public float initSetDelay = 1; //seconds
@@ -166,13 +166,15 @@ namespace Macrometa {
                     return;
                 }
 
-                if (!tempFlag) {
+                if (maxSetInitCount > currentSetInitCount && Time.time > nextInitSetTime) {
+                    currentSetInitCount++;
+                    nextInitSetTime = Time.time + initSetDelay;
                     gdnStreamDriver.chatChannelId = lobbyValue.streamName;
                     gdnStreamDriver.ChatSendGameInit();
-                    tempFlag = true;
+                    
                 }
-                /*
                 
+                /*
                 if (maxSetInitCount > currentSetInitCount && Time.time > nextInitSetTime) {
                     GameDebug.Log("lobby Init NowSet after complete A: " +  currentSetInitCount);
                     lobbyValue.showGameInitNow = true;
@@ -185,14 +187,14 @@ namespace Macrometa {
                     GameDebug.Log("lobby Init NowSet after complete Z: " +  currentSetInitCount);
                     return;
                 }
-
+                */
                 if (!gdnDocumentLobbyDriver.postLobbyStuff) {
                     GameDebug.Log("make game Master: " + lobbyValue.baseName);
                     var lobbyGameMaster = LobbyGameMaster.GetFromLobbyValue(lobbyValue);
                     gdnDocumentLobbyDriver.PostLobbyDocument(lobbyGameMaster);
                     return;
                 }
-                */
+                
 
                 #endregion
 
@@ -253,9 +255,7 @@ namespace Macrometa {
             
             if ( isServer &&   maxSetJoinCount > currentSetJoinCount && Time.time > nextJoinLobbySetTime) {
                 GameDebug.Log("lobbyJoinGameNowSet after complete A: "+ currentSetJoinCount);
-                lobbyValue.joinGameNow = true;
-                var lobbyLobby = LobbyLobby.GetFromLobbyValue(lobbyValue);
-                gdnDocumentLobbyDriver.UpdateLobbyDocument(lobbyLobby, savedKey);
+                gdnStreamDriver.ChatSendGameReady();
                 currentSetJoinCount++;
                 nextJoinLobbySetTime = Time.time + joinLobbySetDelay;
                 GameDebug.Log("lobbyJoinGameNowSet after complete Z count: " + currentSetJoinCount);
