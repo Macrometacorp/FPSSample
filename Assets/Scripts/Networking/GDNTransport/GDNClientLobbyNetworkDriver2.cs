@@ -52,8 +52,11 @@ namespace Macrometa {
         private ConcurrentQueue<LobbyCommand> _lobbyQueue = new ConcurrentQueue<LobbyCommand>();
 
         static public GDNClientLobbyNetworkDriver2 _inst;
+
+        private static string cls = "GDNClientLobbyNetworkDriver2";// used for logging
         
         public override void Awake() {
+            GameDebugPlus.Init(Application.dataPath,false, "BrowserDriver");
             _inst = this;
             GDNStreamDriver.isClientBrowser = true;
             GDNStreamDriver.localId = localId;
@@ -71,6 +74,7 @@ namespace Macrometa {
             }
             gdnStreamDriver.nodeId = PingStatsGroup.NodeFromGDNData(baseGDNData);
             GameDebug.Log("Setup GDNClientBrowserNetworkDriver: " + gdnStreamDriver.nodeId);
+            GameDebugPlus.Log(MMLog.Mm,cls,"Awake()","Setup GDNClientBrowserNetworkDriver: " + gdnStreamDriver.nodeId);
             MakeGDNConnection(null);
             clientId = gdnStreamDriver.consumerName;
             gdnStreamDriver.chatStreamName = "FPSChat";
@@ -85,10 +89,12 @@ namespace Macrometa {
                 closeLobbyInactive = false;
                 lobbyClosingTime = Time.time + 5;
                 closeLobby = true;
-                lobbyValue.closeLobbyNow = true;
+                GameDebug.Log("update setting closelobbynow  time: " + LobbyDocument.UnixTSNowMS());
+               lobbyValue.closeLobbyNow = true;
             }
             if (closeLobby && Time.time > lobbyClosingTime) {
                 closeLobby = false;
+                GameDebug.Log("closeLobby && Time.time > lobbyClosingTime leave lobby");
                 LeaveLobby();
             }
         }
@@ -150,7 +156,7 @@ namespace Macrometa {
         }
         
         public void UpdateLocalLobby(LobbyValue lobbyUpdate) {
-            GameDebug.Log("UpdateLocalLobby joinGamenow: " +lobbyUpdate.joinGameNow);
+           
             lobbyValue = lobbyUpdate;
             lobbyValue.clientId = clientId;
             lobbyUpdateAvail = true;
@@ -163,7 +169,7 @@ namespace Macrometa {
         
         public void Bodyloop() {
             if (gdnStreamDriver.lobbyUpdateAvail) {
-                GameDebug.Log("gdnStreamDriver.lobbyUpdateAvail");
+                GameDebugPlus.Log("LobbyDoc",cls,"Bodyloop","gdnStreamDriver.lobbyUpdateAvail");
                 UpdateLocalLobby( gdnStreamDriver.lobbyUpdate);
                 gdnStreamDriver.lobbyUpdateAvail = false;
             }
@@ -402,7 +408,9 @@ namespace Macrometa {
         /// <param name="teamIndex"></param>
         static public void MoveToTeam(int teamIndex) {
             _inst.gdnStreamDriver.ChatSendRoomRequest(teamIndex);
+           
             if (teamIndex == -1) {
+                GameDebug.Log(" MoveToTeam -1 leaving lobby");
                 _inst.LeaveLobby();
             }
         }

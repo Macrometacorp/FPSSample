@@ -42,16 +42,16 @@ public class GDNStats {
         GDNStats.playerName = playerName;
         GameDebug.Log("SetPlayerName: " + playerName);
     }
-    
+    /*
     static public void SendKills(string killed, string killedBy) {
         GameDebug.Log("SendKills A");
         var gameStats2 = baseGameStats.CopyOf();
         //gameStats2.timeStamp = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         gameStats2.killed = killed;
         gameStats2.killedBy = killedBy;
-        TestPlayStatsDriver.SendStats(gameStats2);
+        TestPlayStatsDriver. SendStats(gameStats2);
     }
-    
+    */
     /// <summary>
     /// Start stat streams
     /// </summary>

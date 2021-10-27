@@ -33,12 +33,24 @@ expireAfter: The time (in seconds) after a document's creation after which the d
  */
 
 
-    /// Query
-    /// /_fabric/{fabric}/_api/cursor create cursor see web page
-    /// /_fabric/{fabric}/_api/cursor/{cursor-identifier}  get next cursor
+    // Query
+    // /_fabric/{fabric}/_api/cursor create cursor see web page
+    // /_fabric/{fabric}/_api/cursor/{cursor-identifier}  get next cursor
 
+    /// <summary>
+    /// THis is used to hold logging costants
+    /// </summary>
+    public static class MMLog {
+        //log groups
+        public const string Ping = "Ping";
+        public const string Rtt = "Rtt";
+        public const string Mm = "MM";
+    }
+    
+    
     [Serializable]
     public struct GDNData {
+        
         public string apiKey;
         public string federationURL;
         public string tenant;
@@ -405,11 +417,17 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         public string d;//desitination
         public int p;//port  used for connection ID
         public VirtualMsgType t;//msgType
-        public int i;//pingId
+        /// <summary>
+        /// pingId
+        /// </summary>
+        public int i;
         public int z;//payloadByteSize
         // these are only used in TranportPing/Pong
         public int r;// last ping time consumer i.e. remote ping time
-        public int o;// last ping time producer i.e. remote ping time
+        /// <summary>
+        /// last ping time producer i.e. remote ping time
+        /// </summary>
+        public int o;
         public string localId;// node i.e. remote ping time
         public string host; // datacenter host from region
         public string city;

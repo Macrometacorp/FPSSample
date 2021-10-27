@@ -343,6 +343,8 @@ public class Game : MonoBehaviour
 
         var logName = m_isHeadless ? "game_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff") : "game";
         GameDebug.Init(engineLogFileLocation, logName);
+        var logNamePlus = "FPS_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff");
+        GameDebugPlus.Init(engineLogFileLocation,m_isHeadless, logNamePlus);
 
         ConfigVar.Init();
 
@@ -358,7 +360,7 @@ public class Game : MonoBehaviour
         Console.EnqueueCommandNoHistory("exec -s " + k_UserConfigFilename);
 
         // Default is to allow no frame cap, i.e. as fast as possible if vsync is disabled
-        Application.targetFrameRate = -1;
+        Application.targetFrameRate = 60;
 
         if (m_isHeadless)
         {

@@ -33,6 +33,7 @@ namespace Macrometa {
         public float streamClearTime = 0;
         
         public override void Awake() {
+            GameDebugPlus.Init(Application.dataPath,false, "BrowserDriver");
             GDNStreamDriver.isClientBrowser = true;
             GDNStreamDriver.localId = localId;
             gdnErrorHandler = new GDNErrorhandler();
@@ -249,7 +250,7 @@ namespace Macrometa {
             }
 
             if (sendTransportPing) {
-                GameDebug.Log(" PingBodyLoop() sendTransportPing");
+               
                 gdnStreamDriver.SendSimpleTransportPing();
                 sendTransportPing = false;
             }

@@ -42,6 +42,9 @@ namespace Macrometa.Lobby {
         static public long UnixTSNow(long offset) {
             return (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds+ (offset);
         }
+        static public long UnixTSNowMS() {
+            return (long) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+        }
     }
     
     

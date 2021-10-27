@@ -22,6 +22,8 @@ namespace Macrometa {
 
     [Serializable]
     public class GDNStreamDriver {
+        private const string cls = "GDNStreamDriver";
+        
         private MonoBehaviour _monobehaviour;
         public bool  isPlayStatsServerOn = true; //Used to SendMessage data start stats sts stream
         
@@ -112,6 +114,8 @@ namespace Macrometa {
         public bool receivedPongOnly = false;
         public float pongOnlyRtt = 0;
         public GDNStats dummyForSetupGDNStats ;
+        static public GDNStreamDriver inst;
+        
         public class ChatBuffer {
             public static Queue<ReceivedMessage> chatReceivedMessages = new Queue<ReceivedMessage>();
             public static void Add(ReceivedMessage receivedMessage) {
@@ -134,7 +138,7 @@ namespace Macrometa {
             _isServer = gdnNetworkDriver.isServer;
             dummyForSetupGDNStats = GDNStats.instance;
             GameDebug.Log(" //dummyForSetupGDNStats.Start(); " );
-            //dummyForSetupGDNStats.Start();
+            inst = this;
         }
 
         public void setRandomClientName() {
@@ -399,16 +403,16 @@ namespace Macrometa {
             producer1.OnOpen += (o) => {
                 _gdnErrorHandler.isWaiting = false;
                 producerExists = true;
-                GameDebug.Log("Open " + debug);
+                GameDebugPlus.Log(MMLog.Mm,cls,"SetProducer"," Producer Open " + debug);
             };
 
             producer1.OnError += (sender, e) => {
-                GameDebug.Log("WebSocket Error" + debug + " : " + e);
+                GameDebugPlus.LogError(MMLog.Mm,cls,"SetProducer","Error" + debug + " : " + e );
                 if (producer1 != null && producer1.IsOpen) {
                     producer1.Close();
                 }
                 else {
-                    GameDebug.Log("WebSocket " + debug);
+                    //GameDebug.Log("WebSocket " + debug);
                     producerExists = false;
                     _gdnErrorHandler.isWaiting = false;
                 }
@@ -417,7 +421,7 @@ namespace Macrometa {
             producer1.OnClosed += (socket, code, message) => {
                 producerExists = false;
                 _gdnErrorHandler.isWaiting = false;
-                GameDebug.Log("Produce closed: " + code + " : " + message);
+                GameDebugPlus.Log(MMLog.Mm,cls,"SetProducer"," Producer closed"  );
             };
             producer1.Open();
         }
@@ -434,16 +438,17 @@ namespace Macrometa {
             chatProducer1.OnOpen += (o) => {
                 _gdnErrorHandler.isWaiting = false;
                 chatProducerExists = true;
-                GameDebug.Log("Open chatProducer1" + debug);
+                GameDebugPlus.Log(MMLog.Mm,cls,"SetChatProducer","Open chatProducer1" + debug);
             };
 
             chatProducer1.OnError += (sender, e) => {
+                GameDebugPlus.LogError(MMLog.Mm,cls,"SetChatProducer","Error" + debug + " : " + e );
                 GameDebug.Log("WebSocket chatProducer1 Error" + debug + " : " + e);
                 if (producer1 != null && producer1.IsOpen) {
                     producer1.Close();
                 }
                 else {
-                    GameDebug.Log("WebSocket chatProducer1 " + debug);
+                    //GameDebug.Log("WebSocket chatProducer1 " + debug);
                     chatProducerExists  = false;
                     _gdnErrorHandler.isWaiting = false;
                 }
@@ -452,7 +457,7 @@ namespace Macrometa {
             chatProducer1.OnClosed += (socket, code, message) => {
                 chatProducerExists  = false;
                 _gdnErrorHandler.isWaiting = false;
-                GameDebug.Log("chatProducer1 closed: " + code + " : " + message);
+                GameDebugPlus.Log(MMLog.Mm,cls,"SetChatProducer","chatProducer closed"  );
             };
             chatProducer1.Open();
         }
@@ -1116,7 +1121,8 @@ namespace Macrometa {
                 var json  =Encoding.UTF8.GetString(Convert.FromBase64String(receivedMessage.payload));
                 var lobbyBase = JsonUtility.FromJson<LobbyBase>(json);
                 GameDebug.Log(" LobbyDocumentReaderExists.OnMessage stream name:" +  lobbyBase.lobbyValue.streamName + ":"+
-                              chatLobbyId +":"+lobbyBase.lobby);
+                              chatLobbyId +":"+lobbyBase.lobby + " time: " + LobbyDocument.UnixTSNowMS()
+                              );
                 if (lobbyBase.lobby && chatLobbyId ==  lobbyBase.lobbyValue.streamName) {
                     lobbyUpdate = lobbyBase.lobbyValue;
                     lobbyUpdateAvail = true;
@@ -1124,7 +1130,7 @@ namespace Macrometa {
                 
             };
             lobbyDocumentReader.OnError += (sender, e) => {
-                GameDebug.Log("WebSocket Error" + debug + " : " + e);
+                GameDebug.Log("SetDocumentReader WebSocket Error" + debug + " : " + e);
 
                 if (producer1 != null && producer1.IsOpen) {
                     producer1.Close();
@@ -1325,6 +1331,8 @@ namespace Macrometa {
             ps.timeStamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
             ps.playerName = aPlayerName;
             ps.disconnect = true;
+            ps.killed = "";
+            ps.killedBy = "";
             ProducerGameStatsSend(ps);
         }
 
@@ -1367,32 +1375,24 @@ namespace Macrometa {
         public void ReceiveTransportPong(ReceivedMessage receivedMessage) {
             var transportPing = TransportPings.Remove(receivedMessage.properties.i);
             pongOnlyRtt = transportPing.elapsedTime;
-
-
+            GameDebugPlus.Log(MMLog.Rtt,cls,"ReceiveTransportPong","id: "+receivedMessage.properties.i +
+                "Rtt: " +  pongOnlyRtt  );
             if (isStatsOn) {
-               
                 var networkStatsData = pingStatsGroup.AddRtt(transportPing.elapsedTime,
                     producer1.Latency, consumer1.Latency,
                     receivedMessage.properties.o, receivedMessage.properties.r,
                     receivedMessage.properties.localId,
                     receivedMessage.properties.host, receivedMessage.properties.city,
                     receivedMessage.properties.countrycode);
-                
-                if (networkStatsData != null) { 
-                    GameDebug.Log("ReceiveTransportPong C");
+                if (networkStatsData != null) {
                     if (isPlayStatsServerOn) {
-                        GameDebug.Log("ReceiveTransportPong D ");
                         var gameStats2 = PlayStats.GenerataPeriodicGameStats2(networkStatsData,receivedMessage);
-                        GameDebug.Log("ReceiveTransportPong E ");
-                        ProducerGameStatsSend(gameStats2); 
-                        GameDebug.Log("GameStats e2:  " + gameStats2);
+                        ProducerGameStatsSend(gameStats2);
                     }
                     else {
-                        GameDebug.Log("ReceiveTransportPong F");
                         ProducerStatsSend(networkStatsData);
                     }
                 }
-                GameDebug.Log("ReceiveTransportPong G ");
             }
         }
 
@@ -1417,8 +1417,9 @@ namespace Macrometa {
             foreach (var destinationId in gdnConnections.Keys) {
                 if (TransportPings.firstPingTimes.ContainsKey(destinationId) &&
                     Time.time > TransportPings.firstPingTimes[destinationId]) {
-
                     var pingId = TransportPings.Add(destinationId, Time.realtimeSinceStartup, 0);
+                    GameDebugPlus.Log(MMLog.Ping,cls,"SendTransportPings()",
+                        "Id: "+ pingId + " DestId: "+ destinationId + " Dest: "+gdnConnections[destinationId].destination);
                     ProducerSend(destinationId, VirtualMsgType.Ping, new byte[0], pingId);
                 }
                 else if (!TransportPings.firstPingTimes.ContainsKey(destinationId)) {
@@ -1437,6 +1438,8 @@ namespace Macrometa {
                 PushEventQueue(driverTransportEvent);
                 TransportPings.RemoveDestinationId(id);
                 RemoveConnectionId(id);
+                GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
+                    "disconnect id: " + id + " dest:" + gdnConnections[id].destination);
                 GameDebug.Log("lost connection id: " + id);
             }
             
@@ -1455,7 +1458,8 @@ namespace Macrometa {
                 destination = receivedMessage.properties.s,
                 port = receivedMessage.properties.p
             };
-            GameDebug.Log("send pong : "+ receivedMessage.properties.s);
+            GameDebugPlus.Log(MMLog.Ping,cls,"SendTransportPong"," Dest: " + receivedMessage.properties.s + 
+                                     " pingId: " +receivedMessage.properties.i );
             ProducerSend(connection, VirtualMsgType.Pong, new byte[0], receivedMessage.properties.i,
                 producer1.Latency, consumer1.Latency,GDNStats.playerName);
         }

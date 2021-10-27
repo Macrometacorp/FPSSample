@@ -66,8 +66,7 @@ namespace Macrometa {
            }
            GameDebug.Log(" killCounts: " +  killCounts.Count);
            updateGDNStatsKills();
-           GDNStats.baseGameStats.killed = killed;
-           GDNStats.baseGameStats.killedBy = killedBy;
+          
         }
 
         static public void updateGDNStatsKills() {
@@ -181,8 +180,9 @@ namespace Macrometa {
             ps.killed = killed;
             ps.killedBy = killedBy;
             AddKills(killed, killedBy);
-            SendPlayerStats(ps);
-            
+            //SendPlayerStats(ps);
+            GDNStreamDriver.inst.ProducerGameStatsSend(ps);
+            //ProducerGameStatsSend
         }
 
         public static void AddPlayerMatchResultStat(string playerName, string gameType,
@@ -315,7 +315,7 @@ public class GameStats2 {
             gdnCountry = gdnCountry,
             rifleShots = rifleShots,
             grenadeShots = grenadeShots,
-            killed = killed,
+            killed = killed, 
             killedBy = killedBy,
             posX = posX,
             posY = posY,

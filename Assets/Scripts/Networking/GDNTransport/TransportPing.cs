@@ -14,6 +14,7 @@ using BestHTTP;
 namespace Macrometa {
     
     public class TransportPings {
+         private const string cls = "TransportPings";
         /// <summary>
         /// All pings access should be main thread only.
         /// </summary>
@@ -94,7 +95,8 @@ namespace Macrometa {
                 pings.Remove(id);
                 
             } else {
-                GameDebug.LogError("Could not find ping: " + id);
+                GameDebugPlus.Log(MMLog.Mm,cls,"Remove"," id:" + id + 
+                     "pings.Count: " +pings.Count );
                 return new TransportPing {id = -1, elapsedTime = -1, stopwatch = null};
             }
 

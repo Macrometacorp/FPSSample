@@ -185,7 +185,7 @@ namespace Macrometa.Lobby {
                 GameDebug.Log("Post Lobby Doc network: " + www.error);
                 _gdnErrorHandler.currentNetworkErrors++;
                 lobbyIsMade = false;
-                maxSerialIsDone = false;
+                //maxSerialIsDone = false;
             }
             else {
                 
@@ -198,7 +198,7 @@ namespace Macrometa.Lobby {
                     GameDebug.Log("Post Lobby Doc insert response:" +insertResponse.code);
                     _gdnErrorHandler.currentNetworkErrors++;
                     lobbyIsMade  = false;
-                    maxSerialIsDone = false;
+                    //maxSerialIsDone = false;
                 }
                 else {
                     GameDebug.Log("Post Lobby Doc key: "+ insertResponse._key);
@@ -216,27 +216,33 @@ namespace Macrometa.Lobby {
         public void UpdateLobbyDocument(LobbyDocument lobbyDocument, string key) {
             _gdnErrorHandler.isWaiting = true;
             String data = JsonUtility.ToJson(lobbyDocument);
-            GameDebug.Log("replace Lobby Doc : "+ lobbyDocument.lobbyValue.DisplayName() + " : " + key + " : "+ lobbyDocument.lobbyValue.joinGameNow  );
+            GameDebug.Log("replace Lobby Doc : "+ lobbyDocument.lobbyValue.DisplayName() +
+                          " : " + key + " time: "+ LobbyDocument.UnixTSNowMS()  );
             GameDebug.Log(data);
             _monoBehaviour.StartCoroutine(PutReplaceDocument(_gdnData, lobbiesCollectionName,
                 data,key, UpdateLobbyDocumentCallback));
         }
 
         public void UpdateLobbyDocumentCallback(UnityWebRequest www) {
+            GameDebug.Log("UpdateLobbyDocumentCallback : "  +
+                          " time: "+ LobbyDocument.UnixTSNowMS()  );
             _gdnErrorHandler.isWaiting = false;
             if (www.isHttpError || www.isNetworkError) {
-                GameDebug.Log("replace Lobby Doc protocol error : " + www.error);
+                GameDebug.Log("x replace Lobby Doc protocol error : " + www.error +
+                              " time: "+ LobbyDocument.UnixTSNowMS()  );
                 _gdnErrorHandler.currentNetworkErrors++;
             }
             else {
                 var baseHttpReply = JsonUtility.FromJson<BaseHtttpReply>(www.downloadHandler.text);
                 if (baseHttpReply.error == true) {
-                    GameDebug.Log("replace Lobby Doc Http :" +baseHttpReply.code);
+                    GameDebug.Log("x replace Lobby Doc Http :" +baseHttpReply.code+
+                                  " time: "+ LobbyDocument.UnixTSNowMS()  );
                     _gdnErrorHandler.currentNetworkErrors++;
-                    maxSerialIsDone = false;
+                    //maxSerialIsDone = false;
                 }
                 else {
-                    GameDebug.Log("replace Lobby Doc   ");
+                    GameDebug.Log("x replace Lobby Doc   "+
+                                  " time: "+ LobbyDocument.UnixTSNowMS()  );
                     _gdnErrorHandler.currentNetworkErrors = 0;
                 }
             }
