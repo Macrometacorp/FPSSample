@@ -15,7 +15,7 @@ using UnityEngine;
 //    Only used for things that should not be logged. Typically reponses to user commands. Only shown on Console.
 //
 
-public static class GameDebug
+public static class  GameDebug
 {
     static System.IO.StreamWriter logFile = null;
 
@@ -44,6 +44,11 @@ public static class GameDebug
         GameDebug.Log("GameDebug initialized. Logging to " + logfilePath + "/" + name);
     }
 
+    public static string UnixTSNowMS() {
+        return DateTime.Now.ToUniversalTime()
+            .ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+    }
+    
     public static void Shutdown()
     {
         Application.logMessageReceived -= LogCallback;
@@ -79,9 +84,9 @@ public static class GameDebug
 
     static void _Log(string message)
     {
-        Console.Write(Time.frameCount + ": " + message);
+        Console.Write(UnixTSNowMS() + " " +Time.frameCount + ": " + message);
         if (logFile != null)
-            logFile.WriteLine(Time.frameCount + ": " + message + "\n");
+            logFile.WriteLine(UnixTSNowMS() + " " +Time.frameCount + ": " + message + "\n");
     }
 
     public static void LogError(string message)

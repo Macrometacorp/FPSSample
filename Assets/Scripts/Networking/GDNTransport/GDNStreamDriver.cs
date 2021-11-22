@@ -478,12 +478,12 @@ namespace Macrometa {
             };
 
             ws.OnError += (sender, e) => {
-                GameDebug.Log("WebSocket Error" + debug + " : " + e);
+                GameDebugPlus.LogError(MMLog.Mm,cls,"SetStatsProducer",
+                    "WebSocket Error " + debug + " : " + e );
                 if (ws != null && ws.IsOpen) {
                     ws.Close();
                 }
                 else {
-                    GameDebug.Log("WebSocket " + debug);
                     producerStatsExists = false;
                     _gdnErrorHandler.isWaiting = false;
                 }
@@ -629,7 +629,10 @@ namespace Macrometa {
                 );
             }
 
+            GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "send msg");
+            
             producer1.Send(msgJSON);
+            GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "post send msg");
             if (isStatsOn || isPlayStatsClientOn) {
                 producer1Stats.IncrementCounts(msgJSON.Length);
             }

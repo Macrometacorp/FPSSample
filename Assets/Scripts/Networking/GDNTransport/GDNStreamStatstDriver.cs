@@ -38,15 +38,14 @@ namespace Macrometa {
        
         private GDNErrorhandler _gdnErrorHandler;
         private GDNData _gdnData;
-
         
-
         public GDNStreamStatsDriver(TestPlayStatsDriver gdnNetworkDriver) {
             _monobehaviour = gdnNetworkDriver;
             _gdnErrorHandler = gdnNetworkDriver.gdnErrorHandler;
-            _gdnData = gdnNetworkDriver.baseGDNData;
-           
-            
+            _gdnData = new GDNData( gdnNetworkDriver.baseGDNData) {
+                //for to global because dash board uses global stream
+                isGlobal = true
+            };
         }
 
         public void setRandomClientName() {

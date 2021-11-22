@@ -1,0 +1,18 @@
+{
+  "dummyTrafficQuantity": 0,
+  "statsGroupSize": 0,
+  "isServer": true,
+  "gameName": "test",
+  "streamName": "test_2",
+  "playerName": "Boris",
+  "userCity": "Sofia",
+  "userCountry": "BG",
+  "connectionType": "Option A",
+  "gdnData": {
+    "apiKey": "unity_fps_macrometa.io.FPS.cH44XXo7KX0ENR0verogNwmxytkPUTcHQkeOmW4ImMQ5dtvYeqfT0KOJvAbbmpyU9fb6d1",
+    "federationURL": "gaming2-ap-northeast.eng.macrometa.io",
+    "tenant": "unity_fps_macrometa.io",
+    "fabric": "_system",
+    "isGlobal": true
+  }
+}

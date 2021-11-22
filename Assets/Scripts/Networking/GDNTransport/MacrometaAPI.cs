@@ -45,6 +45,7 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         public const string Ping = "Ping";
         public const string Rtt = "Rtt";
         public const string Mm = "MM";
+        public const string Latency = "Ltcy";
     }
     
     
@@ -60,6 +61,18 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         public string region => isGlobal ? "c8global" : "c8local";
 
         public string requestURL => "api-" + federationURL;
+
+        /// <summary>
+        /// in case I forget and make this a class copy is needed
+        /// </summary>
+        /// <param name="old"></param>
+        public GDNData(GDNData old) {
+            apiKey = old.apiKey;
+            federationURL = old.federationURL;
+            tenant = old.tenant;
+            fabric = old.fabric;
+            isGlobal = old.isGlobal;
+        }
 
         #region Query
 
@@ -462,6 +475,8 @@ expireAfter: The time (in seconds) after a document's creation after which the d
     }
     
     public class MacrometaAPI {
+
+        private const string cls = "MacrometaAPI";
         public static UnityWebRequest WebPost(string url, string data,GDNData gdnData) {
             UnityWebRequest www = new UnityWebRequest(url, "POST");
             byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(data);
@@ -616,8 +631,9 @@ expireAfter: The time (in seconds) after a document's creation after which the d
                     yield break;
                 }
                 otp = JsonUtility.FromJson<OTPResult>(www.downloadHandler.text);
-            }
+            } 
             Debug.Log( "LIVE producer url :"+gdnData.ProducerURL(streamName));
+            GameDebugPlus.Log(MMLog.Mm, cls,"Producer", "producer url :"+gdnData.ProducerURL(streamName));
             callback(new WebSocket(new Uri(gdnData.ProducerURL(streamName) + "?otp=" + otp.otp)),
                 "LIVE producer "+ streamName);
         }

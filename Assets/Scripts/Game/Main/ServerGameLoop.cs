@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using Macrometa;
 using UnityEngine;
 using Unity.Entities;
 using NetworkCompression;
 using UnityEngine.Profiling;
 using SQP;
 
-public class ServerGameWorld : ISnapshotGenerator, IClientCommandProcessor
-{
+public class ServerGameWorld : ISnapshotGenerator, IClientCommandProcessor {
+    public const string cls = "ServerGameWorld";
     public int WorldTick { get { return m_GameWorld.worldTime.tick; } }
     public int TickRate
     {
@@ -167,7 +168,8 @@ public class ServerGameWorld : ISnapshotGenerator, IClientCommandProcessor
     {
         Profiler.BeginSample("ServerGameWorld.ServerTickUpdate()");
 
-        m_GameWorld.worldTime.tick++;
+        m_GameWorld.worldTime.tick++; 
+        GameDebugPlus.Log(MMLog.Latency,cls,"ServerTickUpdate"," tick: " +  m_GameWorld.worldTime.tick);
         m_GameWorld.worldTime.tickDuration = m_GameWorld.worldTime.tickInterval;
         m_GameWorld.frameDuration = m_GameWorld.worldTime.tickInterval;
 
