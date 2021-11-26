@@ -630,8 +630,9 @@ namespace Macrometa {
             }
 
             GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "send msg");
-            
+            TransportPings.UpdateProcessTime(pingId);
             producer1.Send(msgJSON);
+                
             GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "post send msg");
             if (isStatsOn || isPlayStatsClientOn) {
                 producer1Stats.IncrementCounts(msgJSON.Length);
@@ -1383,7 +1384,10 @@ namespace Macrometa {
             if (isStatsOn) {
                 var networkStatsData = pingStatsGroup.AddRtt(transportPing.elapsedTime,
                     producer1.Latency, consumer1.Latency,
-                    receivedMessage.properties.o, receivedMessage.properties.r,
+                    receivedMessage.properties.o,
+                    receivedMessage.properties.r,
+                    0,  //should this be local?
+                    receivedMessage.properties.remoteProcessingPing,
                     receivedMessage.properties.localId,
                     receivedMessage.properties.host, receivedMessage.properties.city,
                     receivedMessage.properties.countrycode);

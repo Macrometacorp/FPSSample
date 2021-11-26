@@ -437,6 +437,7 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         public int z;//payloadByteSize
         // these are only used in TranportPing/Pong
         public int r;// last ping time consumer i.e. remote ping time
+        public int remoteProcessingPing;
         /// <summary>
         /// last ping time producer i.e. remote ping time
         /// </summary>

@@ -228,7 +228,13 @@ namespace Macrometa {
             ps.playerName = networkStatsData.remoteId;
             ps.gdnCity = networkStatsData.remoteCity;
             ps.gdnCountry = networkStatsData.remoteCountrycode;
-            ps.rtt = networkStatsData.rttAverage; 
+            ps.rtt = networkStatsData.rttAverage;
+            ps.cnsmLocalPing = networkStatsData.streamInLocalPingAverage;
+            ps.prdLocalPing = networkStatsData.streamOutLocalPingAverage;
+            ps.cnsmRemotePing = networkStatsData.streamInRemotePingAverage;
+            ps.prdRemotePing = networkStatsData.streamOutRemotePingAverage;
+            ps.localProcessingPing = networkStatsData.localProcessingPingAverage;
+            ps.remoteProcessingPing =networkStatsData.remoteProcessingPingAverage;
             ps.throughput = networkStatsData.streamOutBytes; // ??? needs to change but useful as dummy data
             ps.health = receivedMessage.properties.health;
             ps.fps = receivedMessage.properties.fps;
@@ -266,6 +272,12 @@ public class GameStats2 {
     public TeamInfo team0;
     public TeamInfo team1;
     public int rtt;
+    public int prdLocalPing;
+    public int cnsmLocalPing;
+    public int prdRemotePing;
+    public int cnsmRemotePing;
+    public int localProcessingPing;
+    public int remoteProcessingPing;
     public string gdnCity;
     public string gdnCountry;
     public int rifleShots;

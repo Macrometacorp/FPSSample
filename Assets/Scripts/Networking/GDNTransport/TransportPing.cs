@@ -85,7 +85,20 @@ namespace Macrometa {
                 //Debug.Log("pings id: "+ id + "  destinationID: "+ destinationID );
             }
         }
-        
+
+        public static void UpdateProcessTime(int id) {
+            TransportPing ping;
+            if (pings.ContainsKey(id)) {
+                ping = pings[id];
+                ping.processingTime = ping.stopwatch.ElapsedMilliseconds;
+                GameDebugPlus.Log(MMLog.Mm,cls," UpdateProcessTime",
+                    " id:" + id + "ping.processingTime: " +ping.processingTime );
+
+            } else {
+                GameDebugPlus.LogError(MMLog.Mm,cls," UpdateProcessTime",
+                    "not found id:" + id + "pings.Count: " +pings.Count );
+            }
+        }
         
         public static TransportPing Remove(int id) {
             //GameDebug.Log("Ping Remove count: "+ pings.Count);
@@ -142,6 +155,7 @@ namespace Macrometa {
         public int destinationId;
         public Stopwatch stopwatch;
         public long elapsedTime;
+        public long processingTime;
         
         public override string ToString() {
             return destinationId + " : " +elapsedTime.ToString();
@@ -184,6 +198,9 @@ namespace Macrometa {
         public float streamOutRemotePingAverage;
         public float streamInLocalPingAverage;
         public float streamInRemotePingAverage;
+        public float localProcessingPingAverage;
+        public float remoteProcessingPingAverage;
+        
 
         public TotalStat streamOutMessages = new TotalStat();
         public TotalStat streamOutBytes = new TotalStat();
@@ -194,6 +211,8 @@ namespace Macrometa {
         public float streamOutRemotePingTotal;
         public float streamInLocalPingTotal;
         public float streamInRemotePingTotal;
+        public float localProcessingPingTotal;
+        public float remoteProcessingPingTotal;
 
         public float rttTotal = 0;
         public float rttAverage;
@@ -323,6 +342,8 @@ namespace Macrometa {
                 streamOutRemotePingAverage =  (int)streamOutRemotePingAverage,
                 streamInLocalPingAverage = (int)streamInLocalPingAverage,
                 streamInRemotePingAverage = (int)streamInRemotePingAverage,
+                localProcessingPingAverage = (int) localProcessingPingAverage, 
+                remoteProcessingPingAverage = (int) remoteProcessingPingAverage,
                 streamOutMessages = (int) streamOutMessages.val,
                 streamInMessages = (int) streamInMessages.val,
                 streamOutBytes = (int) streamOutBytes.val,
@@ -343,6 +364,8 @@ namespace Macrometa {
             public int streamOutRemotePingAverage; // in milliseconds 2 decimalplaces
             public int streamInLocalPingAverage; // in milliseconds 2 decimalplaces
             public int streamInRemotePingAverage; // in milliseconds 2 decimalplaces
+            public int localProcessingPingAverage;
+            public int remoteProcessingPingAverage;
             public long dateTime;  // unix time stamp  UTC +0
             public string localNodeId; // not full domain name missing macrometa.io
             public string localHost;  //datacenter ip
@@ -366,13 +389,16 @@ namespace Macrometa {
     
         
         public NetworkStatsData AddRtt(float rtt, float outLocalPing, float inLocalPing,
-            float outRemotePing,float inRemotePing, string remoteId, string host, string city, string countrycode) {
+            float outRemotePing,float inRemotePing, float  localProcessingPing,float remoteProcessingPing,
+            string remoteId, string host, string city, string countrycode) {
             NetworkStatsData result= null;
             rttTotal += rtt;
             streamOutLocalPingTotal += outLocalPing;
             streamInLocalPingTotal += inLocalPing;
             streamOutRemotePingTotal += outRemotePing;
             streamInRemotePingTotal += inRemotePing;
+            localProcessingPingTotal += localProcessingPing;
+            remoteProcessingPingTotal += remoteProcessingPing;
             this.remoteId = remoteId;
             remoteHost = host;
             remoteCity = city;
@@ -410,8 +436,10 @@ namespace Macrometa {
             streamInLocalPingAverage = streamInLocalPingTotal / (float)latencyCurrentCount;
             streamOutRemotePingAverage = streamOutRemotePingTotal / (float)latencyCurrentCount;
             streamInRemotePingAverage = streamInRemotePingTotal / (float)latencyCurrentCount;
+            localProcessingPingAverage = localProcessingPingTotal / (float)latencyCurrentCount;
+            remoteProcessingPingAverage = remoteProcessingPingTotal / (float)latencyCurrentCount;
             totalPingAverage = (streamOutLocalPingAverage + streamInLocalPingAverage +
-                               streamOutRemotePingAverage +  streamOutRemotePingAverage)/2.0f;
+                                streamOutRemotePingAverage +  streamInRemotePingAverage)/2.0f;
             extraAverage = rttAverage - totalPingAverage;
 
             
@@ -421,6 +449,8 @@ namespace Macrometa {
             streamInLocalPingTotal = 0;
             streamOutRemotePingTotal = 0;
             streamInRemotePingTotal = 0;
+            localProcessingPingTotal = 0;
+            remoteProcessingPingTotal = 0;
             latencyCurrentCount = 0;
             
             streamOutBytes.SetPrev();

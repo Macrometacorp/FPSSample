@@ -81,7 +81,7 @@ public class GameWorld
         
         GameDebug.Assert(m_EntityManager.IsCreated);
 
-        worldTime.tickRate = 60;
+        worldTime.tickRate = 30;
 
         nextTickTime = Game.frameTime;
 
