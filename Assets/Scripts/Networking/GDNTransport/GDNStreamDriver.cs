@@ -33,7 +33,7 @@ namespace Macrometa {
         public static bool isStatsOn = false; //off by default for compatibility 
         public static bool sendDummyTraffic = false; //off by default for compatibility
         public static int missedPingDisconnect = 3;
-        public static float initialPingDelay = 30; // wait period before first ping is sent after connect
+        public static float initialPingDelay = 10; // wait period before first ping is sent after connect
         public static bool isClientBrowser = false;
         public static bool isLobbyAdmin = false;
         public static string lobbyTarget;
@@ -50,10 +50,11 @@ namespace Macrometa {
         public WebSocket producerStats;
         public WebSocket producerGameStats;
         
-        
         public StreamStats consumer1Stats;
         public StreamStats producer1Stats;
         public WebSocket lobbyDocumentReader; // lobby collection stream
+        public TransportProcessTimer transportPongTimer;
+
         public Region region;
         public string consumerName = "Server";
         public string serverName;
@@ -139,6 +140,9 @@ namespace Macrometa {
             dummyForSetupGDNStats = GDNStats.instance;
             GameDebug.Log(" //dummyForSetupGDNStats.Start(); " );
             inst = this;
+            transportPongTimer = new TransportProcessTimer() {
+                stopwatch = new Stopwatch()
+            };
         }
 
         public void setRandomClientName() {
@@ -591,13 +595,14 @@ namespace Macrometa {
                 properties.host = region.host;
                 properties.city = region.locationInfo.city;
                 properties.countrycode = region.locationInfo.countrycode;
-               
+                GameDebug.Log("ProducerSend connect: "+ GDNStats.playerName);
             }
             
             if ( msgType == VirtualMsgType.Pong) {
                 properties.i = pingId;
                 properties.r = pingTimeR;
                 properties.o = pingTimeO;
+                properties.remoteProcessingPing = (int)transportPongTimer.prevProcessingTime;
                 properties.host = region.host;
                 properties.city = region.locationInfo.city;
                 properties.countrycode = region.locationInfo.countrycode;
@@ -629,10 +634,20 @@ namespace Macrometa {
                 );
             }
 
-            GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "send msg");
-            TransportPings.UpdateProcessTime(pingId);
+            GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "send msg A");
+            
+
             producer1.Send(msgJSON);
-                
+            if (msgType == VirtualMsgType.Ping) {
+                GameDebugPlus.Log(MMLog.Mm,cls, "ProducerSend",
+                    " ping id:" + pingId) ;
+                TransportPings.UpdateProcessTime(pingId);
+            }  
+            if (msgType == VirtualMsgType.Pong) {
+                transportPongTimer.ProcessEnd();
+                GameDebugPlus.Log(MMLog.Mm,cls, "ProducerSend",
+                    " pong ms: " + transportPongTimer.prevProcessingTime) ;
+            }  
             GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "post send msg");
             if (isStatsOn || isPlayStatsClientOn) {
                 producer1Stats.IncrementCounts(msgJSON.Length);
@@ -778,7 +793,7 @@ namespace Macrometa {
 
                             break;
                         case VirtualMsgType.Ping:
-                            //GameDebug.Log("Consumer1.OnMessage Ping ");
+                            transportPongTimer.StartProcess();
                             command = new GDNStreamDriver.Command() {
                                 command = QueueCommand.SendTransportPong,
                                 receivedMessage = receivedMessage
@@ -788,6 +803,7 @@ namespace Macrometa {
                             break;
 
                         case VirtualMsgType.Pong:
+                            TransportPings.Recieved(receivedMessage.properties.i);
                             //GameDebug.Log("Consumer1.OnMessage Pong ");
                             command = new GDNStreamDriver.Command() {
                                 command = QueueCommand.ReceiveTransportPong,
@@ -885,6 +901,7 @@ namespace Macrometa {
                     switch (receivedMessage.properties.t) {
                         case VirtualMsgType.Pong:
                             receivedPongOnly = true;
+                            TransportPings.Recieved(receivedMessage.properties.i);
                             var transportPing = TransportPings.Remove(receivedMessage.properties.i);
                             pongOnlyRtt = transportPing.elapsedTime;
                             GameDebug.Log(" consumer1.OnMessage pong only acted on"  );
@@ -1421,7 +1438,11 @@ namespace Macrometa {
         /// need to check games list code again
         /// </summary>
         public void SendTransportPings() {
+            GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
+                "gdnConnections.Count: " +gdnConnections.Count);
             foreach (var destinationId in gdnConnections.Keys) {
+                GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
+                    "destinationId: " +destinationId + " time: " +  Time.time );
                 if (TransportPings.firstPingTimes.ContainsKey(destinationId) &&
                     Time.time > TransportPings.firstPingTimes[destinationId]) {
                     var pingId = TransportPings.Add(destinationId, Time.realtimeSinceStartup, 0);
@@ -1431,6 +1452,9 @@ namespace Macrometa {
                 }
                 else if (!TransportPings.firstPingTimes.ContainsKey(destinationId)) {
                     TransportPings.firstPingTimes[destinationId] = Time.time + initialPingDelay;
+                    GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
+                        "destinationId: " +destinationId + " first ping time: " +
+                        TransportPings.firstPingTimes[destinationId] );
                 }
             }
             

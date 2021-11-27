@@ -99,7 +99,19 @@ namespace Macrometa {
                     "not found id:" + id + "pings.Count: " +pings.Count );
             }
         }
-        
+
+        public static void Recieved(int id) {
+            if (pings.ContainsKey(id)) {
+                var ping =  pings[id];
+                ping.elapsedTime =  ping.stopwatch.ElapsedMilliseconds;
+                pings[id] = ping;
+
+            } else {
+                GameDebugPlus.LogError(MMLog.Mm,cls,"Remove"," id:" + id + 
+                                                        "pings.Count: " +pings.Count );
+            }
+        }
+
         public static TransportPing Remove(int id) {
             //GameDebug.Log("Ping Remove count: "+ pings.Count);
             TransportPing result;
@@ -116,7 +128,7 @@ namespace Macrometa {
             if (result.stopwatch == null) {
                 GameDebug.LogError("missing stopwatch ping: " + id);
             }
-            result.elapsedTime = result.stopwatch.ElapsedMilliseconds;
+            //result.elapsedTime = result.stopwatch.ElapsedMilliseconds;
             //GameDebug.Log("Ping Removed OK: "+ id + " : " + result.elapsedTime);
             stopWatchPool.Return(result.stopwatch);
             result.stopwatch = null;
@@ -124,7 +136,7 @@ namespace Macrometa {
         }
 
         /// <summary>
-        /// used whne shutting down all streams 
+        /// used when shutting down all streams 
         /// </summary>
         /// <returns></returns>
         public static void  Clear() {
@@ -160,6 +172,24 @@ namespace Macrometa {
         public override string ToString() {
             return destinationId + " : " +elapsedTime.ToString();
         }
+    }
+    /// <summary>
+    /// Track GDN Return Trip time processing timer
+    /// this only tracks one process of given type at a time. 
+    /// </summary>
+    public struct TransportProcessTimer {
+      
+        public Stopwatch stopwatch ;
+        public long prevProcessingTime;
+        
+        public void StartProcess() {
+            stopwatch.Restart();
+        }
+        
+        public void ProcessEnd() {
+            prevProcessingTime = stopwatch.ElapsedMilliseconds;
+            stopwatch.Reset();
+        } 
     }
     
     public class PingStatsGroup {

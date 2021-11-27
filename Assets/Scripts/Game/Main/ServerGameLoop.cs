@@ -169,7 +169,7 @@ public class ServerGameWorld : ISnapshotGenerator, IClientCommandProcessor {
         Profiler.BeginSample("ServerGameWorld.ServerTickUpdate()");
 
         m_GameWorld.worldTime.tick++; 
-        GameDebugPlus.Log(MMLog.Latency,cls,"ServerTickUpdate"," tick: " +  m_GameWorld.worldTime.tick);
+        //GameDebugPlus.Log(MMLog.Latency,cls,"ServerTickUpdate"," tick: " +  m_GameWorld.worldTime.tick);
         m_GameWorld.worldTime.tickDuration = m_GameWorld.worldTime.tickInterval;
         m_GameWorld.frameDuration = m_GameWorld.worldTime.tickInterval;
 

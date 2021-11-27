@@ -270,6 +270,7 @@ namespace Macrometa {
 
             if (GDNStreamDriver.isSocketPingOn && !gdnStreamDriver.pingStarted) {
                 gdnStreamDriver.pingStarted = true;
+                GameDebug.Log("gdnStreamDriver.pingStarted ");
                 if (GDNStreamDriver.isStatsOn) {
                     PingStatsGroup.Init(Application.dataPath, "LatencyStats", gdnStreamDriver.statsGroupSize);
                     gdnStreamDriver.InitPingStatsGroup();
