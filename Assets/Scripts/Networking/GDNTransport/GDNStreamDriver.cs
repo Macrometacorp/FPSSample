@@ -1397,13 +1397,13 @@ namespace Macrometa {
             var transportPing = TransportPings.Remove(receivedMessage.properties.i);
             pongOnlyRtt = transportPing.elapsedTime;
             GameDebugPlus.Log(MMLog.Rtt,cls,"ReceiveTransportPong","id: "+receivedMessage.properties.i +
-                "Rtt: " +  pongOnlyRtt  );
+                "Rtt: " +  pongOnlyRtt + " transportPing.processingTime: " +transportPing.processingTime);
             if (isStatsOn) {
                 var networkStatsData = pingStatsGroup.AddRtt(transportPing.elapsedTime,
                     producer1.Latency, consumer1.Latency,
                     receivedMessage.properties.o,
                     receivedMessage.properties.r,
-                    0,  //should this be local?
+                    transportPing.processingTime, 
                     receivedMessage.properties.remoteProcessingPing,
                     receivedMessage.properties.localId,
                     receivedMessage.properties.host, receivedMessage.properties.city,

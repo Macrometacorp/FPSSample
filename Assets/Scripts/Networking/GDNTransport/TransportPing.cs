@@ -91,6 +91,7 @@ namespace Macrometa {
             if (pings.ContainsKey(id)) {
                 ping = pings[id];
                 ping.processingTime = ping.stopwatch.ElapsedMilliseconds;
+                pings[id] = ping;
                 GameDebugPlus.Log(MMLog.Mm,cls," UpdateProcessTime",
                     " id:" + id + "ping.processingTime: " +ping.processingTime );
 
