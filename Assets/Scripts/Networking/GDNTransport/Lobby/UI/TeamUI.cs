@@ -6,17 +6,20 @@ using TMPro;
 using UnityEngine;
 
 public class TeamUI : MonoBehaviour {
+   const string cls ="TeamUI";
+   
    public LobbyUI lobby;
    public int teamIndex;
    public List<PlayerUI> players;
    public TMP_InputField teamName;
    public GameObject highlight;
+   public GameObject addBots;
    
    
    private void Awake() {
       players.Clear();
-      players.AddRange(GetComponentsInChildren<PlayerUI>());
-   }
+      players.AddRange(GetComponentsInChildren<PlayerUI>());  
+    }
 
    // Macrometa.Lobby. is needed to stop FPSSample conflicts
    public void DisplayTeam(Macrometa.Lobby.Team team, string anOwnerId, string rttTarget, string startServer) {
@@ -30,6 +33,10 @@ public class TeamUI : MonoBehaviour {
       }
 
       var serverButtons = lobby.isAdmin;
+      if (addBots != null) {
+         GameDebugPlus.Log(MMLog.Mm, cls, "DisplayTeam", "addBots lobby.isAdmin: " + lobby.isAdmin);
+         addBots.SetActive(serverButtons);
+      }
       highlight.SetActive(false);
       var pos = team.Find(anOwnerId);
       var rttPos = team.Find(rttTarget);

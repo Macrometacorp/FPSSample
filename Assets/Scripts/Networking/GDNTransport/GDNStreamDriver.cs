@@ -634,7 +634,7 @@ namespace Macrometa {
                 );
             }
 
-            GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "send msg A");
+            //GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "send msg A");
             
 
             producer1.Send(msgJSON);
@@ -648,7 +648,7 @@ namespace Macrometa {
                 GameDebugPlus.Log(MMLog.Mm,cls, "ProducerSend",
                     " pong ms: " + transportPongTimer.prevProcessingTime) ;
             }  
-            GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "post send msg");
+            //GameDebugPlus.Log(MMLog.Latency, cls, "ProducerSend", "post send msg");
             if (isStatsOn || isPlayStatsClientOn) {
                 producer1Stats.IncrementCounts(msgJSON.Length);
             }

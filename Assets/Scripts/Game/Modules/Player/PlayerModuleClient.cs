@@ -242,6 +242,8 @@ public class PlayerModuleClient
     
     [ConfigVar(Name = "debugmove", DefaultValue = "0", Description = "Should client perform debug movement")]
     static ConfigVar m_debugMove;
+    [ConfigVar(Name = "debugmovename", DefaultValue = "bot", Description = "defualt debug client name ")]
+    static ConfigVar m_debugMoveName;
     float m_debugMoveDuration;
     float m_debugMovePhaseDuration;
     float m_debugMoveTurnSpeed;

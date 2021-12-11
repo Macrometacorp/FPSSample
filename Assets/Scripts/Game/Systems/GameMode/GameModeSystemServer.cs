@@ -35,8 +35,9 @@ public class Team
 }
 
 [DisableAutoCreation]
-public class GameModeSystemServer : ComponentSystem
-{
+public class GameModeSystemServer : ComponentSystem {
+    private const string cls = "GameModeSystemServer";
+    
     [ConfigVar(Name = "game.respawndelay", DefaultValue = "10", Description = "Time from death to respawning")]
     public static ConfigVar respawnDelay;
     [ConfigVar(Name = "game.modename", DefaultValue = "assault", Description = "Which gamemode to use")]
@@ -119,14 +120,14 @@ public class GameModeSystemServer : ComponentSystem
         m_TeamBaseComponentGroup = GetComponentGroup(typeof(TeamBase));
         m_SpawnPointComponentGroup = GetComponentGroup(typeof(SpawnPoint));
         m_PlayersComponentGroup = GetComponentGroup(typeof(PlayerState), typeof(PlayerCharacterControl));
-       /*
+       
         var spawnPoints = m_SpawnPointComponentGroup.GetComponentArray<SpawnPoint>();
         for (var i = 0; i < spawnPoints.Length; i++)
         {
             var spawnPoint = spawnPoints[i];
-            GameDebug.Log("spawn: " + spawnPoint.teamIndex+ " "+spawnPoint.name + " " + spawnPoint.transform.position );
+            GameDebugPlus.Log(MMLog.Mm, cls,"OnCreateManager", "spawn: " + spawnPoint.teamIndex+ " "+spawnPoint.name + " " + spawnPoint.transform.position );
         }
-        */
+        
     }
 
     new public ComponentGroup GetComponentGroup(params ComponentType[] componentTypes)
