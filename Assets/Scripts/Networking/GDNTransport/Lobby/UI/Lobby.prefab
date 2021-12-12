@@ -671,7 +671,9 @@ MonoBehaviour:
   players: []
   teamName: {fileID: 0}
   highlight: {fileID: 7548061609616836621}
-  addBots: {fileID: 0}
+  botsControl: {fileID: 0}
+  addBotsButton: {fileID: 0}
+  removeBotsButton: {fileID: 0}
 --- !u!1 &1468511231847862228
 GameObject:
   m_ObjectHideFlags: 0
@@ -5719,7 +5721,9 @@ MonoBehaviour:
   players: []
   teamName: {fileID: 0}
   highlight: {fileID: 6172114767775030639}
-  addBots: {fileID: 0}
+  botsControl: {fileID: 0}
+  addBotsButton: {fileID: 0}
+  removeBotsButton: {fileID: 0}
 --- !u!1 &6452070621985747462
 GameObject:
   m_ObjectHideFlags: 0
@@ -6211,7 +6215,9 @@ MonoBehaviour:
   players: []
   teamName: {fileID: 3808683917310742611}
   highlight: {fileID: 1710973594656336893}
-  addBots: {fileID: 6210036721414921617}
+  botsControl: {fileID: 6210036721414921617}
+  addBotsButton: {fileID: 5476748403239336522}
+  removeBotsButton: {fileID: 1327708485034655385}
 --- !u!1 &6452070622218199598
 GameObject:
   m_ObjectHideFlags: 0
@@ -6992,7 +6998,9 @@ MonoBehaviour:
   players: []
   teamName: {fileID: 794117142325742984}
   highlight: {fileID: 4635244169869172960}
-  addBots: {fileID: 5388338766644290878}
+  botsControl: {fileID: 5388338766644290878}
+  addBotsButton: {fileID: 6278382328001274708}
+  removeBotsButton: {fileID: 7522291746990574911}
 --- !u!1 &6452070622750304300
 GameObject:
   m_ObjectHideFlags: 0

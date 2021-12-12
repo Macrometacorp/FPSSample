@@ -4,6 +4,8 @@ using Macrometa;
 using Macrometa.Lobby;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class TeamUI : MonoBehaviour {
    const string cls ="TeamUI";
@@ -13,14 +15,25 @@ public class TeamUI : MonoBehaviour {
    public List<PlayerUI> players;
    public TMP_InputField teamName;
    public GameObject highlight;
-   public GameObject addBots;
-   
-   
+   public GameObject botsControl;
+   public Button addBotsButton;
+   public Button removeBotsButton;
+
    private void Awake() {
       players.Clear();
-      players.AddRange(GetComponentsInChildren<PlayerUI>());  
+      players.AddRange(GetComponentsInChildren<PlayerUI>()); 
+      addBotsButton.onClick.AddListener(AddBot);
+      removeBotsButton.onClick.AddListener(RemoveBot);
     }
 
+   public void AddBot() {
+      addBotsButton.gameObject.SetActive(false);
+   }
+
+   public void RemoveBot() {
+      removeBotsButton.gameObject.SetActive(false);
+   }
+   
    // Macrometa.Lobby. is needed to stop FPSSample conflicts
    public void DisplayTeam(Macrometa.Lobby.Team team, string anOwnerId, string rttTarget, string startServer) {
       if (teamName != null) {
@@ -29,13 +42,11 @@ public class TeamUI : MonoBehaviour {
          }
          teamName.placeholder.gameObject.SetActive(lobby.isAdmin && teamName.text == "");
          teamName.interactable = lobby.isAdmin;
-        
       }
-
       var serverButtons = lobby.isAdmin;
-      if (addBots != null) {
+      if (botsControl != null) {
          GameDebugPlus.Log(MMLog.Mm, cls, "DisplayTeam", "addBots lobby.isAdmin: " + lobby.isAdmin);
-         addBots.SetActive(serverButtons);
+         botsControl.SetActive(serverButtons);
       }
       highlight.SetActive(false);
       var pos = team.Find(anOwnerId);
