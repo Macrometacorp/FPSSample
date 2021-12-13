@@ -55,6 +55,11 @@ public class LobbyUI : MonoBehaviour {
       Debug.Log("StartJoin() ownerId  B: " + ownerId + " : "+ pos );
       JoinGame();
    }
+
+   public void AddBot(int teamIndex) {
+      var teamslot = GDNClientLobbyNetworkDriver2.BotTeamSlot("BotA1");
+      GDNClientLobbyNetworkDriver2.MoveToTeam(teamslot, teamIndex);
+   }
    
    public void SetRttTarget(string clientId) {
       GDNClientLobbyNetworkDriver2.SetRttTarget(clientId);

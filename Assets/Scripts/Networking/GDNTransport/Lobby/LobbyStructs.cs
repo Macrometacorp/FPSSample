@@ -146,6 +146,7 @@ namespace Macrometa.Lobby {
         public int rtt;
         public bool rttTarget;
         public bool runGameServer;
+        public bool isBot = false;
     }
 
    
@@ -298,7 +299,7 @@ namespace Macrometa.Lobby {
             RemoveFromOtherTeams(teamIndex, teamSlot.clientId);
             return true;
         }
-
+        
         public void SetRttTime(string consumerName, int rttTime) {
             GameDebug.Log("SetRttTime try team0 : " + consumerName);
             if (OnTeamSetRttTime(team0, consumerName, rttTime)) return;

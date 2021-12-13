@@ -402,6 +402,20 @@ namespace Macrometa {
            return  _inst.SelfTeamSlot();
         }
 
+        public static Lobby.TeamSlot BotTeamSlot(string aName) {
+
+            return new TeamSlot() {
+                playerName = aName,
+                clientId = aName + "_1",
+                region = new Region(),
+                ping = -1,
+                rtt = -1,
+                runGameServer = false,
+                rttTarget = false,
+                isBot = true
+            };
+        }
+        
         /// <summary>
         /// This is static to make calling from UI easier
         /// </summary>
@@ -427,7 +441,11 @@ namespace Macrometa {
             _inst.UpdateLobby();
             return val;
         }
-
+        static public void RemoveBotFromTeam(TeamSlot teamSlot,int teamIndex) {
+            _inst.lobbyValue.RemoveFromOtherTeams(-1,teamSlot.clientId);
+            _inst.UpdateLobby();
+        }
+        
         static public void GameInit() {
             _inst.lobbyValue.showGameInitNow = true;
             _inst.UpdateLobby();

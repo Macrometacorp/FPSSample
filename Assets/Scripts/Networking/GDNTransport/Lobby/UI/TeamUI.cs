@@ -27,11 +27,15 @@ public class TeamUI : MonoBehaviour {
     }
 
    public void AddBot() {
-      addBotsButton.gameObject.SetActive(false);
+      
+      lobby.AddBot(teamIndex);
+      //addBotsButton.gameObject.SetActive(false);
    }
 
    public void RemoveBot() {
-      removeBotsButton.gameObject.SetActive(false);
+      
+      //lobby.AddBot(teamIndex);
+      //removeBotsButton.gameObject.SetActive(false);
    }
    
    // Macrometa.Lobby. is needed to stop FPSSample conflicts
@@ -69,13 +73,13 @@ public class TeamUI : MonoBehaviour {
    }
    
    public void TeamSelectedClicked() {
-      Debug.Log("TeamSelectedClicked(): " + teamIndex);
+      //Debug.Log("TeamSelectedClicked(): " + teamIndex);
       lobby.TeamSelected( teamIndex);
       highlight.SetActive(true);
    }
    
    public void TeamNameChanged() {
-      Debug.Log("TeamNameChanged(): " + teamIndex + " : "+teamName.text );
+      //Debug.Log("TeamNameChanged(): " + teamIndex + " : "+teamName.text );
       lobby.TeamNameChanged(teamName.text, teamIndex);
    }
 }
