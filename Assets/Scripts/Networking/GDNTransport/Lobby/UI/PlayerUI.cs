@@ -35,14 +35,22 @@ public class PlayerUI : MonoBehaviour {
         emptySlot.SetActive(false);
         activePlayer.SetActive(true);
         playerName.text = teamSlot.playerName;
-        playerRegionName.text = teamSlot.region.DisplayLocation();
-        pingTime.text = teamSlot.ping.ToString();
+        if (teamSlot.isBot) {
+            playerRegionName.text = "";
+            pingTime.text = "";
+        }
+        else {
+            teamSlot.region.DisplayLocation();
+            pingTime.text = teamSlot.ping.ToString();
+        }
+
         if (teamSlot.rtt > 0) {
             rttTime.text = teamSlot.rtt.ToString();
             highlightRttTime.gameObject.SetActive(true);
             if (teamSlot.rtt > 300) {
                 highlightRttTime.color = Color.red;
-            } else if (teamSlot.rtt > 200) {
+            }
+            else if (teamSlot.rtt > 200) {
                 highlightRttTime.color = new Color(0.85f, 0.45f, 0);
             }
             else {
@@ -60,6 +68,7 @@ public class PlayerUI : MonoBehaviour {
         else {
             highlightRttTarget.SetActive(false);
         }
+
         if (teamSlot.runGameServer) {
             startGameServer.gameObject.SetActive(true);
         }
@@ -67,6 +76,8 @@ public class PlayerUI : MonoBehaviour {
             startGameServer.gameObject.SetActive(false);
             startGameClicked = false;
         }
+    
+
         clientID = teamSlot.clientId;
 
     }

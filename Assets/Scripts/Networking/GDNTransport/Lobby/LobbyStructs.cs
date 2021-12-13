@@ -107,6 +107,14 @@ namespace Macrometa.Lobby {
         public int maxSize;
         public List<TeamSlot> slots = new List<TeamSlot>();
 
+        public int BotCount() {
+            int result = 0;
+            foreach (var slot in slots) {
+                result += (slot.isBot) ? 1 : 0;
+            }
+
+            return result;
+        }
         public int Find(string ClientId) {
             return slots.FindIndex(ts => ts.clientId == ClientId);
         }

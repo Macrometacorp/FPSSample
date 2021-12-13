@@ -63,10 +63,12 @@ public class TeamUI : MonoBehaviour {
       for (int i = 0; i < players.Count; i++) {
          bool highlight = pos == i;
          if (i < team.slots.Count) {
-            players[i].rttTargetButton.gameObject.SetActive(serverButtons);
-            players[i].serverAllowed.gameObject.SetActive(serverButtons);
-            team.slots[i].rttTarget = (rttPos == i);
-            team.slots[i].runGameServer = (startServerPos == i &&startServerPos == pos );
+            if (!team.slots[i].isBot) {
+               players[i].rttTargetButton.gameObject.SetActive(serverButtons);
+               players[i].serverAllowed.gameObject.SetActive(serverButtons);
+               team.slots[i].rttTarget = (rttPos == i);
+               team.slots[i].runGameServer = (startServerPos == i && startServerPos == pos);
+            }
             players[i].DisplayPlayer(team.slots[i],highlight);
          }
          else {
