@@ -441,7 +441,7 @@ namespace Macrometa {
             _inst.UpdateLobby();
             return val;
         }
-        static public void RemoveBotFromTeam(TeamSlot teamSlot,int teamIndex) {
+        static public void RemoveBotFromTeam(TeamSlot teamSlot) {
             _inst.lobbyValue.RemoveFromOtherTeams(-1,teamSlot.clientId);
             _inst.UpdateLobby();
         }

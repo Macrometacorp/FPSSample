@@ -24,18 +24,21 @@ public class TeamUI : MonoBehaviour {
       players.AddRange(GetComponentsInChildren<PlayerUI>()); 
       addBotsButton.onClick.AddListener(AddBot);
       removeBotsButton.onClick.AddListener(RemoveBot);
+      addBotsButton.gameObject.SetActive(true);
+      removeBotsButton.gameObject.SetActive(false);
     }
 
    public void AddBot() {
       
-      lobby.AddBot(teamIndex);
-      //addBotsButton.gameObject.SetActive(false);
+      var moreBots = lobby.AddBot(teamIndex);
+      addBotsButton.gameObject.SetActive(moreBots);
+      removeBotsButton.gameObject.SetActive(true);
    }
 
    public void RemoveBot() {
-      
-      //lobby.AddBot(teamIndex);
-      //removeBotsButton.gameObject.SetActive(false);
+      var moreBots =lobby.RemoveBot(teamIndex);
+      removeBotsButton.gameObject.SetActive(moreBots);
+      addBotsButton.gameObject.SetActive(true);
    }
    
    // Macrometa.Lobby. is needed to stop FPSSample conflicts

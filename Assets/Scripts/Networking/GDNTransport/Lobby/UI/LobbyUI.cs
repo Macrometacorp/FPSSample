@@ -22,6 +22,8 @@ public class LobbyUI : MonoBehaviour {
    private bool _joinStarted = false;
 
    public string ownerId;
+   protected int[] botCount = new int[2];
+   
    
    public void DisplayLobbyValue(LobbyValue aLobbyValue,string anOwnerId) {
       lobbyValue = aLobbyValue;
@@ -56,9 +58,30 @@ public class LobbyUI : MonoBehaviour {
       JoinGame();
    }
 
-   public void AddBot(int teamIndex) {
-      var teamslot = GDNClientLobbyNetworkDriver2.BotTeamSlot("BotA1");
-      GDNClientLobbyNetworkDriver2.MoveToTeam(teamslot, teamIndex);
+   /// <summary>
+   /// Add a bot to a team
+   /// </summary>
+   /// <param name="teamIndex"></param>
+   /// <returns>true if more bots cn be to added</returns>
+   public bool AddBot(int teamIndex) {
+      var aName = BotArray.data[teamIndex, botCount[teamIndex]].name;
+      var teamSlot = GDNClientLobbyNetworkDriver2.BotTeamSlot(aName);
+      GDNClientLobbyNetworkDriver2.MoveToTeam(teamSlot, teamIndex);
+      botCount[teamIndex]++;
+      return (botCount[teamIndex] != BotArray.data.GetLength(1));
+   }
+   
+   /// <summary>
+   /// remove a bot from a team
+   /// </summary>
+   /// <param name="teamIndex"></param>
+   /// <returns>true if more bots can be removed</returns>
+   public bool RemoveBot(int teamIndex) {
+      var aName = BotArray.data[teamIndex, botCount[teamIndex]-1].name;
+      var teamSlot = GDNClientLobbyNetworkDriver2.BotTeamSlot(aName);
+      GDNClientLobbyNetworkDriver2.RemoveBotFromTeam(teamSlot);
+      botCount[teamIndex]--;
+      return (botCount[teamIndex] != 0);
    }
    
    public void SetRttTarget(string clientId) {
