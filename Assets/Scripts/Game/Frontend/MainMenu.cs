@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour 
 {
+    
+    const string cls ="MainMenu";
     [System.Serializable]
     public struct UIBinding
     {
@@ -42,6 +44,8 @@ public class MainMenu : MonoBehaviour
     public int activeSubmenuNumber;
 
     CanvasGroup m_CanvasGroup;
+
+    private bool createGame = false;
 
     public void NameChanged(string playerName) {
         testLobbyTransport2.localId = playerName;
@@ -97,16 +101,17 @@ public class MainMenu : MonoBehaviour
     }
     
     void Update() {
-        /*
-        if (gdnClientBrowserNetworkDriver.initSucceeded) {
-            CreateGame();
-            gdnClientBrowserNetworkDriver.initSucceeded= false;
-            ShowSubMenu(joinMenu.gameObject);
-        } else if (gdnClientBrowserNetworkDriver.initFail) {
-            createFailMsg.SetActive(true);
-            gdnClientBrowserNetworkDriver.initFail = false;
+        if (createGame) {
+            CreateBotsFromLobby();
+            CreateServer();
+            createGame = false;
         }
-        */
+    }
+    
+    public void CreateGameFromLobby() {
+        createGame = true;
+       // CreateBotsFromLobby();
+      //  CreateServer();
     }
     void OnEnable() {
         if (isDisconnected) {
@@ -237,8 +242,10 @@ public class MainMenu : MonoBehaviour
         }
         
     }
-    public void CreateGameFromLobby() {
-             var servername = uiBinding.servername.text;
+   
+
+    private void CreateServer() {
+        var servername = uiBinding.servername.text;
 
         var levelname = uiBinding.levelname.options[uiBinding.levelname.value].text;
 
@@ -247,59 +254,79 @@ public class MainMenu : MonoBehaviour
         var maxplayers = 8;
 
         var dedicated = uiBinding.decidatedServer.isOn;
-        if(dedicated)
-        {
+        if (dedicated) {
             var process = new System.Diagnostics.Process();
-            if (Application.isEditor)
-            {
+            if (Application.isEditor) {
                 process.StartInfo.FileName = k_AutoBuildPath + "/" + k_AutoBuildExe;
                 process.StartInfo.WorkingDirectory = k_AutoBuildPath;
             }
-            else
-            {
+            else {
                 // TODO : We should look to make this more robust but for now we just
                 // kill other processes to avoid running multiple servers locally
                 var thisProcess = System.Diagnostics.Process.GetCurrentProcess();
                 var processes = System.Diagnostics.Process.GetProcesses();
-                foreach (var p in processes)
-                {
-                    if (p.Id != thisProcess.Id && p.ProcessName == thisProcess.ProcessName)
-                    {
-                        try
-                        {
-                           // p.Kill();
+                foreach (var p in processes) {
+                    if (p.Id != thisProcess.Id && p.ProcessName == thisProcess.ProcessName) {
+                        try {
+                            // p.Kill();
                         }
-                        catch (System.Exception)
-                        {
+                        catch (System.Exception) {
                         }
                     }
                 }
 
                 process.StartInfo.FileName = thisProcess.MainModule.FileName;
                 process.StartInfo.WorkingDirectory = thisProcess.StartInfo.WorkingDirectory;
-                GameDebug.Log(string.Format("filename='{0}', dir='{1}'", process.StartInfo.FileName, process.StartInfo.WorkingDirectory));
+                GameDebug.Log(string.Format("filename='{0}', dir='{1}'", process.StartInfo.FileName,
+                    process.StartInfo.WorkingDirectory));
             }
 
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.Arguments = " -batchmode -nographics -noboot -consolerestorefocus" +
-                                          " +serve " +"Level_01" + " +game.modename " 
-                                          +("Deathmatch".ToLower()) +
+                                          " +serve " + "Level_01" + " +game.modename "
+                                          + ("Deathmatch".ToLower()) +
                                           " +servername \"" + servername + "\"";
-            if (process.Start()){
+            if (process.Start()) {
                 GameDebug.Log("game process started");
                 //StartCoroutine(SendConnect(10));
                 //ShowSubMenu(introMenu);
             }
         }
-        else
-        {
+        else {
             Console.EnqueueCommand("serve " + levelname);
             Console.EnqueueCommand("servername \"" + servername + "\"");
         }
     }
 
- 
-    
+    public void CreateBotsFromLobby() {
+        var b0Count =  gdnClientBrowserNetworkDriver.lobbyValue.team0.BotCount();
+        var b1Count =  gdnClientBrowserNetworkDriver.lobbyValue.team1.BotCount();
+        GameDebugPlus.Log(MMLog.Mm, cls, "CreateBotsFromLobby()", "bot lobby: " +
+                 b0Count + " : " + b1Count);
+        CreateBot("BotA1");
+        CreateBot("BotB1"); 
+    }
+
+    public void CreateBot(string aName) {
+        var process = new System.Diagnostics.Process();
+        var thisProcess = System.Diagnostics.Process.GetCurrentProcess();
+        process.StartInfo.FileName = thisProcess.MainModule.FileName;
+        process.StartInfo.WorkingDirectory = thisProcess.StartInfo.WorkingDirectory;
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.Arguments = " -batchmode -nographics -forceclientsystems" +
+                                      " +client localhost "+
+                                      " +isbotstring yes" + 
+                                      " +debugmove 2 " +
+                                      " +client.debugmovename " +aName ;
+        GameDebugPlus.Log(MMLog.Mm, cls, "CreateBot", "bot process arguments: " + process.StartInfo.Arguments );
+        if (process.Start()) {
+            GameDebugPlus.Log(MMLog.Mm, cls, "CreateBot", "bot process started: " + aName);
+        }
+        else {
+            GameDebugPlus.Log(MMLog.Mm, cls, "CreateBot", "bot process filed start: " + aName);
+        } 
+    }
+
     public void JoinGame() {
         Console.EnqueueCommand("connect localhost");
     }

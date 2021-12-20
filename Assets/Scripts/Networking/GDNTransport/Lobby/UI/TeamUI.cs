@@ -22,23 +22,31 @@ public class TeamUI : MonoBehaviour {
    private void Awake() {
       players.Clear();
       players.AddRange(GetComponentsInChildren<PlayerUI>()); 
+      botsControl.SetActive(false);
+      
       addBotsButton.onClick.AddListener(AddBot);
       removeBotsButton.onClick.AddListener(RemoveBot);
-      addBotsButton.gameObject.SetActive(true);
-      removeBotsButton.gameObject.SetActive(false);
+      addBotsButton.interactable = true;
+         //gameObject.SetActive(true);
+      removeBotsButton.interactable = false;
+         // .gameObject.SetActive(false);
+      
     }
 
    public void AddBot() {
-      
       var moreBots = lobby.AddBot(teamIndex);
-      addBotsButton.gameObject.SetActive(moreBots);
-      removeBotsButton.gameObject.SetActive(true);
+      addBotsButton.interactable = moreBots;
+         //.gameObject.SetActive(moreBots);
+      removeBotsButton.interactable = true;
+         gameObject.SetActive(true);
    }
 
    public void RemoveBot() {
       var moreBots =lobby.RemoveBot(teamIndex);
-      removeBotsButton.gameObject.SetActive(moreBots);
-      addBotsButton.gameObject.SetActive(true);
+      removeBotsButton.interactable = moreBots;
+         //.gameObject.SetActive(moreBots);
+      addBotsButton.interactable = true;
+         //.gameObject.SetActive(true);
    }
    
    // Macrometa.Lobby. is needed to stop FPSSample conflicts
@@ -51,10 +59,12 @@ public class TeamUI : MonoBehaviour {
          teamName.interactable = lobby.isAdmin;
       }
       var serverButtons = lobby.isAdmin;
+      
       if (botsControl != null) {
-         GameDebugPlus.Log(MMLog.Mm, cls, "DisplayTeam", "addBots lobby.isAdmin: " + lobby.isAdmin);
+        // GameDebugPlus.Log(MMLog.Mm, cls, "DisplayTeam", "addBots lobby.isAdmin: " + lobby.isAdmin);
          botsControl.SetActive(serverButtons);
       }
+      
       highlight.SetActive(false);
       var pos = team.Find(anOwnerId);
       var rttPos = team.Find(rttTarget);

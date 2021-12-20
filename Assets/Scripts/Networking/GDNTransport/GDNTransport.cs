@@ -5,6 +5,7 @@ using Macrometa;
 using UnityEngine;
 
 public class GDNTransport :  INetworkTransport {
+    public const string cls = "GDNTransport";
     public static bool setupComplete = false;
     // must be set before websockets are opened.
     public static bool isSocketPingOn = false; //off by default for compatibility
@@ -61,6 +62,8 @@ public class GDNTransport :  INetworkTransport {
         LogFrequency.AddLogFreq("SendData",1, "oSendData: ", 2 );
         LogFrequency.AddLogFreq("SendDataB",1, "oSendDataB: ", 2 );
         GameDebug.Log(" GDNTransport.Connect ++++++++++++++++++++++++++++++++++++++++++");
+        GameDebugPlus.Log(MMLog.Mm, cls, "Connect", "localId name: " +localId );
+
     }
 
     public void UpdateGameRecord(string gameMode, string mapName, int maxPlayers,

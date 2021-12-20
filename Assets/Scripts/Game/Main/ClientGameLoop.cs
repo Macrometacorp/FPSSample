@@ -504,10 +504,11 @@ public class ClientGameWorld
 }
 
 
-public class ClientGameLoop : Game.IGameLoop, INetworkCallbacks, INetworkClientCallbacks
-{
+public class ClientGameLoop : Game.IGameLoop, INetworkCallbacks, INetworkClientCallbacks {
+    public const string cls = "ClientGameLoop";
 
-    // Client vars
+    public bool printOnce = true;
+        // Client vars
     [ConfigVar(Name ="client.updaterate", DefaultValue = "30000", Description = "Max bytes/sec client wants to receive", Flags = ConfigVar.Flags.ClientInfo)]
     public static ConfigVar clientUpdateRate;
     [ConfigVar(Name ="client.updateinterval", DefaultValue = "3", Description = "Snapshot sendrate requested by client", Flags = ConfigVar.Flags.ClientInfo)]
@@ -515,7 +516,13 @@ public class ClientGameLoop : Game.IGameLoop, INetworkCallbacks, INetworkClientC
 
     [ConfigVar(Name ="client.playername", DefaultValue = "Noname", Description = "Name of player", Flags = ConfigVar.Flags.ClientInfo | ConfigVar.Flags.Save)]
     public static ConfigVar clientPlayerName;
-
+    
+    [ConfigVar(Name = "client.debugmovename", DefaultValue = "bot", Description = "default debug client name ")]
+    public static  ConfigVar debugMoveName;
+    
+    [ConfigVar(Name = "isbotstring", DefaultValue = "no", Description = "string is this a bot")]
+    public static  ConfigVar isBotString;
+    
     [ConfigVar(Name = "client.matchmaker", DefaultValue = "0.0.0.0:80", Description = "Address of matchmaker", Flags = ConfigVar.Flags.None)]
     public static ConfigVar clientMatchmaker;
 
@@ -536,10 +543,11 @@ public class ClientGameLoop : Game.IGameLoop, INetworkCallbacks, INetworkClientC
         
         GDNTransport.isSocketPingOn = true;
         GDNTransport.sendDummyTraffic = false;//probably not need but safer
+        
         GDNTransport.localId = clientPlayerName.Value;
         m_NetworkTransport = GDNTransport.Instance;
-        GameDebug.Log("GDNTransport instanciated ");
-
+        GameDebug.Log("GDNTransport instantiated ");
+     
         m_NetworkClient = new NetworkClient(m_NetworkTransport);
 
         if (Application.isEditor || Game.game.buildId == "AutoBuild")
@@ -642,6 +650,16 @@ public class ClientGameLoop : Game.IGameLoop, INetworkCallbacks, INetworkClientC
         m_NetworkClient.SendData();
 
         // TODO (petera) merge with clientinfo 
+        if (isBotString.Value == "yes") {
+            clientPlayerName.Value = debugMoveName.Value;
+            if (printOnce) {
+                GameDebugPlus.Log(MMLog.Mm, cls, "Update", "printOnce clientPlayerName:" + clientPlayerName.Value);
+                GameDebugPlus.Log(MMLog.Mm, cls, "Update", "printOnce debugMoveName:" + debugMoveName.Value);
+                GameDebugPlus.Log(MMLog.Mm, cls, "Update", "printOnce isBotString:" + isBotString.Value);
+                GameDebugPlus.Log(MMLog.Mm, cls, "Update", "printOnce debugMove:" + PlayerModuleClient.m_debugMove.Value);
+                printOnce = false;
+            }
+        }
         if (m_requestedPlayerSettings.playerName != clientPlayerName.Value)
         {
             // Cap name length

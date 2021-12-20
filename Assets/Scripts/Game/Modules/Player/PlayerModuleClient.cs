@@ -2,9 +2,11 @@
 using Unity.Collections;
 using UnityEngine;
 using Unity.Entities;
+using Macrometa;
 
 public class PlayerModuleClient  
 {
+    public const string cls = "PlayerModuleClient";
     public bool PlayerStateReady
     {
         get { return m_LocalPlayer.playerState != null; }
@@ -29,6 +31,10 @@ public class PlayerModuleClient
         m_UpdatePlayerCameras = m_world.GetECSWorld().CreateManager<UpdatePlayerCameras>(m_world);
         m_ResolvePlayerReference = m_world.GetECSWorld().CreateManager<ResolvePlayerReference>(m_world);
         m_UpdateServerEntityComponent = m_world.GetECSWorld().CreateManager<UpdateServerEntityComponent>(m_world);
+        GameDebugPlus.Log(MMLog.Mm, cls, "PlayerModuleClient", "debugMove:" + PlayerModuleClient.m_debugMove.Value);
+
+
+        
     }
 
     public void Shutdown()
@@ -51,7 +57,7 @@ public class PlayerModuleClient
         m_LocalPlayer.command.lookPitch = 90;
         
         m_ResolvePlayerReference.SetLocalPlayer(m_LocalPlayer);
-        return m_LocalPlayer;
+     return m_LocalPlayer;
     }
 
     public void SampleInput(bool userInputEnabled, float deltaTime, int renderTick)
@@ -241,9 +247,10 @@ public class PlayerModuleClient
     readonly UpdateServerEntityComponent m_UpdateServerEntityComponent;
     
     [ConfigVar(Name = "debugmove", DefaultValue = "0", Description = "Should client perform debug movement")]
-    static ConfigVar m_debugMove;
-    [ConfigVar(Name = "debugmovename", DefaultValue = "bot", Description = "defualt debug client name ")]
-    static ConfigVar m_debugMoveName;
+    public static ConfigVar m_debugMove;
+    [ConfigVar(Name = "debugmovenameb", DefaultValue = "botB", Description = "default debug client name ")]
+    public static  ConfigVar debugMoveNameb;
+   
     float m_debugMoveDuration;
     float m_debugMovePhaseDuration;
     float m_debugMoveTurnSpeed;

@@ -156,8 +156,14 @@ namespace Macrometa {
         }
         
         public void UpdateLocalLobby(LobbyValue lobbyUpdate) {
-           
-            lobbyValue = lobbyUpdate;
+            GameDebugPlus.Log("LobbyDoc",cls,"UpdateLocalLobby","is Admin: " + isLobbyAdmin);
+            if (isLobbyAdmin) {
+                lobbyValue.showGameInitNow = lobbyUpdate.showGameInitNow;
+                lobbyValue.joinGameNow = lobbyUpdate.joinGameNow;
+            }
+            else {
+                lobbyValue = lobbyUpdate;
+            }
             lobbyValue.clientId = clientId;
             lobbyUpdateAvail = true;
             closeLobbyInactiveTime = Time.time + closeLobbyInactiveDelay;

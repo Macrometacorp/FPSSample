@@ -226,6 +226,7 @@ public class GameModeDeathmatch : IGameMode
     public void OnPlayerRespawn(PlayerState player, ref Vector3 position, ref Quaternion rotation)
     {
         GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "+player.teamIndex );
+        //if(player.playerName)
         m_GameModeSystemServer.GetRandomSpawnTransform(player.teamIndex, ref position, ref rotation);
         GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "
                       + player.teamIndex + " :: "+ position);
