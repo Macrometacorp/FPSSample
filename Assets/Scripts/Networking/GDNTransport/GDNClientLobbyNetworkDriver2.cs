@@ -441,6 +441,11 @@ namespace Macrometa {
             _inst.lobbyValue.TeamFromIndex( teamIndex).name = teamName;
             _inst.UpdateLobby();
         }
+
+        static public bool EmptySlot(int teamIndex) {
+            var team = _inst.lobbyValue.TeamFromIndex(teamIndex);
+            return _inst.lobbyValue.SpaceOnTeam(team);
+        }
         
         static public bool MoveToTeam(TeamSlot teamSlot,int teamIndex) {
             var val = _inst.lobbyValue.MoveToTeam(teamSlot, teamIndex);

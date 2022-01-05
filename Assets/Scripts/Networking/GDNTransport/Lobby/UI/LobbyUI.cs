@@ -68,9 +68,31 @@ public class LobbyUI : MonoBehaviour {
       var teamSlot = GDNClientLobbyNetworkDriver2.BotTeamSlot(aName);
       GDNClientLobbyNetworkDriver2.MoveToTeam(teamSlot, teamIndex);
       botCount[teamIndex]++;
-      return (botCount[teamIndex] != BotArray.data.GetLength(1));
+      return (botCount[teamIndex] != BotArray.data.GetLength(1) && 
+              GDNClientLobbyNetworkDriver2.EmptySlot(teamIndex)  && !GlobalBotMaxed());
+   }
+
+   public void SetBotAddRemove() {
+      team0.addBotsButton.interactable = BotAddOK(0);
+      team1.addBotsButton.interactable = BotAddOK(1);
+
+      team0.removeBotsButton.interactable = BotRemoveOK(0);
+      team1.removeBotsButton.interactable = BotRemoveOK(1);
    }
    
+   public bool BotAddOK(int teamIndex) {
+      return (botCount[teamIndex] != BotArray.data.GetLength(1) && 
+              GDNClientLobbyNetworkDriver2.EmptySlot(teamIndex)  && !GlobalBotMaxed());
+   }
+   
+   public bool BotRemoveOK(int teamIndex) {
+      return (botCount[teamIndex] > 0);
+   }
+   
+   public bool GlobalBotMaxed() {
+      return (botCount[0] + botCount[1]) >= BotArray.maxBots;
+   }
+
    /// <summary>
    /// remove a bot from a team
    /// </summary>

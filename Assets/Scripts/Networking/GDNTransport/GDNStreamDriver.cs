@@ -1352,8 +1352,8 @@ namespace Macrometa {
             ps.timeStamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
             ps.playerName = aPlayerName;
             ps.disconnect = true;
-            ps.killed = "";
-            ps.killedBy = "";
+            ps.gkilled = "";
+            ps.gkilledBy = "";
             ProducerGameStatsSend(ps);
         }
 
@@ -1438,16 +1438,16 @@ namespace Macrometa {
         /// need to check games list code again
         /// </summary>
         public void SendTransportPings() {
-            GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
-                "gdnConnections.Count: " +gdnConnections.Count);
+           // GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
+           //     "gdnConnections.Count: " +gdnConnections.Count);
             foreach (var destinationId in gdnConnections.Keys) {
-                GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
-                    "destinationId: " +destinationId + " time: " +  Time.time );
+            //    GameDebugPlus.Log(MMLog.Ping, cls, "SendTransportPings()",
+            //        "destinationId: " +destinationId + " time: " +  Time.time );
                 if (TransportPings.firstPingTimes.ContainsKey(destinationId) &&
                     Time.time > TransportPings.firstPingTimes[destinationId]) {
                     var pingId = TransportPings.Add(destinationId, Time.realtimeSinceStartup, 0);
-                    GameDebugPlus.Log(MMLog.Ping,cls,"SendTransportPings()",
-                        "Id: "+ pingId + " DestId: "+ destinationId + " Dest: "+gdnConnections[destinationId].destination);
+             //       GameDebugPlus.Log(MMLog.Ping,cls,"SendTransportPings()",
+             //           "Id: "+ pingId + " DestId: "+ destinationId + " Dest: "+gdnConnections[destinationId].destination);
                     ProducerSend(destinationId, VirtualMsgType.Ping, new byte[0], pingId);
                 }
                 else if (!TransportPings.firstPingTimes.ContainsKey(destinationId)) {

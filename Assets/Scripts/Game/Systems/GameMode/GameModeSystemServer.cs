@@ -426,13 +426,14 @@ public class GameModeSystemServer : ComponentSystem {
         if (teamSpawns.Count == 0)
             return false;
 
-        var index = (m_prevTeamSpawnPointIndex[teamIndex] + 1) % teamSpawns.Count;
-        m_prevTeamSpawnPointIndex[teamIndex] = index;
+        var index = (m_prevTeamSpawnPointIndex[teamIndex+1] + 1) % teamSpawns.Count;
+        m_prevTeamSpawnPointIndex[teamIndex+1] = index;
         pos = teamSpawns[index].transform.position;
         rot = teamSpawns[index].transform.rotation;
-        GameDebug.Log("spawning at " + teamIndex + " : " + teamSpawns[index].transform.position.x +
-                      " : " + teamSpawns[index].name);
-
+        GameDebugPlus.Log(MMLog.Mm, cls, "GetRandomSpawnTransform", 
+            "spawning at " + teamIndex + " : " + teamSpawns[index].transform.position +
+            " : " + teamSpawns[index].name);
+        
         return true;
     }
 
@@ -461,7 +462,7 @@ public class GameModeSystemServer : ComponentSystem {
     readonly GameWorld m_World;
     readonly BundledResourceManager m_ResourceSystem;
     readonly GameModeSystemSettings m_Settings;
-    int[] m_prevTeamSpawnPointIndex = new int[2];
+    int[] m_prevTeamSpawnPointIndex = new int[3];// change to handle robot on team 3 for spawning only
     IGameMode m_GameMode;
     bool m_EnableRespawning = true;
     string m_CurrentGameModeName;

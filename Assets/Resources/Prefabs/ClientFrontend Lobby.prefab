@@ -776,7 +776,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 19.99996}
+  m_AnchoredPosition: {x: 0, y: 19.999916}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &114635037818496874
@@ -2875,11 +2875,13 @@ MonoBehaviour:
   createGameMenu: {fileID: 1568206690640248}
   createFailMsg: {fileID: 4127060677141337711}
   introMenu: {fileID: 1261939462030130}
+  button_JoinGame: {fileID: 0}
   joinMenu: {fileID: 607015112786268167}
   optionMenu: {fileID: 5334619849375555672}
   disconnectedMenu: {fileID: 7136327633426453273}
   isDisconnected: 0
   gdnClientBrowserNetworkDriver: {fileID: 0}
+  testLobbyTransport2: {fileID: 0}
   activeSubmenuNumber: 0
 --- !u!225 &225308890434892864
 CanvasGroup:
@@ -4599,6 +4601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c9b7e336481c140af13dd70a7c0d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenu: {fileID: 0}
   toggleTemplate: {fileID: 2335991792143617009}
   dropdownTemplate: {fileID: 2458177689091639408}
   inputTemplate: {fileID: 5959736136375814484}
@@ -4607,6 +4610,21 @@ MonoBehaviour:
   gdrpButton: {fileID: 5682927634344800561}
   scrollRect: {fileID: 1249047202427048012}
   content: {fileID: 8719275212373862038}
+  gdnFields:
+    gdnFederationURL: {fileID: 0}
+    gdnTenant: {fileID: 0}
+    gdnFabric: {fileID: 0}
+    isGlobal: {fileID: 0}
+    gdnAPIKey: {fileID: 0}
+    connectionType: {fileID: 0}
+    city: {fileID: 0}
+    country: {fileID: 0}
+    connectionTypes:
+    - Other
+    - 5G
+    - 4G
+    - Fixed Line
+  saveEnabled: {fileID: 0}
 --- !u!1 &1748827756911516
 GameObject:
   m_ObjectHideFlags: 0
@@ -5742,14 +5760,23 @@ MonoBehaviour:
   serverListContentRect: {fileID: 1941227281393415879}
   createGameGDNStreamName: {fileID: 4167574969577054174}
   gdnStreamName: {fileID: 2975785318447250414}
-  gdnFederationURL: {fileID: 140581203608911324}
-  gdnTenant: {fileID: 94648390227967252}
-  gdnFabric: {fileID: 3729980325203366155}
-  isGlobal: {fileID: 790238398820027369}
-  gdnAPIKey: {fileID: 7010224720324819704}
   gameList:
     games: []
     isDirty: 0
+  gdnFields:
+    gdnFederationURL: {fileID: 0}
+    gdnTenant: {fileID: 0}
+    gdnFabric: {fileID: 0}
+    isGlobal: {fileID: 0}
+    gdnAPIKey: {fileID: 0}
+    connectionType: {fileID: 0}
+    city: {fileID: 0}
+    country: {fileID: 0}
+    connectionTypes:
+    - Other
+    - 5G
+    - 4G
+    - Fixed Line
 --- !u!1 &1932532006077610
 GameObject:
   m_ObjectHideFlags: 0
@@ -12338,7 +12365,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 318008911069314333}
   m_HandleRect: {fileID: 4146616146296342882}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -14553,7 +14580,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8841684530773784548}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.5384616
+  m_Size: 0.53846174
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -18215,8 +18242,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6638392394496816882}
   m_HandleRect: {fileID: 4111423720167939573}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.99999994
+  m_Value: 0
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -20328,7 +20355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3698e4ce3d554e9b80e2e3a0ffc8c2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localId: GrantAdmin
   textDisplay: {fileID: 3141269224591088071}
   inputField: {fileID: 3885883825870665937}
   scrollRect: {fileID: 1275260427128446885}
@@ -26168,7 +26194,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012820913, y: 0.00007879042}
+  m_AnchoredPosition: {x: -0.0000068105746, y: 0.000018091145}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!33 &4931950643415678406
@@ -27783,7 +27809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0.00012207031}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &7682642984743684416
@@ -31825,6 +31851,31 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4525966410125433849, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525966410125433849, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525966410125433849, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525966410125433849, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525966410125433849, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4634718255032729702, guid: e6148a76d47744513bea94ae97b87acf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -32271,6 +32322,26 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7593723501954977962, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847329657453082466, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847329657453082466, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847329657453082466, guid: e6148a76d47744513bea94ae97b87acf,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7847329657453082466, guid: e6148a76d47744513bea94ae97b87acf,
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0

@@ -35,18 +35,12 @@ public class TeamUI : MonoBehaviour {
 
    public void AddBot() {
       var moreBots = lobby.AddBot(teamIndex);
-      addBotsButton.interactable = moreBots;
-         //.gameObject.SetActive(moreBots);
-      removeBotsButton.interactable = true;
-         gameObject.SetActive(true);
+      lobby.SetBotAddRemove();
    }
 
    public void RemoveBot() {
       var moreBots =lobby.RemoveBot(teamIndex);
-      removeBotsButton.interactable = moreBots;
-         //.gameObject.SetActive(moreBots);
-      addBotsButton.interactable = true;
-         //.gameObject.SetActive(true);
+      lobby.SetBotAddRemove();
    }
    
    // Macrometa.Lobby. is needed to stop FPSSample conflicts
@@ -78,6 +72,12 @@ public class TeamUI : MonoBehaviour {
                players[i].serverAllowed.gameObject.SetActive(serverButtons);
                team.slots[i].rttTarget = (rttPos == i);
                team.slots[i].runGameServer = (startServerPos == i && startServerPos == pos);
+            }
+            else {
+               players[i].rttTargetButton.gameObject.SetActive(false);
+               players[i].serverAllowed.gameObject.SetActive(false);
+               team.slots[i].rttTarget = false;
+               team.slots[i].runGameServer = false; 
             }
             players[i].DisplayPlayer(team.slots[i],highlight);
          }

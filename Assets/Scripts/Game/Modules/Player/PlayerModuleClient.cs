@@ -82,9 +82,9 @@ public class PlayerModuleClient
         {
             localPlayer.m_debugMoveDuration += deltaTime;
 
-            var fireDuration = 2.0f;
+            var fireDuration = 1.0f;
             var jumpDuration = 1.0f;
-            var maxTurn = 70.0f;
+            var maxTurn = 300.0f;
 
             if (localPlayer.m_debugMoveDuration > localPlayer.m_debugMovePhaseDuration)
             {
@@ -92,17 +92,33 @@ public class PlayerModuleClient
                 localPlayer.m_debugMovePhaseDuration = 4 + 2*Random.value;
                 localPlayer.m_debugMoveTurnSpeed = maxTurn *0.9f + Random.value * maxTurn * 0.1f;
 
-                localPlayer.m_debugMoveMag = Random.value > 0.5f ? 1.0f : 0.0f;
+                localPlayer.m_debugMoveMag = Random.value > 0.8f ? 1.0f : 0.0f;
             }
 
+           
             localPlayer.command.moveMagnitude = localPlayer.m_debugMoveMag;
-            localPlayer.command.lookYaw += localPlayer.m_debugMoveTurnSpeed * deltaTime;
+            if (Random.value > 0.8f) {
+                localPlayer.command.lookYaw += localPlayer.m_debugMoveTurnSpeed * deltaTime;
+            }
+
             localPlayer.command.lookYaw = localPlayer.command.lookYaw % 360;
-            while (localPlayer.command.lookYaw < 0.0f) 
+            while (localPlayer.command.lookYaw < 0.0f)
                 localPlayer.command.lookYaw += 360.0f;
-            localPlayer.command.buttons.Set(UserCommand.Button.PrimaryFire,localPlayer.m_debugMoveDuration < fireDuration);
-            localPlayer.command.buttons.Set(UserCommand.Button.SecondaryFire,localPlayer.command.buttons.IsSet(UserCommand.Button.PrimaryFire));
-            localPlayer.command.buttons.Set(UserCommand.Button.Jump,localPlayer.m_debugMoveDuration < jumpDuration);
+            if (Random.value > 0.8f) {
+                if (Random.value > 0.5f) {
+                    if (Random.value > 0.3f) {
+                        localPlayer.command.buttons.Set(UserCommand.Button.PrimaryFire,
+                            localPlayer.m_debugMoveDuration < fireDuration);
+                    }
+                    else {
+                        localPlayer.command.buttons.Set(UserCommand.Button.SecondaryFire,
+                            (Random.value > 0.8f));
+                    }
+
+                    localPlayer.command.buttons.Set(UserCommand.Button.Jump,
+                        localPlayer.m_debugMoveDuration < jumpDuration);
+                }
+            }
         }
             
         localPlayer.command.renderTick = renderTick; 

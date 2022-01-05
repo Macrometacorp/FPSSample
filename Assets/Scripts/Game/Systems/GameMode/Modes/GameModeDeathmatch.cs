@@ -6,8 +6,8 @@ using Unity.Entities;
 
 // Simple, team based deathmatch mode
 
-public class GameModeDeathmatch : IGameMode
-{
+public class GameModeDeathmatch : IGameMode {
+    public const string cls = "GameModeDeathmatch";
     [ConfigVar(Name = "game.dm.minplayers", DefaultValue = "2", Description = "Minimum players before match starts")]
     public static ConfigVar minPlayers;
     [ConfigVar(Name = "game.dm.prematchtime", DefaultValue = "60", Description = "Time before match starts")]
@@ -223,13 +223,21 @@ public class GameModeDeathmatch : IGameMode
         }
     }
 
-    public void OnPlayerRespawn(PlayerState player, ref Vector3 position, ref Quaternion rotation)
-    {
-        GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "+player.teamIndex );
-        //if(player.playerName)
-        m_GameModeSystemServer.GetRandomSpawnTransform(player.teamIndex, ref position, ref rotation);
-        GameDebug.Log("OnPlayerRespawn "+   player.playerName + " team: "
-                      + player.teamIndex + " :: "+ position);
+    public void OnPlayerRespawn(PlayerState player, ref Vector3 position, ref Quaternion rotation) {
+        var teamIndex = player.teamIndex;
+        if (BotArray.IsBot(player.playerName)) {
+           teamIndex = -1;
+           //GameDebugPlus.Log(MMLog.Mm, cls, " OnPlayerRespawn", 
+           //     "changed team index team: "+teamIndex );
+        }
+        GameDebugPlus.Log(MMLog.Mm, cls, " OnPlayerRespawn", 
+            "A OnPlayerRespawn: "+   player.playerName + " team: "+teamIndex );
+
+       ;
+        m_GameModeSystemServer.GetRandomSpawnTransform(teamIndex, ref position, ref rotation);
+        GameDebugPlus.Log(MMLog.Mm, cls, " OnPlayerRespawn", 
+            "B OnPlayerRespawn: "+   player.playerName + " team: "+teamIndex + " :: "+ position);
+       
     }
 
     enum Phase

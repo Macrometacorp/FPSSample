@@ -10,7 +10,7 @@ public class BotArray {
     }
 
     static public readonly BotData[,] data;
-    
+    static public int maxBots = 3;
     
     static BotArray() {
         data = new BotData[2,4] {
@@ -27,4 +27,13 @@ public class BotArray {
         };
     }
 
+    public static bool IsBot(string aName) {
+        foreach (var botData in data) {
+            if (aName == botData.name) {
+                return true;
+            }
+        }
+        return false;
+    }
+  
 }

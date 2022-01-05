@@ -5,6 +5,7 @@ using Macrometa.Lobby;
 using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.Experimental.UIElements;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Macrometa {
@@ -177,8 +178,8 @@ namespace Macrometa {
 
             var ps = GDNStats.baseGameStats.CopyOf();
             //ps.timeStamp = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            ps.killed = killed;
-            ps.killedBy = killedBy;
+            ps.gkilled = killed;
+            ps.gkilledBy = killedBy;
             AddKills(killed, killedBy);
             //SendPlayerStats(ps);
             GDNStreamDriver.inst.ProducerGameStatsSend(ps);
@@ -282,8 +283,8 @@ public class GameStats2 {
     public string gdnCountry;
     public int rifleShots;
     public int grenadeShots;
-    public string killed;
-    public string killedBy;
+    [FormerlySerializedAs("killed")] public string gkilled;
+    [FormerlySerializedAs("killedBy")] public string gkilledBy;
     public float posX;
     public float posY;
     public float posZ;
@@ -327,8 +328,8 @@ public class GameStats2 {
             gdnCountry = gdnCountry,
             rifleShots = rifleShots,
             grenadeShots = grenadeShots,
-            killed = killed, 
-            killedBy = killedBy,
+            gkilled = gkilled, 
+            gkilledBy = gkilledBy,
             posX = posX,
             posY = posY,
             posZ = posZ,

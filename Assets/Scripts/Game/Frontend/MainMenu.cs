@@ -46,6 +46,7 @@ public class MainMenu : MonoBehaviour
     CanvasGroup m_CanvasGroup;
 
     private bool createGame = false;
+    private List<string> botsPLaying = new List<string>();
 
     public void NameChanged(string playerName) {
         testLobbyTransport2.localId = playerName;
@@ -303,8 +304,22 @@ public class MainMenu : MonoBehaviour
         var b1Count =  gdnClientBrowserNetworkDriver.lobbyValue.team1.BotCount();
         GameDebugPlus.Log(MMLog.Mm, cls, "CreateBotsFromLobby()", "bot lobby: " +
                  b0Count + " : " + b1Count);
-        CreateBot("BotA1");
-        CreateBot("BotB1"); 
+       
+          
+            foreach (var slot in gdnClientBrowserNetworkDriver.lobbyValue.team0.slots) {
+                if (slot.isBot) {
+                    GameDebugPlus.Log(MMLog.Mm, cls, "CreateBotsFromLobby()", "isBot: " + 
+                        slot.playerName);
+                    CreateBot(slot.playerName);
+                }
+            }
+            foreach (var slot in gdnClientBrowserNetworkDriver.lobbyValue.team1.slots) {
+                if (slot.isBot) {
+                    GameDebugPlus.Log(MMLog.Mm, cls, "CreateBotsFromLobby()", "isBot: " + 
+                                                                              slot.playerName);
+                    CreateBot(slot.playerName);
+                }
+            }
     }
 
     public void CreateBot(string aName) {
