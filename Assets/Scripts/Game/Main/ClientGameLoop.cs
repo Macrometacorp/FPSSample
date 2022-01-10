@@ -544,7 +544,8 @@ public class ClientGameLoop : Game.IGameLoop, INetworkCallbacks, INetworkClientC
         GDNTransport.isSocketPingOn = true;
         GDNTransport.sendDummyTraffic = false;//probably not need but safer
         
-        GDNTransport.localId = clientPlayerName.Value;
+        
+        GDNTransport.localId =clientPlayerName.Value;
         m_NetworkTransport = GDNTransport.Instance;
         GameDebug.Log("GDNTransport instantiated ");
      

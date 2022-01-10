@@ -51,8 +51,8 @@ public class ConsoleNullUI : IConsoleUI
     }
 }
 
-public class Console
-{
+public class Console {
+    public const string cls = "Console";
     public delegate void MethodDelegate(string[] args);
 
     static IConsoleUI s_ConsoleUI;
@@ -147,8 +147,10 @@ public class Console
 
         foreach (var command in commands)
         {
-            if (command.StartsWith("+"))
+            if (command.StartsWith("+")) {
+                GameDebugPlus.Log("CMD", cls, "ProcessCommandLineArguments()", command.Substring(1));
                 EnqueueCommandNoHistory(command.Substring(1));
+            }
         }
     }
 
@@ -388,9 +390,16 @@ public class Console
         }
     }
 
-    public static void EnqueueCommandNoHistory(string command)
-    {
+    public static void EnqueueCommandNoHistory(string command) {
         GameDebug.Log("cmd: " + command);
+        GameDebugPlus.Log("CMD", cls, "EnqueueCommandNoHistory()", command);
+        if (command.Contains("client.playername")) {
+            if (ClientGameLoop.isBotString.Value == "yes") {
+                command = "client.playername " + ClientGameLoop.debugMoveName.Value;
+            }
+            GameDebugPlus.Log("CMD", cls, "EnqueueCommandNoHistory()","revised: "+ command);
+        }
+
         s_PendingCommands.Add(command);
     }
 
@@ -399,7 +408,7 @@ public class Console
         s_History[s_HistoryNextIndex % k_HistoryCount] = command;
         s_HistoryNextIndex++;
         s_HistoryIndex = s_HistoryNextIndex;
-
+        GameDebugPlus.Log("CMD", cls, "EnqueueCommand()", command);
         EnqueueCommandNoHistory(command);
     }
 

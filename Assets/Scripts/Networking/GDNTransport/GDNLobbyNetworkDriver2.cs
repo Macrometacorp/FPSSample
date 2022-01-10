@@ -5,6 +5,9 @@ namespace Macrometa {
     //
 
     public class GDNLobbyNetworkDriver2 : GDNNetworkDriver {
+
+        private const string cls = "GDNLobbyNetworkDriver2";
+        
         private bool tempFlag = false;
         
         public GdnDocumentLobbyDriver gdnDocumentLobbyDriver;
@@ -171,6 +174,9 @@ namespace Macrometa {
                     nextInitSetTime = Time.time + initSetDelay;
                     gdnStreamDriver.chatChannelId = lobbyValue.streamName;
                     gdnStreamDriver.ChatSendGameInit();
+                    GameDebugPlus.Log(MMLog.Mm,cls,"SetupLoopBodyDocument()",
+                              "gdnStreamDriver.ChatSendGameInit() ");
+
                     
                 }
                 
@@ -256,6 +262,8 @@ namespace Macrometa {
             if ( isServer &&   maxSetJoinCount > currentSetJoinCount && Time.time > nextJoinLobbySetTime) {
                 GameDebug.Log("lobbyJoinGameNowSet after complete A: "+ currentSetJoinCount);
                 gdnStreamDriver.ChatSendGameReady();
+                GameDebugPlus.Log(MMLog.Mm,cls,"SetupLoopBodyDocument()",
+                    "gdnStreamDriver.ChatSendGameReady()");
                 currentSetJoinCount++;
                 nextJoinLobbySetTime = Time.time + joinLobbySetDelay;
                 GameDebug.Log("lobbyJoinGameNowSet after complete Z count: " + currentSetJoinCount);

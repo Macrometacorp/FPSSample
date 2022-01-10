@@ -465,6 +465,8 @@ namespace Macrometa {
         static public void GameJoin() {
             _inst.lobbyValue.joinGameNow = true;
             _inst.UpdateLobby();
+            GameDebugPlus.Log(MMLog.Mm,cls," GameJoin()",
+                "finished UpdateLobby()");
         }
 
         static public void SetServerAllowed(string consumerName) {
@@ -521,6 +523,8 @@ namespace Macrometa {
                     //update last heartbeat time
                     break;
                 case LobbyCommandType.GameReady:
+                    GameDebugPlus.Log(MMLog.Mm,cls,"SetupLoopBodyDocument()",
+                        "LobbyCommandType.GameReady:  unhandled");
                     GameDebug.Log("unhandled lobby command from source: "
                                   + command.command + " : " + command.source);
                     //update last heartbeat time in heartBeat collection

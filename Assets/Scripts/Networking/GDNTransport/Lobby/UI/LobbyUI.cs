@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 
 public class LobbyUI : MonoBehaviour {
+   private const string cls = "LobbyUI";
+   
    public MainMenu mainMenu;
    public TMP_Text title;
    public TeamUI team0;
@@ -41,6 +43,8 @@ public class LobbyUI : MonoBehaviour {
       }
 
       if (lobbyValue.joinGameNow && !_joinStarted) {
+         GameDebugPlus.Log(MMLog.Mm,cls," DisplayLobbyValue",
+            "StartJoin()");
          _joinStarted = true;
             StartCoroutine(StartJoin());
       }

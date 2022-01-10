@@ -308,8 +308,8 @@ public class ServerGameWorld : ISnapshotGenerator, IClientCommandProcessor {
 
 
 
-public class ServerGameLoop : Game.IGameLoop, INetworkCallbacks
-{
+public class ServerGameLoop : Game.IGameLoop, INetworkCallbacks {
+    private const string cls = "ServerGameLoop";
     public bool Init(string[] args)
     {
         // Set up statemachine for ServerGame
@@ -512,6 +512,7 @@ public class ServerGameLoop : Game.IGameLoop, INetworkCallbacks
 
         // Fall back is just to become a server console command
         // TODO (petera) Add some sort of security system here
+        GameDebugPlus.Log("CMD", cls, "HandleClientCommand()", v);
         Console.EnqueueCommandNoHistory(v);
     }
 

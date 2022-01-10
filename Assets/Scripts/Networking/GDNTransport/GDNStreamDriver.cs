@@ -813,13 +813,15 @@ namespace Macrometa {
                             //ReceiveTransportPong(receivedMessage);
                             break;
 
-                        case VirtualMsgType.Internal:
+                        case VirtualMsgType. Internal:
                             //GameDebug.Log("Consumer1.OnMessage internal ");
                             command = new GDNStreamDriver.Command() {
                                 command = QueueCommand.ReceiveInternal,
                                 receivedMessage = receivedMessage
                             };
                             AddCommand(command);
+                            GameDebugPlus.Log(MMLog.Mm,cls,"SetConsumer",
+                                "onMessage internal " );
                             //ReceiveInternal(receivedMessage);
                             break;
 
@@ -1002,6 +1004,8 @@ namespace Macrometa {
                 command = LobbyCommandType.GameInit,
                 all = true,
             };
+            GameDebugPlus.Log(MMLog.Mm,cls," ChatSendGameInit()",
+                " ChatSendGameInit() : "+chatChannelId );
             GameDebug.Log(" ChatSendGameInit() : "+chatChannelId );
             ChatSendCommand(chatChannelId,command);
         }
@@ -1648,6 +1652,8 @@ namespace Macrometa {
                 case LobbyCommandType.GameReady:
                     GameDebug.Log("stream driver lobby command from source: " 
                                   + command.command +" : "+command.source );
+                    GameDebugPlus.Log(MMLog.Mm,cls,"ExecuteLobby",
+                        "LobbyCommandType.GameReady: GameJoin()");
                     GDNClientLobbyNetworkDriver2.GameJoin();
                     break;
                 case LobbyCommandType.AllowServer:

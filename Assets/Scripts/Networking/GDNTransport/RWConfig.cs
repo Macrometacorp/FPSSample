@@ -68,6 +68,9 @@ public class RwConfig {
     public static ConfigData ReadConfig(string fileName, TextAsset defaultConfig) {
         if (_read) {
             GDNStats.playerName = _configData.playerName;
+            if (ClientGameLoop.isBotString.Value == "yes") {
+                GDNStats.playerName = ClientGameLoop.debugMoveName.Value;
+            }
             return _configData;
         } else {
             string path = Application.dataPath + "/" + fileName;
