@@ -115,6 +115,8 @@ namespace Macrometa {
         public bool receivedPongOnly = false;
         public float pongOnlyRtt = 0;
         public GDNStats dummyForSetupGDNStats ;
+        public GameStats2 prevGameStats2;
+        
         static public GDNStreamDriver inst;
         
         public class ChatBuffer {
@@ -1414,8 +1416,8 @@ namespace Macrometa {
                     receivedMessage.properties.countrycode);
                 if (networkStatsData != null) {
                     if (isPlayStatsServerOn) {
-                        var gameStats2 = PlayStats.GenerataPeriodicGameStats2(networkStatsData,receivedMessage);
-                        ProducerGameStatsSend(gameStats2);
+                        prevGameStats2 = PlayStats.GenerataPeriodicGameStats2(networkStatsData,receivedMessage);
+                        ProducerGameStatsSend(prevGameStats2);
                     }
                     else {
                         ProducerStatsSend(networkStatsData);

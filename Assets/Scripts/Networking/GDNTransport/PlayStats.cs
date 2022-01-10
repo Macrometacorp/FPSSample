@@ -10,6 +10,8 @@ using Random = UnityEngine.Random;
 
 namespace Macrometa {
     public class PlayStats {
+        private const string cls = "PlayStats";
+        
         private static LobbyValue lobbyValue;
         
         public enum MatchResult {
@@ -177,10 +179,11 @@ namespace Macrometa {
             GameDebug.Log("AddPlayerStat team1: "+ (GDNStats.baseGameStats.team1 != null) );
 
             var ps = GDNStats.baseGameStats.CopyOf();
-            //ps.timeStamp = (long) (DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            //var ps = GDNStreamDriver.inst.prevGameStats2;
             ps.gkilled = killed;
             ps.gkilledBy = killedBy;
             AddKills(killed, killedBy);
+            GameDebugPlus.Log("CMD", cls, "AddPlayerStat", "playername: "+ps.playerName);
             //SendPlayerStats(ps);
             GDNStreamDriver.inst.ProducerGameStatsSend(ps);
             //ProducerGameStatsSend
