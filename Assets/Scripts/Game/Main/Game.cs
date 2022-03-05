@@ -345,6 +345,8 @@ public class Game : MonoBehaviour
         GameDebug.Init(engineLogFileLocation, logName);
         var logNamePlus = "FPS_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff");
         GameDebugPlus.Init(engineLogFileLocation,m_isHeadless, logNamePlus);
+        var logTransport = "TRN_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff");
+        TransportMsgLog.Init(engineLogFileLocation,m_isHeadless, logTransport);
 
         ConfigVar.Init();
 

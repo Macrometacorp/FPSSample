@@ -435,7 +435,7 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         /// </summary>
         public int i;
         public int z;//payloadByteSize
-        // these are only used in TranportPing/Pong
+        // these are only used in TransportPing/Pong
         public int r;// last ping time consumer i.e. remote ping time
         public int remoteProcessingPing;
         /// <summary>
@@ -459,7 +459,10 @@ expireAfter: The time (in seconds) after a document's creation after which the d
         public string remotePlayerCountrycode;
         public string remoteConnectin_Type;
 
-
+        public string ToLogString() {
+            return "Source: " + s + " |" + "Dest: " + d + " |" + "msgType: " + t +
+                   " | " + "MsgId: " + i + " |";
+        }
     }
     
     [Serializable]

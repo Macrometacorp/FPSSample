@@ -41,6 +41,8 @@ namespace Macrometa {
         public static Stopwatch chatPingStopwatch;
         public static string localId;  // is player name in FPS
         public static string appType;
+        public static int msgId = 0;
+        
         public string nodeId = "";
         public ListStream listStream;
         public WebSocket consumer1;
@@ -564,7 +566,7 @@ namespace Macrometa {
         
 
         public void ProducerSend(int id, VirtualMsgType msgType, byte[] payload,
-            int pingId = 0, int pingTimeR = 0, int pingTimeO = 0, string localId = "") {
+            int pingId = -1, int pingTimeR = 0, int pingTimeO = 0, string localId = "") {
             //GameDebug.Log("ProducerSend A: " + id);
             if (!gdnConnections.ContainsKey(id)) {
                 GameDebug.Log("ProducerSend bad id:" + id)  ;
@@ -582,7 +584,11 @@ namespace Macrometa {
                 GameDebug.Log("ProducerSend connect: "+ GDNStats.playerName);
             }
 
+            if (pingId == -1) {
+                pingId = msgId++;
+            }
             var properties = new MessageProperties() {
+                i = pingId,
                 t = msgType,
                 p = gdnConnection.port,
                 d = gdnConnection.destination,
@@ -619,7 +625,6 @@ namespace Macrometa {
                 properties.remotePlayerCity = PlayStats.remotePlayerCity;
                 properties.remotePlayerCountrycode = PlayStats.remotePlayerCountry;
                 properties.remoteConnectin_Type = PlayStats.remoteConnectin_Type;
-                
                 //GameDebug.Log("pong to: "+ gdnConnection.destination + " rifle: " +properties.rifleShots );
             }
 
@@ -627,6 +632,7 @@ namespace Macrometa {
                 properties = properties,
                 payload = Convert.ToBase64String(payload)
             };
+            TransportMsgLog.Log("Msg",cls,"ProducerSend",properties.ToLogString());
             string msgJSON = JsonUtility.ToJson(message);
             //GameDebug.Log("Send msg: " + message.properties.msgType);
             if (msgType == VirtualMsgType.Data) {
@@ -654,6 +660,7 @@ namespace Macrometa {
             if (isStatsOn || isPlayStatsClientOn) {
                 producer1Stats.IncrementCounts(msgJSON.Length);
             }
+            
         }
 
         
@@ -733,7 +740,8 @@ namespace Macrometa {
                     Command command;
                     switch (receivedMessage.properties.t) {
                         case VirtualMsgType.Data:
-
+                            TransportMsgLog.Log("Msg",cls,"SetConsumer"
+                                ,receivedMessage.properties.ToLogString());
                             //GameDebug.Log("Consumer1.OnMessage Data");
                             var connection = new GDNNetworkDriver.GDNConnection() {
                                 source = receivedMessage.properties.d,

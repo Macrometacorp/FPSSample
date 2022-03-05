@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using Macrometa;
 using BestHTTP.WebSocket;
@@ -30,6 +31,11 @@ public class GDNNetworkDriver : MonoBehaviour {
     public long kvValueTTL = 15;
 
     public virtual void Awake() {
+        var path = Application.dataPath;
+#if UNITY_EDITOR
+        path = Path.Combine(Application.dataPath, "../Logs");  
+#endif        
+        
         GameDebug.Log("  GDNNetworkDriver Awake");
         PlayStats.remotePlayerCity = RwConfig.ReadConfig().userCity;
         PlayStats.remotePlayerCountry = RwConfig.ReadConfig().userCountry;
