@@ -18,10 +18,11 @@ public class PairMessageCheck : MonoBehaviour {
         public string received;
         public List<string> skipped ;
         public int delay;
+        public int size;
         public bool matched;
 
         public override string ToString() {
-            return id + " | " + sent + " | " + received + " | " + delay + " | " + matched + " | " + skipped.Count + " |";
+            return id + " | " + sent + " | " + received + " | " + delay  + " | " + size + " | " + matched + " | " + skipped.Count + " |";
         }
     }
 
@@ -37,18 +38,26 @@ public class PairMessageCheck : MonoBehaviour {
 
         bool isPairMessage = false;
         foreach (var field in fields) {
-            if (field.Contains("MsgType: PairMessage")) {
+            if (field.Contains("MsgType: PairMessage") && !field.Contains("msgType: Ping" )) {
                 isPairMessage = true;
+                break;
+            }
+        }
+        if (!isPairMessage) return;
+        foreach (var field in fields) {
+            if (field.Contains("msgType: Ping" ) ||  field.Contains("msgType: Pong" ) ) {
+                isPairMessage =false;
                 break;
             }
         }
         
         if (!isPairMessage) return;
-        
+        count++;
         string pmKey = "";
         bool send = false;
         string address = "";
         string dest = "";
+        int size = 0;
         
         foreach (var field in fields) {
             if (stringFields.Any(field.Contains)) {
@@ -59,6 +68,12 @@ public class PairMessageCheck : MonoBehaviour {
                 string[] subFields = field.Split(':');
                 //Debug.Log(subFields[1] +" :: "+ int.Parse(subFields[1]) + " :: " +$"{int.Parse(subFields[1]):00000}");
                 pmKey +=subFields[0]+": "+  $"{int.Parse(subFields[1]):00000} ";
+            }
+            
+            if (field.Contains("Size:")) {
+                string[] subFields = field.Split(':');
+                //Debug.Log(subFields[1] +" :: "+ int.Parse(subFields[1]) + " :: " +$"{int.Parse(subFields[1]):00000}");
+               size =int.Parse(subFields[1]);
             }
             
             if (field.Contains("Send: True")) {
@@ -83,6 +98,9 @@ public class PairMessageCheck : MonoBehaviour {
         pmRecord.id = pmKey;
         if (send) {
             pmRecord.sent = fields[0];
+        }
+        if (size != 0) {
+            pmRecord.size = size;
         }
         else if(address == dest) {
             pmRecord.received = fields[0];

@@ -166,7 +166,7 @@ public class Game : MonoBehaviour
     public event UpdateDelegate endUpdateEvent;
 
     // Vars owned by server and replicated to clients
-    [ConfigVar(Name = "server.tickrate", DefaultValue = "60", Description = "Tickrate for server", Flags = ConfigVar.Flags.ServerInfo)]
+    [ConfigVar(Name = "server.tickrate", DefaultValue = "20", Description = "Tickrate for server", Flags = ConfigVar.Flags.ServerInfo)]
     public static ConfigVar serverTickRate;
 
     [ConfigVar(Name = "config.fov", DefaultValue = "60", Description = "Field of view", Flags = ConfigVar.Flags.Save)]

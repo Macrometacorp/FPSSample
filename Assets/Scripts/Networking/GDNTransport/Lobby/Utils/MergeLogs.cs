@@ -7,8 +7,12 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class MergeLogs : MonoBehaviour {
+
+    public int debugCount;
     
-    public UnityEvent<string> AddLine;
+    public UnityEvent<string> AddLine;//not working in 2019 inspector
+    public PairMessageCheck pairMessageCheck;// for 2019
+    
     public UnityEvent MergeComplete;
     void Start() {
         var pathRead = Application.dataPath;
@@ -56,7 +60,8 @@ public class MergeLogs : MonoBehaviour {
                     }
                 }
 
-                AddLine.Invoke(lr.line);
+                //AddLine.Invoke(lr.line);
+                pairMessageCheck.AddLine(lr.line);
                 sw.WriteLine( lr.line);
                 lr.line = lr.sr.ReadLine();
             }

@@ -31,7 +31,7 @@ namespace Macrometa.Lobby {
         public List<bool> indexesExist = new List<bool>();
         public List<IndexParams> indexParamsList = new List<IndexParams>();
         public bool indexTTLExist;
-        public IndexParams ttlIndexParams;
+        public TTLIndexParams ttlIndexParams;
 
         public bool maxSerialIsDone;
         public MaxSerialResult maxSerialResult;
@@ -87,12 +87,14 @@ namespace Macrometa.Lobby {
                 type = "persistent"
             });
             indexesExist.Add(false);
-
-            ttlIndexParams = new IndexParams() {
+            
+            
+            ttlIndexParams = new TTLIndexParams() {
                 expireAfter = 90,
                 fields = new List<string>() {"lastUpdate"},
                 type = "ttl"
             };
+            
 
         }
 
@@ -401,10 +403,13 @@ namespace Macrometa.Lobby {
         }
         public void CreateTTLIndex() {
             if (!indexTTLExist) {
+                indexTTLExist=  true;
+                
                 _gdnErrorHandler.isWaiting = true;
                 //Debug.Log("creating server in stream: " + baseGDNData.CreateStreamURL(serverInStreamName));
                 _monoBehaviour.StartCoroutine(PostCreateTTLIndex(_gdnData, lobbiesCollectionName, ttlIndexParams,
                     CreateTTLIndexCallback));
+                    
             }
         }
 

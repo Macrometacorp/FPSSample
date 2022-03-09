@@ -632,8 +632,11 @@ namespace Macrometa {
                 properties = properties,
                 payload = Convert.ToBase64String(payload)
             };
-            TransportMsgLog.Log("Msg",cls,"ProducerSend",properties.ToLogString());
             string msgJSON = JsonUtility.ToJson(message);
+            TransportMsgLog.Log("Msg",cls,"ProducerSend","MsgType: PairMessage | " 
+            +"Send: True |" +  "Size: " + msgJSON.Length  +"  |" + 
+                "Address: " + properties.s + " | " + properties.ToLogString());
+            
             //GameDebug.Log("Send msg: " + message.properties.msgType);
             if (msgType == VirtualMsgType.Data) {
                 LogFrequency.Incr("ProducerSend Data",
@@ -740,8 +743,9 @@ namespace Macrometa {
                     Command command;
                     switch (receivedMessage.properties.t) {
                         case VirtualMsgType.Data:
-                            TransportMsgLog.Log("Msg",cls,"SetConsumer"
-                                ,receivedMessage.properties.ToLogString());
+                            TransportMsgLog.Log("Msg",cls,"SetConsumer","MsgType: PairMessage | "+
+                                "Address: " + receivedMessage.properties.d + " | " 
+                                 +receivedMessage.properties.ToLogString());
                             //GameDebug.Log("Consumer1.OnMessage Data");
                             var connection = new GDNNetworkDriver.GDNConnection() {
                                 source = receivedMessage.properties.d,

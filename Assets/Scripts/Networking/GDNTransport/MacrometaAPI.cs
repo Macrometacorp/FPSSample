@@ -290,9 +290,15 @@ expireAfter: The time (in seconds) after a document's creation after which the d
     public bool sparse;
     public string type;
     public bool unique;
-    public int expireAfter;
+    //public int expireAfter;
     }
 
+    [Serializable]
+    public struct TTLIndexParams {
+        public List<string> fields;
+        public string type;
+        public int expireAfter;
+    }
     
     [Serializable]
     public struct ListIndexes{
@@ -728,6 +734,8 @@ expireAfter: The time (in seconds) after a document's creation after which the d
             Action<UnityWebRequest,int> callback) {
             ;
             var data= JsonUtility.ToJson(indexParams);
+            GameDebug.Log("PostCreateIndex url:"+(gdnData.PostPersistentIndexURL(collectionName)));
+            GameDebug.Log("PostCreateIndex collectionName:"+ collectionName  + " dataJSON: "+ data);
             var www = WebPost(gdnData.PostPersistentIndexURL(collectionName), data, gdnData);
             yield return www.SendWebRequest();
             
@@ -735,7 +743,7 @@ expireAfter: The time (in seconds) after a document's creation after which the d
                 callback(www, indexId);
         }
         
-        public static IEnumerator PostCreateTTLIndex(GDNData gdnData, string collectionName, IndexParams indexParams,
+        public static IEnumerator PostCreateTTLIndex(GDNData gdnData, string collectionName, TTLIndexParams indexParams,
             Action<UnityWebRequest> callback) {
             ;
             var data= JsonUtility.ToJson(indexParams);
