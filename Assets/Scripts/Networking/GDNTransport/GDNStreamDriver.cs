@@ -734,7 +734,11 @@ namespace Macrometa {
                 ) {
                     PlayStats.PlayerKilled(receivedMessage.properties.killedPlayerName);
                 }
-
+                TransportMsgLog.Log("Msg",cls,"SetConsumer","MsgType: PairMessage | "+
+                                                            "Address: " +  consumerName + " | " 
+                                                            +  "publishTime@ " +  receivedMessage.publishTime + " | " 
+                                                            + "messageId@ " + receivedMessage.messageId + " | "
+                                                            +receivedMessage.properties.ToLogString());
                 if (receivedMessage.properties != null &&
                     receivedMessage.properties.d == consumerName
                     // && DateTime.Now.AddMinutes(discardMinutes) < DateTime.Parse(receivedMessage.publishTime)  
@@ -743,14 +747,12 @@ namespace Macrometa {
                     Command command;
                     switch (receivedMessage.properties.t) {
                         case VirtualMsgType.Data:
-                            TransportMsgLog.Log("Msg",cls,"SetConsumer","MsgType: PairMessage | "+
-                                "Address: " + receivedMessage.properties.d + " | " 
-                                 +receivedMessage.properties.ToLogString());
+                            
                             //GameDebug.Log("Consumer1.OnMessage Data");
                             var connection = new GDNNetworkDriver.GDNConnection() {
                                 source = receivedMessage.properties.d,
                                 destination = receivedMessage.properties.s,
-                                port = receivedMessage.properties.p
+                                port = receivedMessage.properties.p 
                             };
 
                             var id = GetConnectionId(connection);

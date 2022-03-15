@@ -14,6 +14,10 @@ public class PairMessageCheck : MonoBehaviour {
     
     public struct PMRecord {
         public string id;
+        public string source;
+        public string destination;
+        public int msgId;
+        public string publishTime;
         public string sent;
         public string received;
         public List<string> skipped ;
@@ -22,15 +26,25 @@ public class PairMessageCheck : MonoBehaviour {
         public bool matched;
 
         public override string ToString() {
-            return id + " | " + sent + " | " + received + " | " + delay  + " | " + size + " | " + matched + " | " + skipped.Count + " |";
+
+            string extra = "";
+            foreach (var time in skipped) {
+                extra +=  time + " |";
+            }
+            return  source + " | " + destination + " | " +  msgId + " | " + publishTime + " | " +
+                    sent + " | " + received + " | " + delay  + " | " + size + " | " + matched + " | " + 
+                    skipped.Count + " |" + extra ;
         }
     }
 
     public string[] stringFields = new[] {"Source:", "Dest:"};
     public string[] intFields = new[] { "MsgId:"};
     public string destField = "Dest:";
+    public string sourceField = "Source:";
+    public string msgIdField = "MsgId:";
     public string addressField = "Address:";
-   
+    public string messageIdField = "messageId@";
+    public string publishTimeField  ="publishTime@";
     
     public void AddLine(string line) {
         
@@ -57,7 +71,11 @@ public class PairMessageCheck : MonoBehaviour {
         bool send = false;
         string address = "";
         string dest = "";
+        string source = "";
+        int msgId =0;
         int size = 0;
+        string messageId="";
+        string publishTime="";
         
         foreach (var field in fields) {
             if (stringFields.Any(field.Contains)) {
@@ -73,7 +91,12 @@ public class PairMessageCheck : MonoBehaviour {
             if (field.Contains("Size:")) {
                 string[] subFields = field.Split(':');
                 //Debug.Log(subFields[1] +" :: "+ int.Parse(subFields[1]) + " :: " +$"{int.Parse(subFields[1]):00000}");
-               size =int.Parse(subFields[1]);
+                size =int.Parse(subFields[1]);
+            } 
+            if (field.Contains(msgIdField)) {
+                string[] subFields = field.Split(':');
+                //Debug.Log(subFields[1] +" :: "+ int.Parse(subFields[1]) + " :: " +$"{int.Parse(subFields[1]):00000}");
+                msgId =int.Parse(subFields[1]);
             }
             
             if (field.Contains("Send: True")) {
@@ -85,7 +108,17 @@ public class PairMessageCheck : MonoBehaviour {
             }
             if (field.Contains(destField)) {
                 string[] subFields = field.Split(':');
-                dest = subFields[1].Trim();;
+                dest = subFields[1].Trim();
+            } if (field.Contains(sourceField)) {
+                string[] subFields = field.Split(':');
+                source = subFields[1].Trim();
+            }
+            if (field.Contains(messageIdField)) {
+                string[] subFields = field.Split('@');
+                messageId = subFields[1].Trim();;
+            }if (field.Contains(publishTimeField)) {
+                string[] subFields = field.Split('@');
+                publishTime = subFields[1].Trim();;
             }
         }
 
@@ -95,6 +128,9 @@ public class PairMessageCheck : MonoBehaviour {
             pmRecord = PMRecords[pmKey];
         }
 
+        pmRecord.source = source;
+        pmRecord.destination = dest;
+        pmRecord.msgId = msgId;
         pmRecord.id = pmKey;
         if (send) {
             pmRecord.sent = fields[0];
@@ -118,6 +154,14 @@ public class PairMessageCheck : MonoBehaviour {
             pmRecord.delay = (int)delay.TotalMilliseconds;
         }
 
+        if (!String.IsNullOrEmpty(messageId)) {
+           
+        }
+
+        if (!String.IsNullOrEmpty(publishTime)) {
+            pmRecord.publishTime = publishTime;
+        }
+        
         PMRecords[pmKey] = pmRecord;
     }
 
