@@ -776,7 +776,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 19.999916}
+  m_AnchoredPosition: {x: 0, y: 20.000021}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &114635037818496874
@@ -12366,7 +12366,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 4146616146296342882}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999999
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14579,8 +14579,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 618397691084722893}
   m_HandleRect: {fileID: 8841684530773784548}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.53846174
+  m_Value: 1
+  m_Size: 0.53846115
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16175,6 +16175,46 @@ MonoBehaviour:
     dummyTrafficQuantity: 0
     receivedPongOnly: 0
     pongOnlyRtt: 0
+    prevGameStats2:
+      gameName: 
+      gameId: 
+      timeStamp: 0
+      playerName: 
+      health: 0
+      matchType: 
+      matchResult: 
+      teamName: 
+      team0:
+        teamName: 
+        players: []
+      team1:
+        teamName: 
+        players: []
+      rtt: 0
+      prdLocalPing: 0
+      cnsmLocalPing: 0
+      prdRemotePing: 0
+      cnsmRemotePing: 0
+      localProcessingPing: 0
+      remoteProcessingPing: 0
+      gdnCity: 
+      gdnCountry: 
+      rifleShots: 0
+      grenadeShots: 0
+      gkilled: 
+      gkilledBy: 
+      posX: 0
+      posY: 0
+      posZ: 0
+      orientation: 0
+      throughput: 0
+      fps: 0
+      killCounts: []
+      deathCounts: []
+      playerCity: 
+      playerCountry: 
+      connectionType: 
+      disconnect: 0
   nextKVValuePutIncr: 5
   kvValueTTL: 15
   startDocumentInit: 1
@@ -16207,9 +16247,7 @@ MonoBehaviour:
     indexTTLExist: 0
     ttlIndexParams:
       fields: []
-      sparse: 0
       type: 
-      unique: 0
       expireAfter: 0
     maxSerialIsDone: 0
     maxSerialResult:
@@ -18242,7 +18280,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6638392394496816882}
   m_HandleRect: {fileID: 4111423720167939573}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -26194,7 +26232,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0000068105746, y: 0.000018091145}
+  m_AnchoredPosition: {x: 0.000114258684, y: -0.0000727108}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!33 &4931950643415678406
@@ -27809,7 +27847,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: -0.00030517578}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &7682642984743684416

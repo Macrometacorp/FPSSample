@@ -40,7 +40,7 @@ public class PlayerUI : MonoBehaviour {
             pingTime.text = "";
         }
         else {
-            teamSlot.region.DisplayLocation();
+            playerRegionName.text = teamSlot.region.DisplayLocation();
             pingTime.text = teamSlot.ping.ToString();
         }
 
