@@ -214,7 +214,7 @@ namespace Macrometa {
                     _gdnErrorHandler.currentNetworkErrors++;
                 }
                 else {
-                    GameDebug.Log("ListStream succeed ");
+                    GameDebug.Log("ListStream succeed GDNStreamDriver");
                     streamListDone = true;
                     _gdnErrorHandler.currentNetworkErrors = 0;
                 }
@@ -265,6 +265,9 @@ namespace Macrometa {
                 //Debug.Log("creating server in stream: " + baseGDNData.CreateStreamURL(serverInStreamName));
                 _monobehaviour.StartCoroutine(MacrometaAPI.CreateStream(_gdnData, chatStreamName,
                     CreateChatStreamCallback));
+            }
+            else {
+                GameDebug.Log("chatStreamExists : " + chatStreamName); 
             }
         }
 
@@ -436,6 +439,7 @@ namespace Macrometa {
 
         public void CreateChatProducer(string streamName) {
             _gdnErrorHandler.isWaiting = true;
+            GameDebug.Log("In CreateChatProducer(): " );
             _monobehaviour.StartCoroutine(MacrometaAPI.Producer(_gdnData, streamName, SetChatProducer,_gdnErrorHandler));
         }
 

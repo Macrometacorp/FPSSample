@@ -92,29 +92,28 @@ public class PlayerModuleClient
                 localPlayer.m_debugMovePhaseDuration = 4 + 2*Random.value;
                 localPlayer.m_debugMoveTurnSpeed = maxTurn *0.9f + Random.value * maxTurn * 0.1f;
 
-                localPlayer.m_debugMoveMag = Random.value > 0.8f ? 1.0f : 0.0f;
+                localPlayer.m_debugMoveMag = Random.value > 0.9f ? 1.0f : 0.0f;
             }
 
            
             localPlayer.command.moveMagnitude = localPlayer.m_debugMoveMag;
-            if (Random.value > 0.8f) {
+            if (Random.value > 0.9f) {
                 localPlayer.command.lookYaw += localPlayer.m_debugMoveTurnSpeed * deltaTime;
             }
 
             localPlayer.command.lookYaw = localPlayer.command.lookYaw % 360;
             while (localPlayer.command.lookYaw < 0.0f)
                 localPlayer.command.lookYaw += 360.0f;
-            if (Random.value > 0.8f) {
-                if (Random.value > 0.5f) {
-                    if (Random.value > 0.3f) {
-                        localPlayer.command.buttons.Set(UserCommand.Button.PrimaryFire,
-                            localPlayer.m_debugMoveDuration < fireDuration);
-                    }
-                    else {
-                        localPlayer.command.buttons.Set(UserCommand.Button.SecondaryFire,
-                            (Random.value > 0.8f));
-                    }
-
+            if (Random.value > 0.9f) {
+                if (Random.value > 0.3f) {
+                    localPlayer.command.buttons.Set(UserCommand.Button.PrimaryFire,
+                        localPlayer.m_debugMoveDuration < fireDuration);
+                }
+                else {
+                    localPlayer.command.buttons.Set(UserCommand.Button.SecondaryFire,
+                        (Random.value > 0.8f));
+                }
+                if (Random.value > 0.9f) {
                     localPlayer.command.buttons.Set(UserCommand.Button.Jump,
                         localPlayer.m_debugMoveDuration < jumpDuration);
                 }

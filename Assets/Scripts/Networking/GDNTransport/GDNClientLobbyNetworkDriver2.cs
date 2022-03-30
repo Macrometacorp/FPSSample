@@ -215,10 +215,13 @@ namespace Macrometa {
                 }
             }
 
+            //removed so as not to override manual TTL setting made for testing
+            /*
             if (!gdnDocumentLobbyDriver.indexTTLExist) {
                 gdnDocumentLobbyDriver.CreateTTLIndex();
                 return;
             }
+            */
             
             if (!gdnStreamDriver.regionIsDone) {
                 gdnStreamDriver.GetRegion();
@@ -231,21 +234,25 @@ namespace Macrometa {
             }
             
             if (!gdnStreamDriver.chatStreamExists) {
+                GameDebug.Log("start CreateChatStream(): " );
                 gdnStreamDriver.CreateChatStream();
                 return;
             }
-            
+
             if (!gdnStreamDriver.chatProducerExists) {
+                GameDebug.Log("start CreateChatProducer(): " );
                 gdnStreamDriver.CreateChatProducer(gdnStreamDriver.chatStreamName);
                 return;
             }
 
             if (!gdnStreamDriver.chatConsumerExists) {
+                GameDebug.Log("start CreateChatConsumer(): " );
                 gdnStreamDriver.CreateChatConsumer(gdnStreamDriver.chatStreamName, gdnStreamDriver.consumerName);
                 return;
             }
             
             if (!gdnDocumentLobbyDriver.lobbyListIsDone ) {
+                GameDebug.Log(" PostLobbyListQuery: " );
                 gdnDocumentLobbyDriver.PostLobbyListQuery();
                 nextRefreshLobbyList = Time.time + 2f;
                 return;
@@ -564,7 +571,7 @@ namespace Macrometa {
    
    #region LobbyTesting
         //testing
-
+/*
         public void AddDummyTeamSlots(int teamIndex, int count) {
             for (int i = 0; i < count; i++) {
                 var dummy = DummyTeamSlot();
@@ -582,7 +589,7 @@ namespace Macrometa {
             return result;
         }
         
-        
+        */
         
     #endregion LobbyLobbyTesting
         

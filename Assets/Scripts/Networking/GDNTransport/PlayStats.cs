@@ -263,8 +263,7 @@ namespace Macrometa {
 [Serializable]
 public class GameStats2 {
     public string gameName;
-    public string gameId = (long)(DateTime.Now.
-        Subtract(new DateTime(1970, 1, 1))).TotalSeconds+ "R"+Random.Range(1,1000000);
+    public string gameId;
     public long   timeStamp;
     public string playerName;
     public int health;

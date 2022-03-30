@@ -10,7 +10,7 @@ public class BotArray {
     }
 
     static public readonly BotData[,] data;
-    static public int maxBots = 3;
+    static public int maxBots = 7;
     
     static BotArray() {
         data = new BotData[2,4] {

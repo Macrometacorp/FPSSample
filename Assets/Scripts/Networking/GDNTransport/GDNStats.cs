@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Macrometa;
 using Macrometa.Lobby;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GDNStats {
     public static bool setupComplete = false;
@@ -82,7 +83,9 @@ public class GDNStats {
         baseGameStats = new GameStats2() {
             gameName = gameName,
             team0 = team0,
-            team1 = team1
+            team1 = team1,
+            gameId = (long)(DateTime.Now.
+                Subtract(new DateTime(1970, 1, 1))).TotalSeconds+ "R"+Random.Range(1,1000000)
         };
     }
 
@@ -120,7 +123,9 @@ public class GDNStats {
         baseGameStats = new GameStats2() {
             gameName = gameName,
             team0 = team0,
-            team1 = team1
+            team1 = team1,
+            gameId = (long)(DateTime.Now.
+                Subtract(new DateTime(1970, 1, 1))).TotalSeconds+ "R"+Random.Range(1,1000000)
         };
         GameDebug.Log(" BaseGameFromLobby GDNStats.baseGameStats" + ( GDNStats.baseGameStats != null));
         GameDebug.Log("BaseGameFromLobby team0: "+ (GDNStats.baseGameStats.team0 != null) );
@@ -143,7 +148,9 @@ public class GDNStats {
         baseGameStats = new GameStats2() {
             gameName = gameName,
             team0 = team0,
-            team1 = team1
+            team1 = team1,
+            gameId = (long)(DateTime.Now.
+                Subtract(new DateTime(1970, 1, 1))).TotalSeconds+ "R"+Random.Range(1,1000000)
         };
     }
 
