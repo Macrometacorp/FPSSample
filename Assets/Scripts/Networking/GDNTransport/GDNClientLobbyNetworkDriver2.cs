@@ -216,12 +216,12 @@ namespace Macrometa {
             }
 
             //removed so as not to override manual TTL setting made for testing
-            /*
+            
             if (!gdnDocumentLobbyDriver.indexTTLExist) {
                 gdnDocumentLobbyDriver.CreateTTLIndex();
                 return;
             }
-            */
+            
             
             if (!gdnStreamDriver.regionIsDone) {
                 gdnStreamDriver.GetRegion();

@@ -696,6 +696,7 @@ namespace Macrometa {
                 payload = payload
             };
             string msgJSON = JsonUtility.ToJson(message);
+            
             producerGameStats.Send(msgJSON);
 
         }
@@ -1436,6 +1437,7 @@ namespace Macrometa {
                     if (isPlayStatsServerOn) {
                         prevGameStats2 = PlayStats.GenerataPeriodicGameStats2(networkStatsData,receivedMessage);
                         ProducerGameStatsSend(prevGameStats2);
+                        GameDebug.Log(" sent GameStats2: " +prevGameStats2 );
                     }
                     else {
                         ProducerStatsSend(networkStatsData);

@@ -1,0 +1,4147 @@
+﻿2022-03-24T00:41:48.713Z 0: GameDebug initialized. Logging to ./game_20220324_004148_642.log
+
+
+2022-03-24T00:41:49.058Z 0: cmd: exec -s user.cfg
+
+
+2022-03-24T00:41:49.059Z 0: cmd: exec -s boot.cfg
+
+
+2022-03-24T00:41:49.075Z 0: FPS Sample initialized
+
+
+2022-03-24T00:41:49.079Z 0: Build type: release
+
+
+2022-03-24T00:41:49.083Z 0: BuildID: 20220323.Dev.0
+
+
+2022-03-24T00:41:49.084Z 0: Cwd: C:\Users\grant\Documents\Unity\FPSSample - full - 9.30\Builds\StandaloneWindows64\FPS_ECS_StandaloneWindows64_20220323.Dev.0
+
+
+2022-03-24T00:41:49.085Z 0: SimpleBundleManager initialized
+
+
+2022-03-24T00:41:49.087Z 0: LevelManager initialized
+
+
+2022-03-24T00:41:49.088Z 0: InputSystem initialized
+
+
+2022-03-24T00:41:49.091Z 0: Loaded game config
+
+
+2022-03-24T00:41:49.123Z 0: cmd: client localhost
+
+
+2022-03-24T00:41:49.128Z 0: cmd: isbotstring yes
+
+
+2022-03-24T00:41:49.131Z 0: cmd: debugmove 2
+
+
+2022-03-24T00:41:49.134Z 0: cmd: client.debugmovename BotB1
+
+
+2022-03-24T00:41:49.382Z 1: Game loop ClientGameLoop requested
+
+
+2022-03-24T00:41:49.478Z 2: GameWorld ClientWorld initializing
+
+
+2022-03-24T00:41:49.483Z 2: GDNTransport instantiated 
+
+
+2022-03-24T00:41:49.489Z 2: NetworkClient initialized 
+
+
+2022-03-24T00:41:49.507Z 2: Switching state: null -> Browsing
+
+
+2022-03-24T00:41:49.509Z 2: Client Browsing after init
+
+
+2022-03-24T00:41:49.514Z 2: Client initialized
+
+
+2022-03-24T00:41:49.520Z 2: loading:AssetBundles/level_menu
+
+
+2022-03-24T00:41:49.531Z 2: loading:AssetBundles/level_menu
+
+
+2022-03-24T00:41:49.539Z 2: Loading Assets/Scenes/Level_Menu/Level_Menu_Background.unity
+
+
+2022-03-24T00:41:49.552Z 2: Game loop ClientGameLoop requested
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LitTessellation' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LitTessellation' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LitTessellation' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LitTessellation' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 26 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 28 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 29 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 30 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 31 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+2022-03-24T00:41:55.055Z 3: ClientGameLoop shutdown
+
+
+2022-03-24T00:41:55.059Z 3: GameWorld Default World shutting down
+
+
+2022-03-24T00:41:55.066Z 3: GameWorld ClientWorld initializing
+
+
+2022-03-24T00:41:55.069Z 3: GDNTransport instantiated 
+
+
+2022-03-24T00:41:55.070Z 3: NetworkClient initialized 
+
+
+2022-03-24T00:41:55.071Z 3: Switching state: null -> Connecting
+
+
+2022-03-24T00:41:55.073Z 3: Client  EnterConnectingState
+
+
+2022-03-24T00:41:55.074Z 3: GDNTransport Connect
+
+
+2022-03-24T00:41:55.083Z 3:   GDN Lobby NetworkDriver2 Awake
+
+
+2022-03-24T00:41:55.128Z 3: Read Config: ConfigGDN.json
+
+
+2022-03-24T00:41:55.167Z 3:   GDNNetworkDriver Awake gamename: grant
+
+
+2022-03-24T00:41:55.176Z 3:  //dummyForSetupGDNStats.Start(); 
+
+
+2022-03-24T00:41:55.194Z 3: Setup: gaming3-us-west.eng
+
+
+2022-03-24T00:41:55.196Z 3: GDNStats creation Make
+
+
+2022-03-24T00:41:55.198Z 3: GDNStats start
+
+
+2022-03-24T00:41:55.208Z 3: TestPlayStatsDriver  Awake A
+
+
+2022-03-24T00:41:55.209Z 3: TestPlayStatsDriver  Awake C
+
+
+2022-03-24T00:41:55.210Z 3: TestPlayStatsDriver  Awake D
+
+
+2022-03-24T00:41:55.211Z 3: TestPlayStatsDriver  Awake E
+
+
+2022-03-24T00:41:55.213Z 3: ResetBaseGame()
+
+
+2022-03-24T00:41:55.218Z 3:   GDNNetworkDriver Awake end
+
+
+2022-03-24T00:41:55.222Z 3:  GDNTransport.Connect ++++++++++++++++++++++++++++++++++++++++++
+
+
+2022-03-24T00:41:55.225Z 3: Client Connecting after init
+
+
+2022-03-24T00:41:55.226Z 3: Client initialized
+
+
+2022-03-24T00:41:55.227Z 3: Trying to connect to localhost (attempt #1)...
+
+
+2022-03-24T00:41:55.731Z 5: Stripping code for Client (DevBuild)
+
+
+2022-03-24T00:41:55.733Z 5: Stripping 0 game object(s) and 0 behavior(s)
+
+
+2022-03-24T00:41:55.734Z 5: Scene level_menu loaded
+
+
+2022-03-24T00:41:55.760Z 6: Get Regionsucceed 
+
+
+2022-03-24T00:41:55.762Z 6: ListStream succeed GDNStreamDriver
+
+
+2022-03-24T00:41:55.763Z 6: Get Regionsucceed 
+
+
+2022-03-24T00:41:55.780Z 6: TestPlayStatsDriver GetListStream 
+
+
+2022-03-24T00:41:55.957Z 10: ListStream succeed 
+
+
+2022-03-24T00:41:55.962Z 10: CreateServerOutStream topic:c8globals.FPSGame_PlayStats
+
+
+2022-03-24T00:41:56.010Z 11: TestPlayStatsDriver CreateProducer 
+
+
+2022-03-24T00:41:56.157Z 14: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.grant_3_InStream
+
+
+2022-03-24T00:41:56.182Z 14: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8global._system/c8globals.FPSGame_PlayStats
+
+
+2022-03-24T00:41:56.612Z 23: Open LIVE producer FPSGame_PlayStats
+
+
+2022-03-24T00:41:56.658Z 24: TestPlayStatsDriver  CreateConsumer  
+
+
+2022-03-24T00:41:56.858Z 28: consumerURL wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/consumer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.grant_3_OutStream/C9530538615663232?otp=hdAIJBBMWn4mljadxQNCnPvM40mzJBVT
+
+
+2022-03-24T00:41:56.860Z 28: consumerURL wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/consumer/persistent/unity_fps_macrometa.io/c8global._system/c8globals.FPSGame_InGameStats_New/Server21309848?otp=s0S9P1J4pZf1FzcdgicCogIiS33UfVpc
+
+
+2022-03-24T00:41:57.155Z 34: Stream driver Open LIVE consumer FPSGame_InGameStats_New
+
+
+2022-03-24T00:41:57.156Z 34: Stream driver Open LIVE consumer grant_3_OutStream isPingOn: True
+
+
+2022-03-24T00:41:57.206Z 35: CreateStatsProducer: Unity_StatsStream
+
+
+2022-03-24T00:41:57.208Z 35: try producerStatsExists
+
+
+2022-03-24T00:41:57.404Z 39: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.Unity_StatsStream
+
+
+2022-03-24T00:41:57.656Z 44: Open LIVE producer Unity_StatsStream
+
+
+2022-03-24T00:41:57.703Z 45: Create Game StatsProducer: FPSGame_GameStats
+
+
+2022-03-24T00:41:57.704Z 45: try producerGameStatsExists
+
+
+2022-03-24T00:41:57.903Z 49: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.FPSGame_GameStats
+
+
+2022-03-24T00:41:58.153Z 54: Open LIVE producer FPSGame_GameStats
+
+
+2022-03-24T00:41:58.203Z 55: Set up Complete as grant_3 : C95305386
+
+
+2022-03-24T00:41:58.203Z 55: Connect after complete grant : C95305386
+
+
+2022-03-24T00:41:58.206Z 55:  Client send Connect
+
+
+2022-03-24T00:41:58.210Z 55: ProducerSend connect: BotB1
+
+
+2022-03-24T00:41:58.213Z 55: gdnStreamDriver.pingStarted 
+
+
+2022-03-24T00:41:58.217Z 55: starting RepeatTransportPing
+
+
+2022-03-24T00:41:58.505Z 61: consumer1.OnMessage data:  t:2.989782 : 1 t2: 44 t3: 31 t4: 31 timestamp: 3/23/2022 5:41:58 PM
+
+
+2022-03-24T00:41:58.554Z 62: OnData31 : 02-01-00-00-00-00-00-01-14-04-13-00-10-02-03-03-03-04-04-04-05-05-05-06-06-06-06-06-06-00-00
+
+
+2022-03-24T00:41:58.560Z 62: Client protocol id: 4
+
+
+2022-03-24T00:41:58.561Z 62: Server protocol id: 4
+
+
+2022-03-24T00:41:58.600Z 62: ProducerSend Data:  t:3.039701 : 1 t2: 20 t3: 13 t4: 0 timestamp: 3/23/2022 5:41:58 PM
+
+
+2022-03-24T00:41:58.600Z 62: SendData13 : 02-01-00-01-00-01-00-30-75-00-00-03-00
+
+
+2022-03-24T00:41:58.620Z 63: ProducerSend Data:  t:3.100404 : 2 t2: 56 t3: 39 t4: 0 timestamp: 3/23/2022 5:41:58 PM
+
+
+2022-03-24T00:41:58.622Z 63: SendData26 : 01-02-00-01-00-01-00-B2-1E-16-18-10-6D-00-B4-01-48-42-6F-74-42-31-DC-9F-6A-00
+
+
+2022-03-24T00:41:58.664Z 64: ProducerSend Data:  t:3.150304 : 3 t2: 68 t3: 47 t4: 0 timestamp: 3/23/2022 5:41:58 PM
+
+
+2022-03-24T00:41:58.715Z 65: consumer1.OnMessage data:  t:3.200204 : 2 t2: 88 t3: 62 t4: 62 timestamp: 3/23/2022 5:41:58 PM
+
+
+2022-03-24T00:41:58.762Z 66: OnData31 : 02-02-00-00-00-00-00-01-14-04-13-00-10-02-03-03-03-04-04-04-05-05-05-06-06-06-06-06-06-00-00
+
+
+2022-03-24T00:42:01.212Z 115: consumer1.OnMessage data:  t:5.695276 : 3 t2: 120 t3: 85 t4: 85 timestamp: 3/23/2022 5:42:01 PM
+
+
+2022-03-24T00:42:01.259Z 116: Resending lost reliable event: PlayerSetup:1
+
+
+2022-03-24T00:42:01.263Z 116: Switching state: Connecting -> Loading
+
+
+2022-03-24T00:42:01.267Z 116: loading:AssetBundles/Level_01
+
+
+2022-03-24T00:42:01.286Z 116: Loading Assets/Scenes/Level_01/Level_01_Main.unity
+
+
+2022-03-24T00:42:01.286Z 116: +Loading Assets/Scenes/Level_01/Level_01_Background.unity
+
+
+2022-03-24T00:42:01.287Z 116: +Loading Assets/Scenes/Level_01/Level_01_Gameplay.unity
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 26 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 28 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 29 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 30 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLit' uses 31 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 28 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 26 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 29 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/LayeredLitTessellation' uses 31 texture parameters, more than the 16 supported by the current graphics device.
+
+
+2022-03-24T00:42:06.861Z 117: Stripping code for Client (DevBuild)
+
+
+2022-03-24T00:42:07.027Z 117: Stripping 0 game object(s) and 39 behavior(s)
+
+
+2022-03-24T00:42:07.029Z 117: Scene Level_01 loaded
+
+
+2022-03-24T00:42:07.364Z 118: Switching state: Loading -> Playing
+
+
+[WARN] Shader 'Firstperson_Projection' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 26 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 26 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 28 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection_SSS' uses 29 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 23 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 25 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 26 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'Firstperson_Projection' uses 27 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 20 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 22 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 24 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] The referenced script on this Behaviour (Game Object 'CapsulePrimitive') is missing!
+
+
+[WARN] The referenced script on this Behaviour (Game Object 'LinePrimitive') is missing!
+
+
+[WARN] The referenced script on this Behaviour (Game Object 'SpherePrimitive') is missing!
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 17 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 18 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 19 texture parameters, more than the 16 supported by the current graphics device.
+
+
+[WARN] Shader 'HDRenderPipeline/Lit' uses 21 texture parameters, more than the 16 supported by the current graphics device.
+
+
+2022-03-24T00:42:08.680Z 119: Client hard catchup ... 
+
+
+2022-03-24T00:42:08.681Z 119: CATCHUP (1 -> 419)
+
+
+2022-03-24T00:42:08.726Z 120: Client hard slowdown ... 
+
+
+2022-03-24T00:42:08.727Z 120: CATCHUP (419 -> 281)
+
+
+2022-03-24T00:42:09.040Z 124: Client hard catchup ... 
+
+
+2022-03-24T00:42:09.042Z 124: CATCHUP (285 -> 422)
+
+
+2022-03-24T00:42:09.359Z 124: Spawning 1P char and items
+
+
+2022-03-24T00:42:09.606Z 125: Trying to store tick:422 but last buffer tick is:-1. Clearing buffer
+
+
+2022-03-24T00:42:09.717Z 125: update incr :0
+
+
+2022-03-24T00:42:16.612Z 263: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:17.642Z 284: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:18.547Z 302: update incr :1
+
+
+2022-03-24T00:42:18.695Z 305: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:19.738Z 326: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:20.781Z 347: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:21.831Z 368: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:22.878Z 389: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:23.926Z 410: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:24.972Z 431: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:26.020Z 452: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:27.067Z 473: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:28.115Z 494: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:29.166Z 515: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:30.208Z 536: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:31.258Z 557: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:32.306Z 578: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:33.359Z 599: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:34.402Z 620: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:35.445Z 641: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:36.253Z 657: update incr :2
+
+
+2022-03-24T00:42:36.498Z 662: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:37.545Z 683: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:38.597Z 704: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:39.641Z 725: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:40.694Z 746: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:41.739Z 767: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:42.784Z 788: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:43.837Z 809: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:44.876Z 830: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:45.492Z 842: update incr :3
+
+
+2022-03-24T00:42:45.891Z 850: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:46.936Z 871: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:47.985Z 892: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:48.986Z 912: update incr :4
+
+
+2022-03-24T00:42:49.038Z 913: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:50.082Z 934: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:51.138Z 955: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:52.177Z 976: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:53.225Z 997: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:54.272Z 1018: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:55.321Z 1039: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:56.367Z 1060: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:57.416Z 1081: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:58.466Z 1102: ProducerSend connect: BotB1
+
+
+2022-03-24T00:42:59.518Z 1123: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:00.568Z 1144: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:00.779Z 1147: Spawning 1P char and items
+
+
+2022-03-24T00:43:01.643Z 1164: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:02.689Z 1185: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:03.741Z 1206: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:04.781Z 1227: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:05.828Z 1248: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:06.877Z 1269: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:07.924Z 1290: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:07.932Z 1290: update incr :5
+
+
+2022-03-24T00:43:08.974Z 1311: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:10.022Z 1332: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:11.070Z 1353: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:11.672Z 1365: update incr :6
+
+
+2022-03-24T00:43:12.121Z 1374: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:13.167Z 1395: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:14.174Z 1415: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:15.219Z 1436: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:16.220Z 1456: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:17.271Z 1477: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:18.317Z 1498: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:19.359Z 1519: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:20.410Z 1540: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:21.457Z 1561: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:22.511Z 1582: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:23.217Z 1596: update incr :7
+
+
+2022-03-24T00:43:23.554Z 1603: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:24.603Z 1624: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:25.646Z 1645: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:26.623Z 1664: update incr :8
+
+
+2022-03-24T00:43:26.696Z 1666: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:27.749Z 1687: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:28.791Z 1708: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:29.543Z 1723: update incr :9
+
+
+2022-03-24T00:43:29.846Z 1729: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:30.889Z 1750: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:31.144Z 1755: Reload() start: 72 : 88
+
+
+2022-03-24T00:43:31.195Z 1756: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.242Z 1757: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.305Z 1758: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.352Z 1759: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.398Z 1760: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.443Z 1761: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.493Z 1762: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.541Z 1763: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.591Z 1764: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.639Z 1765: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.690Z 1766: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.740Z 1767: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.788Z 1768: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.839Z 1769: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.898Z 1770: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.935Z 1771: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:31.943Z 1771: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:31.990Z 1772: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.043Z 1773: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.088Z 1774: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.140Z 1775: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.193Z 1776: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.237Z 1777: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.288Z 1778: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.345Z 1779: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.394Z 1780: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.435Z 1781: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.489Z 1782: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.535Z 1783: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.589Z 1784: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.637Z 1785: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.686Z 1786: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.739Z 1787: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.790Z 1788: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.835Z 1789: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.888Z 1790: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.943Z 1791: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:32.986Z 1792: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:32.993Z 1792: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.041Z 1793: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.090Z 1794: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.134Z 1795: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.191Z 1796: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.239Z 1797: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.287Z 1798: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.333Z 1799: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.389Z 1800: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.443Z 1801: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.488Z 1802: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.535Z 1803: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.589Z 1804: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.640Z 1805: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.686Z 1806: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.737Z 1807: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.786Z 1808: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.835Z 1809: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.888Z 1810: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.930Z 1811: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:33.988Z 1812: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.037Z 1813: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:34.047Z 1813: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.086Z 1814: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.137Z 1815: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.197Z 1816: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.243Z 1817: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.290Z 1818: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.333Z 1819: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.389Z 1820: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.451Z 1821: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.494Z 1822: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.534Z 1823: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.590Z 1824: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.630Z 1825: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.686Z 1826: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.741Z 1827: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.784Z 1828: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.834Z 1829: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.887Z 1830: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.933Z 1831: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:34.984Z 1832: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.041Z 1833: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.087Z 1834: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:35.094Z 1834: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.135Z 1835: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.189Z 1836: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.238Z 1837: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.290Z 1838: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.335Z 1839: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.385Z 1840: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.436Z 1841: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.492Z 1842: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.536Z 1843: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.583Z 1844: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.633Z 1845: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.682Z 1846: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.736Z 1847: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.778Z 1848: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.835Z 1849: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.881Z 1850: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.932Z 1851: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:35.981Z 1852: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.035Z 1853: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.082Z 1854: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.131Z 1855: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:36.147Z 1855: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.185Z 1856: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.226Z 1857: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.287Z 1858: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.334Z 1859: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.381Z 1860: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.458Z 1861: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.485Z 1862: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.545Z 1863: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.581Z 1864: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.633Z 1865: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.682Z 1866: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.734Z 1867: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.780Z 1868: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.829Z 1869: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.879Z 1870: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.930Z 1871: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:36.982Z 1872: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.033Z 1873: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.087Z 1874: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.133Z 1875: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.175Z 1876: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:37.184Z 1876: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.230Z 1877: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.283Z 1878: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.336Z 1879: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.378Z 1880: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.431Z 1881: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.479Z 1882: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.534Z 1883: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.584Z 1884: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.629Z 1885: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.680Z 1886: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.730Z 1887: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.781Z 1888: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.827Z 1889: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.879Z 1890: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.927Z 1891: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:37.976Z 1892: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.031Z 1893: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.076Z 1894: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.128Z 1895: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.178Z 1896: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.226Z 1897: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:38.233Z 1897: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.280Z 1898: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.330Z 1899: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.379Z 1900: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.429Z 1901: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.475Z 1902: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.528Z 1903: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.581Z 1904: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.629Z 1905: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.672Z 1906: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.723Z 1907: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.776Z 1908: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.825Z 1909: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.874Z 1910: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.921Z 1911: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:38.971Z 1912: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.026Z 1913: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.073Z 1914: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.123Z 1915: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.174Z 1916: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.226Z 1917: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.273Z 1918: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:39.279Z 1918: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.322Z 1919: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.377Z 1920: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.425Z 1921: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.474Z 1922: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.523Z 1923: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.581Z 1924: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.627Z 1925: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.671Z 1926: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.724Z 1927: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.772Z 1928: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.821Z 1929: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.872Z 1930: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.923Z 1931: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:39.973Z 1932: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.025Z 1933: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.073Z 1934: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.124Z 1935: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.169Z 1936: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.220Z 1937: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.273Z 1938: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.320Z 1939: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:40.337Z 1939: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.371Z 1940: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.421Z 1941: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.472Z 1942: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.521Z 1943: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.580Z 1944: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.632Z 1945: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.672Z 1946: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.723Z 1947: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.768Z 1948: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.820Z 1949: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.872Z 1950: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.918Z 1951: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:40.967Z 1952: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:41.022Z 1953: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:41.066Z 1954: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:41.122Z 1955: Reload() start: 80 : 88
+
+
+2022-03-24T00:43:41.320Z 1959: Spawning 1P char and items
+
+
+2022-03-24T00:43:41.336Z 1959: Reload() unpause: 80 : 88
+
+
+2022-03-24T00:43:41.371Z 1960: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:42.413Z 1981: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:43.462Z 2002: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:44.014Z 2013: update incr :10
+
+
+2022-03-24T00:43:44.508Z 2023: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:45.562Z 2044: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:46.560Z 2064: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:47.604Z 2085: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:48.658Z 2106: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:49.703Z 2127: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:50.753Z 2148: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:51.799Z 2169: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:51.950Z 2172: update incr :11
+
+
+2022-03-24T00:43:52.848Z 2190: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:53.904Z 2211: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:54.952Z 2232: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:55.998Z 2253: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:57.048Z 2274: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:58.095Z 2295: ProducerSend connect: BotB1
+
+
+2022-03-24T00:43:58.892Z 2311: update incr :12
+
+
+2022-03-24T00:43:59.135Z 2316: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:00.193Z 2337: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:01.224Z 2358: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:02.277Z 2379: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:03.326Z 2400: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:04.372Z 2421: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:05.423Z 2442: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:06.466Z 2463: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:07.514Z 2484: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:08.562Z 2505: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:09.611Z 2526: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:10.656Z 2547: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:11.706Z 2568: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:12.756Z 2589: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:13.801Z 2610: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:14.850Z 2631: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:14.960Z 2633: update incr :13
+
+
+2022-03-24T00:44:15.906Z 2652: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:16.599Z 2666: update incr :14
+
+
+2022-03-24T00:44:16.946Z 2673: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:17.996Z 2694: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:19.039Z 2715: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:20.093Z 2736: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:21.143Z 2757: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:22.195Z 2778: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:22.897Z 2792: update incr :15
+
+
+2022-03-24T00:44:23.242Z 2799: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:24.296Z 2820: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:25.333Z 2841: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:26.388Z 2862: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:26.731Z 2869: update incr :16
+
+
+2022-03-24T00:44:27.434Z 2883: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:28.483Z 2904: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:29.523Z 2925: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:30.575Z 2946: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:31.617Z 2967: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:31.973Z 2974: update incr :17
+
+
+2022-03-24T00:44:32.666Z 2988: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:33.716Z 3009: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:34.762Z 3030: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:35.813Z 3051: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:36.860Z 3072: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:37.904Z 3093: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:38.960Z 3114: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:40.010Z 3135: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:40.761Z 3150: update incr :18
+
+
+2022-03-24T00:44:41.059Z 3156: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:42.101Z 3177: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:43.149Z 3198: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:44.193Z 3219: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:45.143Z 3238: update incr :19
+
+
+2022-03-24T00:44:45.239Z 3240: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:46.292Z 3261: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:47.360Z 3282: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:48.386Z 3303: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:49.435Z 3324: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:50.485Z 3345: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:51.536Z 3366: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:52.586Z 3387: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:53.629Z 3408: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:54.481Z 3425: update incr :20
+
+
+2022-03-24T00:44:54.677Z 3429: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:55.737Z 3450: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:56.790Z 3471: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:57.810Z 3492: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:58.862Z 3513: ProducerSend connect: BotB1
+
+
+2022-03-24T00:44:59.908Z 3534: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:00.957Z 3555: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:02.007Z 3576: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:02.959Z 3595: Reload() start: 59 : 109
+
+
+2022-03-24T00:45:03.007Z 3596: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.058Z 3597: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:03.065Z 3597: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.109Z 3598: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.155Z 3599: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.210Z 3600: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.258Z 3601: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.306Z 3602: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.356Z 3603: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.406Z 3604: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.455Z 3605: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.503Z 3606: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.556Z 3607: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.606Z 3608: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.661Z 3609: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.707Z 3610: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.754Z 3611: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.804Z 3612: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.855Z 3613: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.908Z 3614: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:03.967Z 3615: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.016Z 3616: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.052Z 3617: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.104Z 3618: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:04.128Z 3618: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.154Z 3619: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.201Z 3620: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.254Z 3621: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.309Z 3622: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.353Z 3623: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.402Z 3624: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.458Z 3625: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.502Z 3626: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.552Z 3627: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.607Z 3628: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.655Z 3629: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.700Z 3630: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.753Z 3631: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.801Z 3632: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.849Z 3633: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.901Z 3634: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:04.955Z 3635: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.015Z 3636: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.057Z 3637: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.102Z 3638: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.150Z 3639: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:05.161Z 3639: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.203Z 3640: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.254Z 3641: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.299Z 3642: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.352Z 3643: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.401Z 3644: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.449Z 3645: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.498Z 3646: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.551Z 3647: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.599Z 3648: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.649Z 3649: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.703Z 3650: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.748Z 3651: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.799Z 3652: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.852Z 3653: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.900Z 3654: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.954Z 3655: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:05.999Z 3656: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.057Z 3657: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.109Z 3658: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.153Z 3659: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.198Z 3660: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:06.204Z 3660: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.252Z 3661: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.301Z 3662: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.350Z 3663: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.400Z 3664: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.451Z 3665: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.502Z 3666: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.553Z 3667: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.600Z 3668: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.654Z 3669: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.696Z 3670: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.752Z 3671: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.799Z 3672: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.848Z 3673: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.902Z 3674: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:06.950Z 3675: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.005Z 3676: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.055Z 3677: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.104Z 3678: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.149Z 3679: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.196Z 3680: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.244Z 3681: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:07.250Z 3681: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.304Z 3682: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.350Z 3683: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.397Z 3684: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.446Z 3685: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.503Z 3686: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.544Z 3687: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.594Z 3688: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.649Z 3689: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.703Z 3690: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.746Z 3691: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.797Z 3692: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.847Z 3693: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.895Z 3694: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.947Z 3695: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:07.998Z 3696: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.048Z 3697: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.111Z 3698: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.153Z 3699: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.195Z 3700: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.248Z 3701: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.300Z 3702: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:08.314Z 3702: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.348Z 3703: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.399Z 3704: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.445Z 3705: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.501Z 3706: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.555Z 3707: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.605Z 3708: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.648Z 3709: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.699Z 3710: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.747Z 3711: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.798Z 3712: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.854Z 3713: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.899Z 3714: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:08.948Z 3715: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.003Z 3716: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.047Z 3717: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.100Z 3718: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.157Z 3719: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.202Z 3720: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.246Z 3721: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.297Z 3722: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.352Z 3723: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:09.381Z 3723: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.403Z 3724: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.466Z 3725: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.498Z 3726: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.548Z 3727: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.603Z 3728: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.650Z 3729: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.696Z 3730: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.749Z 3731: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.800Z 3732: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.847Z 3733: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.900Z 3734: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.946Z 3735: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:09.997Z 3736: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.049Z 3737: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.098Z 3738: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.154Z 3739: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.201Z 3740: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.246Z 3741: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.299Z 3742: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.349Z 3743: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:10.355Z 3743: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.399Z 3744: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.446Z 3745: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.506Z 3746: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.559Z 3747: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.603Z 3748: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.653Z 3749: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.697Z 3750: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.748Z 3751: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.794Z 3752: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.853Z 3753: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.901Z 3754: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.948Z 3755: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:10.998Z 3756: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.048Z 3757: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.100Z 3758: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.147Z 3759: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.198Z 3760: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.259Z 3761: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.305Z 3762: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.351Z 3763: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.394Z 3764: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:11.406Z 3764: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.446Z 3765: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.496Z 3766: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.541Z 3767: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.597Z 3768: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.649Z 3769: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.695Z 3770: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.754Z 3771: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.830Z 3772: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.865Z 3773: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.906Z 3774: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:11.955Z 3775: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.009Z 3776: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.055Z 3777: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.106Z 3778: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.151Z 3779: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.199Z 3780: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.262Z 3781: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.303Z 3782: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.351Z 3783: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.404Z 3784: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:12.417Z 3784: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.459Z 3785: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.499Z 3786: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.551Z 3787: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.602Z 3788: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.652Z 3789: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.707Z 3790: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.750Z 3791: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.800Z 3792: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.851Z 3793: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.897Z 3794: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:12.953Z 3795: Reload() start: 80 : 109
+
+
+2022-03-24T00:45:13.152Z 3799: Spawning 1P char and items
+
+
+2022-03-24T00:45:13.190Z 3799: Reload() unpause: 80 : 109
+
+
+2022-03-24T00:45:13.403Z 3804: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:14.453Z 3825: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:15.501Z 3846: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:16.556Z 3867: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:17.599Z 3888: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:18.642Z 3909: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:19.691Z 3930: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:20.742Z 3951: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:21.793Z 3972: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:22.835Z 3993: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:23.884Z 4014: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:24.930Z 4035: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:25.980Z 4056: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:27.027Z 4077: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:28.074Z 4098: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:29.124Z 4119: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:30.167Z 4140: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:31.217Z 4161: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:31.817Z 4173: update incr :21
+
+
+2022-03-24T00:45:32.265Z 4182: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:33.321Z 4203: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:34.365Z 4224: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:35.409Z 4245: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:36.459Z 4266: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:37.506Z 4287: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:38.553Z 4308: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:39.601Z 4329: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:40.649Z 4350: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:41.699Z 4371: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:42.749Z 4392: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:43.795Z 4413: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:43.898Z 4415: update incr :22
+
+
+2022-03-24T00:45:44.848Z 4434: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:45.600Z 4449: update incr :23
+
+
+2022-03-24T00:45:45.889Z 4455: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:46.934Z 4476: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:47.983Z 4497: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:49.034Z 4518: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:50.078Z 4539: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:50.388Z 4545: update incr :24
+
+
+2022-03-24T00:45:51.132Z 4560: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:52.180Z 4581: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:53.233Z 4602: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:54.276Z 4623: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:55.326Z 4644: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:56.370Z 4665: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:57.418Z 4686: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:58.466Z 4707: ProducerSend connect: BotB1
+
+
+2022-03-24T00:45:59.266Z 4723: update incr :25
+
+
+2022-03-24T00:45:59.515Z 4728: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:00.561Z 4749: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:01.609Z 4770: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:02.659Z 4791: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:03.710Z 4812: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:04.755Z 4833: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:05.801Z 4854: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:06.860Z 4875: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:07.907Z 4896: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:08.947Z 4917: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:09.994Z 4938: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:11.045Z 4959: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:12.093Z 4980: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:13.139Z 5001: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:14.186Z 5022: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:15.236Z 5043: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:16.280Z 5064: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:17.334Z 5085: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:18.383Z 5106: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:19.427Z 5127: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:20.469Z 5148: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:21.523Z 5169: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:22.568Z 5190: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:23.612Z 5211: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:24.670Z 5232: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:25.711Z 5253: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:26.756Z 5274: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:27.803Z 5295: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:28.855Z 5316: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:29.899Z 5337: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:30.349Z 5346: update incr :26
+
+
+2022-03-24T00:46:30.947Z 5358: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:31.996Z 5379: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:33.043Z 5400: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:34.091Z 5421: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:35.138Z 5442: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:36.188Z 5463: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:37.234Z 5484: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:38.282Z 5505: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:38.934Z 5518: update incr :27
+
+
+2022-03-24T00:46:39.330Z 5526: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:40.380Z 5547: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:41.427Z 5568: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:42.474Z 5589: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:43.523Z 5610: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:44.474Z 5629: update incr :28
+
+
+2022-03-24T00:46:44.571Z 5631: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:45.617Z 5652: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:46.665Z 5673: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:47.713Z 5694: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:48.760Z 5715: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:49.808Z 5736: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:50.858Z 5757: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:51.859Z 5777: update incr :29
+
+
+2022-03-24T00:46:51.907Z 5778: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:52.954Z 5799: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:54.007Z 5820: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:55.050Z 5841: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:56.097Z 5862: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:57.143Z 5883: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:57.653Z 5893: WebSocket ErrorLIVE producer FPSGame_PlayStats : Request Finished with Error! Exception: TCP Stream closed unexpectedly by the remote server  at BestHTTP.WebSocket.Frames.WebSocketFrameReader.ReadByte (System.IO.Stream stream) [0x0000f] in <7c11d72d3ebe406686046a1eb369960f>:0 
+  at BestHTTP.WebSocket.Frames.WebSocketFrameReader.Read (System.IO.Stream stream) [0x00000] in <7c11d72d3ebe406686046a1eb369960f>:0 
+  at BestHTTP.WebSocket.WebSocketResponse.ReceiveThreadFunc () [0x0000e] in <7c11d72d3ebe406686046a1eb369960f>:0 
+
+
+2022-03-24T00:46:57.654Z 5893: WebSocket LIVE producer FPSGame_PlayStats
+
+
+2022-03-24T00:46:57.675Z 5893: TestPlayStatsDriver CreateProducer 
+
+
+2022-03-24T00:46:57.884Z 5898: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8global._system/c8globals.FPSGame_PlayStats
+
+
+2022-03-24T00:46:58.146Z 5903: WebSocket ErrorLIVE consumer FPSGame_InGameStats_New : Request Finished with Error! Exception: TCP Stream closed unexpectedly by the remote server  at BestHTTP.WebSocket.Frames.WebSocketFrameReader.ReadByte (System.IO.Stream stream) [0x0000f] in <7c11d72d3ebe406686046a1eb369960f>:0 
+  at BestHTTP.WebSocket.Frames.WebSocketFrameReader.Read (System.IO.Stream stream) [0x00000] in <7c11d72d3ebe406686046a1eb369960f>:0 
+  at BestHTTP.WebSocket.WebSocketResponse.ReceiveThreadFunc () [0x0000e] in <7c11d72d3ebe406686046a1eb369960f>:0 
+
+
+2022-03-24T00:46:58.150Z 5903: TestPlayStatsDriver CreateProducer 
+
+
+2022-03-24T00:46:58.195Z 5904: Open LIVE producer FPSGame_PlayStats
+
+
+2022-03-24T00:46:58.199Z 5904: TestPlayStatsDriver  CreateConsumer  
+
+
+2022-03-24T00:46:58.201Z 5904: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:58.336Z 5907: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8global._system/c8globals.FPSGame_PlayStats
+
+
+2022-03-24T00:46:58.393Z 5908: consumerURL wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/consumer/persistent/unity_fps_macrometa.io/c8global._system/c8globals.FPSGame_InGameStats_New/Server47533608?otp=IlQVY3bYVbjcIAZqsFg8gD0NlX7NWo3A
+
+
+2022-03-24T00:46:58.653Z 5913: Open LIVE producer FPSGame_PlayStats
+
+
+2022-03-24T00:46:58.656Z 5913: TestPlayStatsDriver  CreateConsumer  
+
+
+2022-03-24T00:46:58.707Z 5914: Stream driver Open LIVE consumer FPSGame_InGameStats_New
+
+
+2022-03-24T00:46:58.752Z 5915: CreateStatsProducer: Unity_StatsStream
+
+
+2022-03-24T00:46:58.755Z 5915: try producerStatsExists
+
+
+2022-03-24T00:46:58.771Z 5915: update incr :30
+
+
+2022-03-24T00:46:58.843Z 5917: consumerURL wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/consumer/persistent/unity_fps_macrometa.io/c8global._system/c8globals.FPSGame_InGameStats_New/Server42888936?otp=kG9NYDXNhqEgyW4Eho6tKXK7KcdkNh0g
+
+
+2022-03-24T00:46:58.941Z 5919: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.Unity_StatsStream
+
+
+2022-03-24T00:46:59.154Z 5923: Stream driver Open LIVE consumer FPSGame_InGameStats_New
+
+
+2022-03-24T00:46:59.156Z 5923: WebSocket ErrorLIVE producer FPSGame_GameStats : Request Finished with Error! Exception: TCP Stream closed unexpectedly by the remote server  at BestHTTP.WebSocket.Frames.WebSocketFrameReader.ReadByte (System.IO.Stream stream) [0x0000f] in <7c11d72d3ebe406686046a1eb369960f>:0 
+  at BestHTTP.WebSocket.Frames.WebSocketFrameReader.Read (System.IO.Stream stream) [0x00000] in <7c11d72d3ebe406686046a1eb369960f>:0 
+  at BestHTTP.WebSocket.WebSocketResponse.ReceiveThreadFunc () [0x0000e] in <7c11d72d3ebe406686046a1eb369960f>:0 
+
+
+2022-03-24T00:46:59.157Z 5923: WebSocket LIVE producer FPSGame_GameStats
+
+
+2022-03-24T00:46:59.200Z 5924: CreateStatsProducer: Unity_StatsStream
+
+
+2022-03-24T00:46:59.204Z 5924: try producerStatsExists
+
+
+2022-03-24T00:46:59.205Z 5924: Open LIVE producer Unity_StatsStream
+
+
+2022-03-24T00:46:59.211Z 5924: ProducerSend connect: BotB1
+
+
+2022-03-24T00:46:59.249Z 5925: Create Game StatsProducer: FPSGame_GameStats
+
+
+2022-03-24T00:46:59.256Z 5925: try producerGameStatsExists
+
+
+2022-03-24T00:46:59.395Z 5928: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.Unity_StatsStream
+
+
+2022-03-24T00:46:59.441Z 5929: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.FPSGame_GameStats
+
+
+2022-03-24T00:46:59.698Z 5934: Open LIVE producer Unity_StatsStream
+
+
+2022-03-24T00:46:59.747Z 5935: Create Game StatsProducer: FPSGame_GameStats
+
+
+2022-03-24T00:46:59.751Z 5935: try producerGameStatsExists
+
+
+2022-03-24T00:46:59.753Z 5935: Open LIVE producer FPSGame_GameStats
+
+
+2022-03-24T00:46:59.939Z 5939: LIVE producer url :wss://api-gaming3-us-west.eng.macrometa.io/_ws/ws/v2/producer/persistent/unity_fps_macrometa.io/c8local._system/c8locals.FPSGame_GameStats
+
+
+2022-03-24T00:47:00.199Z 5944: Open LIVE producer FPSGame_GameStats
+
+
+2022-03-24T00:47:00.259Z 5945: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:01.303Z 5966: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:02.349Z 5987: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:03.403Z 6008: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:04.446Z 6029: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:05.494Z 6050: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:06.537Z 6071: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:07.585Z 6092: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:08.635Z 6113: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:08.938Z 6119: update incr :31
+
+
+2022-03-24T00:47:09.687Z 6134: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:10.723Z 6154: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:11.143Z 6163: update incr :32
+
+
+2022-03-24T00:47:11.699Z 6174: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:12.744Z 6195: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:13.789Z 6216: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:14.590Z 6232: update incr :33
+
+
+2022-03-24T00:47:14.840Z 6237: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:15.889Z 6258: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:16.950Z 6279: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:17.984Z 6300: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:19.036Z 6321: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:20.080Z 6342: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:21.131Z 6363: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:21.975Z 6380: update incr :34
+
+
+2022-03-24T00:47:22.176Z 6384: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:23.225Z 6405: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:24.268Z 6426: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:25.314Z 6447: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:26.365Z 6468: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:26.464Z 6470: update incr :35
+
+
+2022-03-24T00:47:27.407Z 6489: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:28.466Z 6510: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:29.507Z 6531: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:30.159Z 6544: update incr :36
+
+
+2022-03-24T00:47:30.555Z 6552: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:31.600Z 6573: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:32.651Z 6594: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:33.701Z 6615: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:34.748Z 6636: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:35.799Z 6657: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:36.496Z 6671: update incr :37
+
+
+2022-03-24T00:47:36.853Z 6678: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:37.892Z 6699: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:38.940Z 6720: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:39.989Z 6741: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:41.034Z 6762: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:42.084Z 6783: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:43.131Z 6804: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:44.179Z 6825: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:45.224Z 6846: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:45.231Z 6846: update incr :38
+
+
+2022-03-24T00:47:46.272Z 6867: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:47.322Z 6888: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:48.366Z 6909: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:49.416Z 6930: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:50.465Z 6951: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:51.511Z 6972: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:52.557Z 6993: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:53.606Z 7014: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:54.656Z 7035: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:55.703Z 7056: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:56.748Z 7077: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:57.798Z 7098: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:58.846Z 7119: ProducerSend connect: BotB1
+
+
+2022-03-24T00:47:59.893Z 7140: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:00.941Z 7161: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:01.991Z 7182: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:03.038Z 7203: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:03.245Z 7207: update incr :39
+
+
+2022-03-24T00:48:04.087Z 7224: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:05.138Z 7245: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:06.198Z 7266: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:07.192Z 7286: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:08.244Z 7307: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:09.291Z 7328: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:10.342Z 7349: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:11.388Z 7370: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:12.436Z 7391: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:13.482Z 7412: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:14.532Z 7433: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:15.573Z 7454: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:16.619Z 7475: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:17.667Z 7496: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:18.719Z 7517: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:19.768Z 7538: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:20.821Z 7559: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:21.865Z 7580: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:22.857Z 7600: update incr :40
+
+
+2022-03-24T00:48:22.910Z 7601: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:23.955Z 7622: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:25.019Z 7643: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:25.268Z 7648: update incr :41
+
+
+2022-03-24T00:48:26.058Z 7664: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:27.100Z 7685: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:28.157Z 7706: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:29.202Z 7727: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:30.253Z 7748: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:31.293Z 7769: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:32.342Z 7790: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:33.390Z 7811: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:34.435Z 7832: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:35.487Z 7853: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:36.535Z 7874: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:37.583Z 7895: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:38.629Z 7916: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:39.680Z 7937: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:40.725Z 7958: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:41.769Z 7979: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:42.820Z 8000: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:43.863Z 8021: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:44.913Z 8042: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:45.962Z 8063: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:47.015Z 8084: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:48.059Z 8105: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:49.109Z 8126: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:50.154Z 8147: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:51.200Z 8168: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:52.250Z 8189: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:53.295Z 8210: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:53.649Z 8217: update incr :42
+
+
+2022-03-24T00:48:54.347Z 8231: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:55.393Z 8252: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:56.436Z 8273: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:57.488Z 8294: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:58.538Z 8315: ProducerSend connect: BotB1
+
+
+2022-03-24T00:48:59.588Z 8336: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:00.638Z 8357: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:01.683Z 8378: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:02.730Z 8399: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:03.781Z 8420: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:04.828Z 8441: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:05.878Z 8462: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:06.723Z 8479: update incr :43
+
+
+2022-03-24T00:49:06.922Z 8483: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:07.970Z 8504: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:09.016Z 8525: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:10.069Z 8546: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:11.109Z 8567: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:12.159Z 8588: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:13.210Z 8609: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:14.256Z 8630: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:15.300Z 8651: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:16.358Z 8672: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:17.406Z 8693: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:18.448Z 8714: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:19.506Z 8735: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:20.557Z 8756: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:21.592Z 8777: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:22.649Z 8798: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:23.690Z 8819: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:24.739Z 8840: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:25.784Z 8861: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:26.830Z 8882: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:27.883Z 8903: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:28.928Z 8924: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:29.973Z 8945: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:31.027Z 8966: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:32.072Z 8987: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:33.120Z 9008: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:34.175Z 9029: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:35.216Z 9050: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:36.264Z 9071: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:37.315Z 9092: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:38.363Z 9113: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:39.407Z 9134: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:40.104Z 9148: update incr :44
+
+
+2022-03-24T00:49:40.455Z 9155: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:41.509Z 9176: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:42.549Z 9197: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:43.601Z 9218: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:43.850Z 9223: update incr :45
+
+
+2022-03-24T00:49:44.648Z 9239: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:45.693Z 9260: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:46.741Z 9281: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:47.789Z 9302: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:48.838Z 9323: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:48.938Z 9325: update incr :46
+
+
+2022-03-24T00:49:49.888Z 9344: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:50.937Z 9365: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:51.984Z 9386: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:52.238Z 9391: update incr :47
+
+
+2022-03-24T00:49:53.032Z 9407: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:54.074Z 9428: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:55.124Z 9449: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:56.172Z 9470: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:57.227Z 9491: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:58.273Z 9512: ProducerSend connect: BotB1
+
+
+2022-03-24T00:49:59.323Z 9533: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:00.384Z 9554: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:00.968Z 9566: Reload() start: 9 : 180
+
+
+2022-03-24T00:50:01.018Z 9567: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.068Z 9568: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.121Z 9569: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.167Z 9570: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.218Z 9571: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.271Z 9572: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.319Z 9573: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.384Z 9574: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.424Z 9575: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:01.431Z 9575: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.468Z 9576: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.517Z 9577: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.567Z 9578: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.615Z 9579: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.667Z 9580: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.719Z 9581: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.764Z 9582: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.816Z 9583: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.864Z 9584: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.919Z 9585: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:01.967Z 9586: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.014Z 9587: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.064Z 9588: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.118Z 9589: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.163Z 9590: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.213Z 9591: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.264Z 9592: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.320Z 9593: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.371Z 9594: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.418Z 9595: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.464Z 9596: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:02.472Z 9596: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.524Z 9597: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.570Z 9598: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.615Z 9599: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.666Z 9600: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.714Z 9601: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.766Z 9602: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.814Z 9603: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.863Z 9604: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.912Z 9605: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:02.962Z 9606: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.015Z 9607: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.062Z 9608: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.114Z 9609: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.163Z 9610: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.213Z 9611: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.262Z 9612: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.313Z 9613: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.361Z 9614: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.430Z 9615: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.473Z 9616: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.515Z 9617: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:03.520Z 9617: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.563Z 9618: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.611Z 9619: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.663Z 9620: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.713Z 9621: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.764Z 9622: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.810Z 9623: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.864Z 9624: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.910Z 9625: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:03.961Z 9626: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.015Z 9627: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.059Z 9628: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.109Z 9629: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.163Z 9630: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.208Z 9631: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.260Z 9632: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.310Z 9633: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.362Z 9634: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.414Z 9635: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.465Z 9636: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.511Z 9637: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.563Z 9638: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:04.568Z 9638: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.614Z 9639: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.659Z 9640: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.713Z 9641: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.763Z 9642: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.809Z 9643: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.858Z 9644: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.912Z 9645: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:04.959Z 9646: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.008Z 9647: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.058Z 9648: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.108Z 9649: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.159Z 9650: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.208Z 9651: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.259Z 9652: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.306Z 9653: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.359Z 9654: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.409Z 9655: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.459Z 9656: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.514Z 9657: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.559Z 9658: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.606Z 9659: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:05.614Z 9659: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.659Z 9660: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.707Z 9661: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.759Z 9662: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.810Z 9663: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.858Z 9664: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.909Z 9665: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:05.956Z 9666: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.007Z 9667: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.057Z 9668: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.108Z 9669: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.155Z 9670: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.208Z 9671: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.259Z 9672: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.307Z 9673: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.359Z 9674: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.410Z 9675: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.462Z 9676: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.519Z 9677: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.566Z 9678: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.607Z 9679: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.658Z 9680: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:06.666Z 9680: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.712Z 9681: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.754Z 9682: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.807Z 9683: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.859Z 9684: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.903Z 9685: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:06.956Z 9686: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.009Z 9687: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.064Z 9688: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.111Z 9689: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.158Z 9690: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.212Z 9691: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.256Z 9692: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.305Z 9693: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.353Z 9694: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.400Z 9695: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.456Z 9696: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.509Z 9697: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.557Z 9698: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.607Z 9699: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.654Z 9700: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.702Z 9701: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:07.709Z 9701: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.759Z 9702: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.803Z 9703: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.857Z 9704: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.902Z 9705: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:07.951Z 9706: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.002Z 9707: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.056Z 9708: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.120Z 9709: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.190Z 9710: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.222Z 9711: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.261Z 9712: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.311Z 9713: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.360Z 9714: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.408Z 9715: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.455Z 9716: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.505Z 9717: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.561Z 9718: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.610Z 9719: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.654Z 9720: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.705Z 9721: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:08.711Z 9721: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.756Z 9722: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.804Z 9723: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.855Z 9724: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.903Z 9725: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:08.955Z 9726: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.002Z 9727: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.054Z 9728: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.102Z 9729: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.152Z 9730: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.201Z 9731: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.253Z 9732: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.301Z 9733: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.352Z 9734: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.400Z 9735: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.451Z 9736: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.498Z 9737: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.557Z 9738: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.605Z 9739: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.657Z 9740: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.702Z 9741: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.748Z 9742: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:09.757Z 9742: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.798Z 9743: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.849Z 9744: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.897Z 9745: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.949Z 9746: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:09.999Z 9747: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.050Z 9748: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.099Z 9749: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.151Z 9750: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.199Z 9751: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.252Z 9752: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.300Z 9753: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.349Z 9754: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.398Z 9755: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.449Z 9756: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.496Z 9757: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.548Z 9758: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.596Z 9759: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.648Z 9760: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.697Z 9761: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.748Z 9762: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.794Z 9763: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:10.797Z 9763: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.844Z 9764: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.894Z 9765: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.946Z 9766: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:10.998Z 9767: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.049Z 9768: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.096Z 9769: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.143Z 9770: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.192Z 9771: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.244Z 9772: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.295Z 9773: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.342Z 9774: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.393Z 9775: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.443Z 9776: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.493Z 9777: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.543Z 9778: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.593Z 9779: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.643Z 9780: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.692Z 9781: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.744Z 9782: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.793Z 9783: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.842Z 9784: ProducerSend connect: BotB1
+
+
+2022-03-24T00:50:11.847Z 9784: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.891Z 9785: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.942Z 9786: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:11.992Z 9787: Reload() start: 80 : 180
+
+
+2022-03-24T00:50:12.044Z 9788: Reload() start: 80 : 180

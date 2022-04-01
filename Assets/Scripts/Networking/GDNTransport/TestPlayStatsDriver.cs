@@ -175,6 +175,7 @@ namespace Macrometa {
         }
 
         public static void SendStats(GameStats2 gameStats) {
+            GameDebug.Log("send  GameStats2  sendstats: " + gameStats.ToString() );
             var msg = JsonUtility.ToJson(gameStats);
             _inst.gdnStreamStatsDriver.ProducerSend(msg);
         }
